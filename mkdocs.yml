@@ -1,0 +1,63 @@
+site_name: Rath RPG
+site_description: A tabletop RPG system based on Knave
+site_url: https://rathrpg.github.io/
+
+theme:
+  name: material
+  palette:
+    # Light mode (default)
+    - scheme: default
+      primary: deep orange
+      accent: orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - scheme: slate
+      primary: deep orange
+      accent: orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Crimson Pro
+    code: Roboto Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - content.tabs.link
+
+nav:
+  - Home: index.md
+  - Player Rules:
+    - Core Rules: Core Rules Reference.md
+    - Character Creation: Character Creation Guide.md
+    - Aptitudes: Aptitude Reference.md
+    - Magic: Magic Reference.md
+    - Equipment: Equipment Reference.md
+  - GM Rules:
+    - GM Reference: GM Reference.md
+    - Homebrew Guide: Homebrew Guide.md
+  - License: License and Attribution.md
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search

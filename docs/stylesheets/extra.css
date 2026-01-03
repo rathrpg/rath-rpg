@@ -1,0 +1,74 @@
+/* Rath RPG custom theme - red/black booklet style */
+
+:root {
+  --md-primary-fg-color: #8B0000;
+  --md-primary-fg-color--light: #A52A2A;
+  --md-primary-fg-color--dark: #600000;
+  --md-accent-fg-color: #8B0000;
+}
+
+/* Import Cinzel for headings */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+/* Headings with Cinzel font */
+h1, h2, h3, h4, h5, h6,
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: Cinzel, Georgia, serif;
+}
+
+.md-typeset h1 {
+  color: #8B0000;
+}
+
+.md-typeset h2 {
+  color: #8B0000;
+  border-bottom: 1px solid #8B0000;
+  padding-bottom: 4px;
+}
+
+/* Table styling */
+.md-typeset table:not([class]) th {
+  background-color: #8B0000;
+  color: white;
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) td {
+  background-color: rgba(139, 0, 0, 0.05);
+}
+
+/* Navigation tabs */
+.md-tabs {
+  background-color: #8B0000;
+}
+
+/* Header */
+.md-header {
+  background-color: #8B0000;
+}
+
+/* Site title styling */
+.md-header__title {
+  font-family: Cinzel, Georgia, serif;
+}
+
+/* Links */
+.md-typeset a {
+  color: #8B0000;
+}
+
+.md-typeset a:hover {
+  color: #600000;
+}
+
+/* Blockquotes */
+.md-typeset blockquote {
+  border-left: 4px solid #8B0000;
+}
+
+/* Horizontal rules */
+.md-typeset hr {
+  border-bottom: 1px solid #8B0000;
+}
