@@ -21,6 +21,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).parent
 RULES_DIR = SCRIPT_DIR / "../../Rath - Rules"
 DOCS_DIR = SCRIPT_DIR / "docs"
+PUBLISHING_DIR = RULES_DIR / "Publishing"
 
 # Files to copy (source name -> destination name)
 FILES = {
@@ -96,6 +97,40 @@ def copy_files():
     print("Done!")
 
 
+def copy_pdfs():
+    """Copy PDF files to docs/downloads folder."""
+    print("\nCopying PDFs to downloads folder...")
+
+    downloads_dir = DOCS_DIR / "downloads"
+    downloads_dir.mkdir(exist_ok=True)
+
+    # Copy handbooks
+    handbooks_dir = PUBLISHING_DIR / "Handbooks"
+    if handbooks_dir.exists():
+        for pdf in handbooks_dir.glob("*.pdf"):
+            dest = downloads_dir / pdf.name
+            shutil.copy2(pdf, dest)
+            print(f"  Copied: {pdf.name}")
+
+    # Copy booklets
+    booklets_dir = PUBLISHING_DIR / "Booklets"
+    if booklets_dir.exists():
+        for pdf in booklets_dir.glob("*.pdf"):
+            dest = downloads_dir / pdf.name
+            shutil.copy2(pdf, dest)
+            print(f"  Copied: {pdf.name}")
+
+    # Copy character sheets
+    sheets_dir = PUBLISHING_DIR / "Character Sheets"
+    if sheets_dir.exists():
+        for pdf in sheets_dir.glob("*.pdf"):
+            dest = downloads_dir / pdf.name
+            shutil.copy2(pdf, dest)
+            print(f"  Copied: {pdf.name}")
+
+    print("PDFs copied!")
+
+
 def build_site():
     """Build the MkDocs site."""
     print("\nBuilding site...")
@@ -126,6 +161,7 @@ def main():
 
     # Always copy files first
     copy_files()
+    copy_pdfs()
 
     if '--serve' in args:
         serve_site()

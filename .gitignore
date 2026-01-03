@@ -1,6 +1,9 @@
 # Build output
 site/
 
+# Downloaded PDFs (copied during build)
+docs/downloads/
+
 # Python
 __pycache__/
 *.py[cod]

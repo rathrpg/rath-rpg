@@ -1,22 +1,45 @@
 /* Rath RPG custom theme - red/black booklet style */
 
+/* Custom fonts - must be before @import */
+@font-face {
+  font-family: 'Endor';
+  src: url('../fonts/ENDOR__.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Immortal';
+  src: url('../fonts/IMMORTAL.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Import Crimson Pro for body text */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
 :root {
   --md-primary-fg-color: #8B0000;
   --md-primary-fg-color--light: #A52A2A;
   --md-primary-fg-color--dark: #600000;
   --md-accent-fg-color: #8B0000;
+  --md-text-font: "Crimson Pro", Georgia, serif;
 }
 
-/* Import Cinzel for headings */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+/* Headings with Immortal font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Immortal', Georgia, serif !important;
+}
 
-/* Headings with Cinzel font */
-h1, h2, h3, h4, h5, h6,
 .md-typeset h1,
 .md-typeset h2,
 .md-typeset h3,
-.md-typeset h4 {
-  font-family: Cinzel, Georgia, serif;
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  font-family: 'Immortal', Georgia, serif !important;
 }
 
 .md-typeset h1 {
@@ -33,6 +56,7 @@ h1, h2, h3, h4, h5, h6,
 .md-typeset table:not([class]) th {
   background-color: #8B0000;
   color: white;
+  font-family: 'Immortal', Georgia, serif !important;
 }
 
 .md-typeset table:not([class]) tr:nth-child(even) td {
@@ -44,14 +68,28 @@ h1, h2, h3, h4, h5, h6,
   background-color: #8B0000;
 }
 
+.md-tabs__link {
+  font-family: 'Immortal', Georgia, serif !important;
+}
+
 /* Header */
 .md-header {
   background-color: #8B0000;
 }
 
-/* Site title styling */
+/* Site title with Endor font */
 .md-header__title {
-  font-family: Cinzel, Georgia, serif;
+  font-family: 'Endor', 'Immortal', Georgia, serif !important;
+  font-size: 1.4rem;
+}
+
+.md-header__topic {
+  font-family: 'Endor', 'Immortal', Georgia, serif !important;
+}
+
+/* Sidebar navigation */
+.md-nav__link {
+  font-family: 'Immortal', Georgia, serif !important;
 }
 
 /* Links */

@@ -42,6 +42,7 @@ nav:
   - GM Rules:
     - GM Reference: GM Reference.md
     - Homebrew Guide: Homebrew Guide.md
+  - Downloads: downloads.md
   - License: License and Attribution.md
 
 markdown_extensions:

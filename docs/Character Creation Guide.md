@@ -15,7 +15,9 @@ Creating a character in Rath RPG is as fast and easy as you want it to be. If yo
 
 ## Aptitudes and Species
 
-In Rath RPG, Aptitudes are special abilities that help differentiate and define who and what your character is, what they're capable of, and what their specialties are. These work in conjunction with **Keywords** to define your character.
+In Rath RPG, Aptitudes are special abilities that help differentiate and define who and what your character is, what they're capable of, and what their specialties are. These work in conjunction with **Keywords** to define your character. 
+
+Also, don't sweat your choices too much. Characters would be viable without any aptitudes at all. They're nice bonuses that help you specialize, So think about what your character should be good at, and choose those. With a clear concept, the choice should be easy!
 
 Your aptitude choices at creation determine your species:
 
@@ -220,7 +222,7 @@ Pick one pack. All packs include **UD8 Rations** and **2d6+5 copper pieces**.
 
 ## Step 6: Traits (Optional)
 
-Roll or choose to add personality and appearance.
+Roll or choose to add personality and appearance. You can choose traits that aren't in the lists.
 
 ### Physical Traits (d20 each)
 
