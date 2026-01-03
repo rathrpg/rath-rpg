@@ -23,7 +23,6 @@ To attempt something uncertain with consequences, roll a **Test**:
 **Success if total ≥ 13** (beats DC 12)
 
 - **Natural 20**: Critical Success (GM determines special result)
-- 
 - **Natural 1**: Critical Failure (GM determines complication)
 
 The Default **DC** is **12**. Assume the target is 12 unless told otherwise. There are a some exceptions to this rule (To-Hit in combat, Spellcasting, etc.)

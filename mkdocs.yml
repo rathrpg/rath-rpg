@@ -1,6 +1,6 @@
 site_name: Rath RPG
 site_description: A tabletop RPG system based on Knave
-site_url: https://rathrpg.github.io/
+site_url: https://bcdooley-bit.github.io/rath-rpg/
 
 theme:
   name: material
