@@ -28,6 +28,11 @@
   --md-text-font: "Crimson Pro", Georgia, serif;
 }
 
+/* Black background outside content area */
+body {
+  background-color: #1a1a1a;
+}
+
 /* Headings with Immortal font */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Immortal', Georgia, serif !important;
