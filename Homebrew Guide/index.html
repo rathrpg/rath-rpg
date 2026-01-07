@@ -1,0 +1,1892 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A tabletop RPG system based on Knave">
+      
+      
+      
+        <link rel="canonical" href="https://rathrpg.github.io/rath-rpg/Homebrew%20Guide/">
+      
+      
+        <link rel="prev" href="../GM%20Handbook/">
+      
+      
+        <link rel="next" href="../downloads/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Homebrew Guide - Rath RPG</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Crimson+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Crimson Pro";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#homebrew-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Rath RPG" class="md-header__button md-logo" aria-label="Rath RPG" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Rath RPG
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Homebrew Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Players%20Handbook/" class="md-tabs__link">
+          
+  
+  
+  Player Rules
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../GM%20Handbook/" class="md-tabs__link">
+          
+  
+  
+  GM Rules
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Supplements
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../downloads/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Downloads
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../License%20and%20Attribution/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Rath RPG" class="md-nav__button md-logo" aria-label="Rath RPG" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Rath RPG
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Player Rules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Player Rules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Players%20Handbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Players Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Advanced%20Aptitudes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Aptitudes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Advanced%20Magic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GM Rules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GM Rules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../GM%20Handbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GM Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supplements
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Supplements
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Homebrew Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Homebrew Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../downloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Downloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../License%20and%20Attribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="homebrew-guide">Homebrew Guide<a class="headerlink" href="#homebrew-guide" title="Permanent link">&para;</a></h1>
+<p><strong>Creating custom aptitudes and magic Circles</strong></p>
+<p>This guide is for GMs and experienced players who want to expand Rath with their own content. If you just want to build a character, see the <strong>Players Handbook</strong> instead.</p>
+<blockquote>
+<p><strong>Note:</strong> All starter content is complete and balanced—you don't need to create anything custom to have a full-featured game.</p>
+</blockquote>
+<hr />
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>This guide explains how to create new aptitudes and Circles of Magic that fit seamlessly into Rath. Use these tools to:</p>
+<ul>
+<li>Design aptitudes that match your character concepts</li>
+<li>Create new Circles of Magic with unique themes</li>
+<li>Maintain balance with existing content</li>
+<li>Extend the system for your campaign world</li>
+</ul>
+<p><strong>Who should use this guide:</strong>
+- GMs wanting to offer custom options to players
+- Players working with their GM to realize unique concepts
+- Designers wanting to understand the system's philosophy</p>
+<p><strong>When to create custom content:</strong>
+- You have a character concept that existing aptitudes don't support
+- You want a magic theme not covered by existing Circles
+- Your campaign world needs setting-specific abilities
+- You're adapting content from other systems</p>
+<p><strong>When NOT to create custom content:</strong>
+- Just starting with the system (use existing content first)
+- During character creation at session 1 (too much to learn)
+- Without GM approval and collaboration
+- To "fix" perceived balance issues (discuss with GM first)</p>
+<hr />
+<h1 id="part-1-creating-aptitudes">Part 1: Creating Aptitudes<a class="headerlink" href="#part-1-creating-aptitudes" title="Permanent link">&para;</a></h1>
+<p>Aptitudes are the mechanical abilities that define what your character can do. They should be <strong>generally useful</strong> without being <strong>overpowered</strong>.</p>
+<hr />
+<h2 id="aptitude-design-philosophy">Aptitude Design Philosophy<a class="headerlink" href="#aptitude-design-philosophy" title="Permanent link">&para;</a></h2>
+<p><strong>Aptitudes should:</strong></p>
+<ul>
+<li>Be <strong>useful</strong> - Clear purpose and application in most sessions</li>
+<li>Have <strong>conditions or limitations</strong> - Prevent them from being overpowered</li>
+<li>Fit a <strong>theme</strong> - Someone of a particular profession or species would have it</li>
+<li>Scale with <strong>level</strong> when appropriate - Use "L times per long rest" for abilities that get more powerful</li>
+</ul>
+<p><strong>Avoid:</strong></p>
+<ul>
+<li>Flat, unconditional bonuses (like "+1 to hit on all attacks")</li>
+<li>Abilities without costs or triggers</li>
+<li>Overly complex mechanics that slow play</li>
+<li>Abilities that make other characters feel useless</li>
+</ul>
+<hr />
+<h2 id="types-of-aptitudes">Types of Aptitudes<a class="headerlink" href="#types-of-aptitudes" title="Permanent link">&para;</a></h2>
+<h3 id="skill-aptitudes">Skill Aptitudes<a class="headerlink" href="#skill-aptitudes" title="Permanent link">&para;</a></h3>
+<p>Learned abilities that any character could potentially train in:</p>
+<ul>
+<li><strong>Combat skills</strong> - Fighting techniques, weapon mastery, tactical abilities</li>
+<li><strong>Magic</strong> - Spellcasting, magical enhancement, arcane knowledge</li>
+<li><strong>Exploration</strong> - Stealth, survival, navigation, trap handling</li>
+<li><strong>Social</strong> - Persuasion, intimidation, diplomacy, leadership</li>
+<li><strong>Knowledge</strong> - Lore, languages, scholarly pursuits</li>
+<li><strong>Crafting</strong> - Item creation, repair, modification</li>
+</ul>
+<p><strong>Key principle:</strong> Any dedicated student could theoretically learn these through training.</p>
+<h3 id="inherent-aptitudes">Inherent Aptitudes<a class="headerlink" href="#inherent-aptitudes" title="Permanent link">&para;</a></h3>
+<p>Innate traits tied to a character's physical nature or magical essence:</p>
+<ul>
+<li><strong>Sensory</strong> - Enhanced senses, unusual perception abilities</li>
+<li><strong>Physical/Anatomical</strong> - Natural weapons, armor, unusual body parts</li>
+<li><strong>Movement</strong> - Flight, climbing, swimming, teleportation</li>
+<li><strong>Combat</strong> - Natural fighting abilities, pack tactics, regeneration</li>
+<li><strong>Magical/Mystical</strong> - Innate magic resistance, supernatural knowledge</li>
+<li><strong>Constructed</strong> - Abilities for artificial or magical beings</li>
+</ul>
+<p><strong>Key principle:</strong> These define what a character IS, not what they've learned.</p>
+<hr />
+<h2 id="design-guidelines-for-skill-aptitudes">Design Guidelines for Skill Aptitudes<a class="headerlink" href="#design-guidelines-for-skill-aptitudes" title="Permanent link">&para;</a></h2>
+<h3 id="combat-aptitudes">Combat Aptitudes<a class="headerlink" href="#combat-aptitudes" title="Permanent link">&para;</a></h3>
+<p><strong>Good triggers and conditions:</strong></p>
+<ul>
+<li>"When you reduce enemy to 0 HP" (Cleave)</li>
+<li>"When fighting 1-on-1" (Duelist)</li>
+<li>"When enemy misses you" (Riposte)</li>
+<li>"L times per long rest" (Mighty Blow)</li>
+<li>"Once per combat" (Whirlwind Strike)</li>
+</ul>
+<p><strong>Examples to follow:</strong></p>
+<ul>
+<li><strong>Cleave</strong>: Simple trigger (reduce to 0 HP), clear benefit (free attack), doesn't slow combat</li>
+<li><strong>Duelist</strong>: Conditional advantage (1-on-1 only) + expanded crit range (18-20)</li>
+<li><strong>Shield Bash</strong>: Active ability with cost (use action, requires shield), provides control (stun)</li>
+</ul>
+<p><strong>Why these work:</strong>
+- Clear triggers that are easy to track
+- Meaningful but not overwhelming benefits
+- Reward specific playstyles without dominating
+- Create interesting tactical decisions</p>
+<p><strong>Avoid:</strong></p>
+<ul>
+<li>Unconditional bonuses without triggers (boring, unbalanced)</li>
+<li>Abilities that trigger too frequently (every attack becomes a chore)</li>
+<li>Complex calculations that slow combat (d20+STR+proficiency+situation-bonus-terrain...)</li>
+<li>"Passive +X to everything" abilities (make other characters feel worse)</li>
+</ul>
+<h3 id="magic-aptitudes">Magic Aptitudes<a class="headerlink" href="#magic-aptitudes" title="Permanent link">&para;</a></h3>
+<p>Magic aptitudes should enhance spellcasting without overshadowing the Circle system:</p>
+<p><strong>Good patterns:</strong></p>
+<ul>
+<li>Modify spell mechanics (Spell Twister, Metamagic)</li>
+<li>Provide spell recovery (Arcane Recovery)</li>
+<li>Enhance specific casting styles (Swordspell, Ritual Caster)</li>
+<li>Offer defensive options (Spellshield, Counterspell)</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><strong>Spell Twister</strong>: Once/long rest, change one scaling parameter without increasing DC (limited uses, GM approval required)</li>
+<li><strong>Metamagic</strong>: L times/long rest, cast silently or without gestures (scales with level, situational benefit)</li>
+<li><strong>Blood Magic</strong>: Take HP equal to DC to auto-succeed (high cost, desperate option)</li>
+</ul>
+<p><strong>Why these work:</strong>
+- Expand what casters can do WITHOUT giving them more spells
+- Create meaningful choices (when to use limited abilities)
+- Support different casting styles (ritual, combat, subtle)
+- Have costs or limitations</p>
+<p><strong>Avoid:</strong>
+- "Cast one extra spell per day" (just makes casters better at everything)
+- Reducing spell DCs without cost (breaks the scaling system)
+- Abilities that eliminate spell weaknesses (armor doesn't hinder you)
+- Making all Circles equally good at everything (homogenizes magic)</p>
+<h3 id="exploration-aptitudes">Exploration Aptitudes<a class="headerlink" href="#exploration-aptitudes" title="Permanent link">&para;</a></h3>
+<p>Exploration aptitudes should create interesting choices and enable specific playstyles:</p>
+<p><strong>Good patterns:</strong></p>
+<ul>
+<li>Advantage on specific types of tests (Move Silently and Unseen, Wild Walker)</li>
+<li>Special abilities once per rest period (Shadow Step, Escape Artist)</li>
+<li>Passive benefits that enhance role (Dungeon Sense, Cartographer)</li>
+<li>Companion creatures that add options (Hunting Dog, Familiar)</li>
+</ul>
+<p><strong>Consider:</strong></p>
+<ul>
+<li>Does this enable a specific archetype? (thief, scout, tracker)</li>
+<li>Does it create interesting decisions? (when to use limited abilities)</li>
+<li>Is it useful frequently enough? (avoid overly situational)</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><strong>Wild Walker</strong>: Advantage in wilderness (defines clear niche)</li>
+<li><strong>Shadow Step</strong>: Once/long rest teleport (strong but limited)</li>
+<li><strong>Cartographer</strong>: Auto-map areas (always useful, never overpowered)</li>
+</ul>
+<p><strong>Why these work:</strong>
+- Define clear niches (you're THE wilderness person)
+- Useful regularly but not overwhelming
+- Create opportunities for clever play
+- Make exploration more interesting</p>
+<p><strong>Avoid:</strong>
+- "You can't fail at X" (removes challenge)
+- Too broad advantages (advantage on ALL tests)
+- Abilities that only work in one specific scenario per campaign
+- Replacements for player skill (auto-solve all puzzles)</p>
+<h3 id="social-aptitudes">Social Aptitudes<a class="headerlink" href="#social-aptitudes" title="Permanent link">&para;</a></h3>
+<p>Social aptitudes should enhance roleplay without replacing it:</p>
+<p><strong>Good patterns:</strong></p>
+<ul>
+<li>Advantage on specific social tests (Silver Tongue)</li>
+<li>Once per encounter abilities (Fast Talk)</li>
+<li>Conditional bonuses (Intimidating Presence)</li>
+<li>Information gathering (Read Tells, Network)</li>
+</ul>
+<p><strong>Important:</strong></p>
+<ul>
+<li>Should enhance roleplay, not replace it</li>
+<li>Should have reasonable limitations</li>
+<li>Should fit character archetype</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><strong>Silver Tongue</strong>: Advantage to negotiate (but not mind control)</li>
+<li><strong>Fast Talk</strong>: Reroll one failed CHA test (limited, clutch ability)</li>
+<li><strong>Network</strong>: Know someone useful in each location (creates story hooks)</li>
+</ul>
+<p><strong>Why these work:</strong>
+- Player still has to describe WHAT they say
+- Dice help when it matters, don't auto-win
+- Create story opportunities
+- Reward social character builds</p>
+<p><strong>Avoid:</strong>
+- Mind control or compulsion effects as aptitudes (that's magic)
+- Automatic success on all social tests (boring)
+- Abilities that short-circuit entire social encounters
+- Making other players feel like they shouldn't talk</p>
+<hr />
+<h2 id="design-guidelines-for-inherent-aptitudes">Design Guidelines for Inherent Aptitudes<a class="headerlink" href="#design-guidelines-for-inherent-aptitudes" title="Permanent link">&para;</a></h2>
+<p>Inherent aptitudes define what a character IS rather than what they've learned.</p>
+<h3 id="physicalanatomical-traits">Physical/Anatomical Traits<a class="headerlink" href="#physicalanatomical-traits" title="Permanent link">&para;</a></h3>
+<p><strong>Consider:</strong></p>
+<ul>
+<li>How does this change the character's form?</li>
+<li>What are the trade-offs? (Natural Armor prevents manufactured armor)</li>
+<li>Is it always-on or situational?</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><strong>Natural Weapons</strong>: 1d6+STR damage (comparable to weapons, always available)</li>
+<li><strong>Natural Armor</strong>: +2 AC but can't wear manufactured armor (trade-off)</li>
+<li><strong>Demon Tail</strong>: Can hold things but can't wield weapon (interesting limitation)</li>
+</ul>
+<p><strong>Why these work:</strong>
+- Clear mechanical benefits
+- Balanced by trade-offs or limitations
+- Create interesting character concepts
+- Always relevant (define your form)</p>
+<p><strong>Avoid:</strong>
+- "Natural weapons AND armor AND claws AND..." (too much)
+- No trade-offs (just better than everyone)
+- Purely cosmetic traits masquerading as aptitudes
+- Body parts that never matter in play</p>
+<h3 id="movement-traits">Movement Traits<a class="headerlink" href="#movement-traits" title="Permanent link">&para;</a></h3>
+<p><strong>Consider:</strong></p>
+<ul>
+<li>How does this change exploration and combat?</li>
+<li>What are the limitations? (can't use while hands full)</li>
+<li>Is it magical or physical?</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><strong>Leathery Wings</strong>: Can't fly but can glide (limited benefit, interesting)</li>
+<li><strong>Spider Climb</strong>: Climb at half speed, hands must be free (useful, balanced)</li>
+<li><strong>Forest Walk</strong>: Step into trees (magical, thematic, limited by environment)</li>
+</ul>
+<p><strong>Why these work:</strong>
+- Solve specific movement challenges
+- Have clear limitations (not just "better")
+- Create tactical options in combat
+- Enable interesting exploration</p>
+<p><strong>Avoid:</strong>
+- Unlimited teleportation (breaks encounters)
+- Flight with no restrictions (trivializes many challenges)
+- Speed bonuses without trade-offs (+10 ft all the time is boring)
+- Movement that makes other characters irrelevant</p>
+<h3 id="magicalmystical-traits">Magical/Mystical Traits<a class="headerlink" href="#magicalmystical-traits" title="Permanent link">&para;</a></h3>
+<p><strong>Consider:</strong></p>
+<ul>
+<li>How does this reflect the character's nature?</li>
+<li>Does it create interesting story opportunities?</li>
+<li>Is it too powerful for always-on?</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><strong>Magic Resistance</strong>: Advantage vs spells (strong but passive)</li>
+<li><strong>Soulspell</strong>: Absorb spell without slot but lose original (interesting trade-off)</li>
+<li><strong>Innate Spellcasting</strong>: Cast one spell L times/long rest (limited but reliable)</li>
+</ul>
+<p><strong>Why these work:</strong>
+- Create unique magical identities
+- Generate story hooks (why are you like this?)
+- Balanced by limitations or costs
+- Interact interestingly with the magic system</p>
+<p><strong>Avoid:</strong>
+- Immunity to entire damage types (unless very narrow)
+- Always-on spell effects with no cost (that's Circle of Magic)
+- Abilities that let you "cheat" the magic system
+- Generic magical bonuses (+1 to all magic tests)</p>
+<hr />
+<h2 id="balancing-aptitudes">Balancing Aptitudes<a class="headerlink" href="#balancing-aptitudes" title="Permanent link">&para;</a></h2>
+<h3 id="power-level-guidelines">Power Level Guidelines<a class="headerlink" href="#power-level-guidelines" title="Permanent link">&para;</a></h3>
+<p><strong>Weak Aptitudes</strong> (rarely useful or very limited):</p>
+<ul>
+<li>Passive +1 bonus in specific rare situations</li>
+<li>Ability usable once per week</li>
+<li>Very situational benefit that rarely applies</li>
+<li>Benefits that are purely cosmetic</li>
+</ul>
+<p><strong>Example weak aptitude:</strong>
+"<strong>Lucky Coin</strong>: Once per month, you can flip a coin and call it for +1 on your next test."</p>
+<p><strong>Why it's weak:</strong> Too limited (once per month), too small benefit (+1), too unreliable (coin flip).</p>
+<p><strong>Moderate Aptitudes</strong> (the target):</p>
+<ul>
+<li>Advantage on specific types of tests</li>
+<li>Ability usable L times per long rest</li>
+<li>Once per combat abilities</li>
+<li>Always-on benefits with trade-offs</li>
+</ul>
+<p><strong>Example moderate aptitudes:</strong>
+- <strong>Cleave</strong>: Free attack when you drop enemy (common trigger, useful benefit)
+- <strong>Wild Walker</strong>: Advantage in wilderness (niche but substantial)
+- <strong>Shadow Step</strong>: Teleport once per long rest (powerful but limited)</p>
+<p><strong>Why they're moderate:</strong> Useful regularly, meaningful benefits, clear limitations or triggers.</p>
+<p><strong>Strong Aptitudes</strong> (risk of overshadowing):</p>
+<ul>
+<li>Unconditional advantage on common tests</li>
+<li>Abilities usable every round</li>
+<li>Large bonuses without conditions</li>
+<li>Multiple benefits in one aptitude</li>
+</ul>
+<p><strong>Example strong aptitude:</strong>
+"<strong>Master Warrior</strong>: +2 to all attack rolls, advantage on all STR tests, and +2 AC."</p>
+<p><strong>Why it's too strong:</strong> No conditions, multiple benefits, always active, makes combat characters strictly better.</p>
+<p><strong>Most aptitudes should be Moderate.</strong> A character with 2 Moderate aptitudes feels capable without being overpowered.</p>
+<h3 id="testing-your-aptitude">Testing Your Aptitude<a class="headerlink" href="#testing-your-aptitude" title="Permanent link">&para;</a></h3>
+<p><strong>Ask yourself:</strong></p>
+<ol>
+<li><strong>Is it generally useful?</strong> If it only applies in one specific scenario per session, it's too narrow</li>
+<li><strong>Does it have appropriate limitations?</strong> No unlimited power without costs or conditions</li>
+<li><strong>Does it fit a clear theme?</strong> What profession or species would have this? Why?</li>
+<li><strong>Does it scale appropriately?</strong> Should it use "L times per long rest" to grow with character?</li>
+<li><strong>Would I be excited to choose this?</strong> If not, it needs more interesting benefits or better flavor</li>
+</ol>
+<p><strong>Compare to existing aptitudes:</strong></p>
+<ul>
+<li>Is it weaker or stronger than similar aptitudes?</li>
+<li>Does it overlap too much with another aptitude?</li>
+<li>Does it create interesting decisions, or is it just "always use this"?</li>
+<li>Would you feel bad if another player took this instead of you?</li>
+</ul>
+<p><strong>Playtest questions:</strong></p>
+<ul>
+<li>Did it come up in most sessions?</li>
+<li>Did it create interesting moments or just passive benefits?</li>
+<li>Did other players feel overshadowed?</li>
+<li>Was it too complicated to remember/use?</li>
+</ul>
+<hr />
+<h2 id="example-creating-a-new-aptitude">Example: Creating a New Aptitude<a class="headerlink" href="#example-creating-a-new-aptitude" title="Permanent link">&para;</a></h2>
+<p>Let's walk through creating a new aptitude from concept to final version.</p>
+<p><strong>Concept:</strong> An aptitude for a character who's a master of thrown weapons</p>
+<h3 id="first-draft">First Draft<a class="headerlink" href="#first-draft" title="Permanent link">&para;</a></h3>
+<p>"<strong>Thrown Weapon Master</strong>: Advantage on all thrown weapon attacks"</p>
+<p><strong>Problems:</strong>
+- Too simple and unconditional
+- Doesn't create interesting decisions
+- Just a flat bonus with no flavor
+- Boring to use (always the same)</p>
+<h3 id="second-draft">Second Draft<a class="headerlink" href="#second-draft" title="Permanent link">&para;</a></h3>
+<p>"<strong>Thrown Weapon Master</strong>: After hitting with a thrown weapon, your next thrown weapon attack this combat has advantage. You can draw thrown weapons as a free action."</p>
+<p><strong>Why this is better:</strong>
+- Creates a conditional benefit (must hit first)
+- Rewards consecutive throws (builds momentum)
+- Includes utility benefit (quick draw)
+- Fits the archetype without being overpowered</p>
+<p><strong>Remaining issues:</strong>
+- Lacks flavor
+- Doesn't scale with level
+- Might be too weak (only one advantage per hit)</p>
+<h3 id="final-version">Final Version<a class="headerlink" href="#final-version" title="Permanent link">&para;</a></h3>
+<p>"<strong>Thrown Weapon Master</strong>: After hitting with a thrown weapon, your next thrown weapon attack this combat has advantage. Additionally, you can draw thrown weapons as a free action, and you always seem to have one more throwing knife than anyone expects."</p>
+<p><strong>Why the final version works:</strong>
+- Clear mechanical benefit (conditional advantage)
+- Interesting decision point (when to throw vs melee)
+- Utility benefit (quick draw)
+- Narrative flavor (the last sentence)
+- Comparable to other combat aptitudes
+- Opens up thrown weapon as viable playstyle</p>
+<p><strong>Could also add scaling:</strong> "L times per long rest, you can throw a weapon with such force it deals +1d6 damage."</p>
+<hr />
+<h2 id="aptitude-templates">Aptitude Templates<a class="headerlink" href="#aptitude-templates" title="Permanent link">&para;</a></h2>
+<p>Use these templates as starting points for creating new aptitudes:</p>
+<h3 id="combat-aptitude-template">Combat Aptitude Template<a class="headerlink" href="#combat-aptitude-template" title="Permanent link">&para;</a></h3>
+<p><strong>[Name]</strong>: When [trigger condition], [benefit]. [Optional: Frequency limitation]</p>
+<p><strong>Examples:</strong>
+- <strong>Cleave</strong>: When you reduce enemy to 0 HP, free attack on another enemy in close range
+- <strong>Mighty Blow</strong>: L times/long rest, declare before attack. If hit, roll damage twice, take higher</p>
+<h3 id="magic-aptitude-template">Magic Aptitude Template<a class="headerlink" href="#magic-aptitude-template" title="Permanent link">&para;</a></h3>
+<p><strong>[Name]</strong>: [Frequency], [spell-related benefit or modification]. [Optional: Limitation or cost]</p>
+<p><strong>Examples:</strong>
+- <strong>Spell Twister</strong>: Once/long rest, change one scaling parameter without increasing DC (GM approval)
+- <strong>Blood Magic</strong>: Cast spell: take HP = DC to auto-succeed (still burns spell)</p>
+<h3 id="exploration-aptitude-template">Exploration Aptitude Template<a class="headerlink" href="#exploration-aptitude-template" title="Permanent link">&para;</a></h3>
+<p><strong>[Name]</strong>: Advantage on [specific type of test]. [Optional: Additional benefit in niche]</p>
+<p><strong>Examples:</strong>
+- <strong>Wild Walker</strong>: Advantage to track/hunt/forage/navigate in natural wilderness
+- <strong>Dungeon Sense</strong>: Advantage to detect traps, secret doors, unusual construction. Can tell depth underground</p>
+<h3 id="social-aptitude-template">Social Aptitude Template<a class="headerlink" href="#social-aptitude-template" title="Permanent link">&para;</a></h3>
+<p><strong>[Name]</strong>: Advantage on [social stat] to [specific social goal]. [Optional: Limitation]</p>
+<p><strong>Examples:</strong>
+- <strong>Silver Tongue</strong>: Advantage on CHA to negotiate, improve reactions, convince risk (not against core interests)
+- <strong>Intimidating Presence</strong>: Advantage to intimidate smaller creatures or with fewer HD than your level</p>
+<hr />
+<h1 id="part-2-creating-circles-of-magic">Part 2: Creating Circles of Magic<a class="headerlink" href="#part-2-creating-circles-of-magic" title="Permanent link">&para;</a></h1>
+<p>Circles define what type of magic a caster can perform. Each Circle provides a theme and spell framework.</p>
+<hr />
+<h2 id="circle-design-philosophy">Circle Design Philosophy<a class="headerlink" href="#circle-design-philosophy" title="Permanent link">&para;</a></h2>
+<p><strong>Circles should:</strong></p>
+<ul>
+<li>Have a <strong>clear theme</strong> that's easy to explain in one sentence</li>
+<li>Provide <strong>versatile options</strong> for different situations</li>
+<li>Allow for <strong>creative problem-solving</strong></li>
+<li>Scale appropriately with the spell level system</li>
+</ul>
+<p><strong>Avoid:</strong></p>
+<ul>
+<li>Circles that only do one thing (too narrow)</li>
+<li>Themes that overlap too much with existing Circles (redundant)</li>
+<li>Concepts that are too narrow or too broad (hard to use)</li>
+<li>Complexity that makes spellcasting tedious</li>
+</ul>
+<hr />
+<h2 id="choosing-your-theme">Choosing Your Theme<a class="headerlink" href="#choosing-your-theme" title="Permanent link">&para;</a></h2>
+<h3 id="strong-themes">Strong Themes<a class="headerlink" href="#strong-themes" title="Permanent link">&para;</a></h3>
+<p><strong>Transmutation</strong> - Alteration of matter and form</p>
+<ul>
+<li>Clear concept: change things</li>
+<li>Versatile: works on objects, creatures, materials</li>
+<li>Scalable: small changes to dramatic transformations</li>
+<li>Example spells: Stoneflesh, Shrink/Enlarge, Liquid Form</li>
+</ul>
+<p><strong>Conjuration</strong> - Creation and summoning</p>
+<ul>
+<li>Clear concept: bring things into existence</li>
+<li>Versatile: creatures, objects, elements</li>
+<li>Scalable: temporary to permanent, small to large</li>
+<li>Example spells: Conjure Flame, Summon Swarm, Fog Cloud</li>
+</ul>
+<p><strong>Elementalism</strong> - Fire, water, air, earth</p>
+<ul>
+<li>Clear concept: primal forces</li>
+<li>Versatile: damage, control, utility</li>
+<li>Scalable: small effects to devastating forces</li>
+<li>Example spells: Flame Jet, Stone Grasp, Whispering Wind</li>
+</ul>
+<p><strong>Why these work:</strong>
+- Instantly understandable theme
+- Can handle combat, exploration, and social situations
+- Many possible spells within theme
+- Distinct from each other</p>
+<h3 id="weak-themes-and-how-to-fix-them">Weak Themes (and how to fix them)<a class="headerlink" href="#weak-themes-and-how-to-fix-them" title="Permanent link">&para;</a></h3>
+<p><strong>"Weather Magic"</strong> - Too narrow</p>
+<ul>
+<li>Problem: Only works outdoors, limited spell variety</li>
+<li>Fix: Broaden to "Nature" (includes plants, animals, weather)</li>
+<li>Or: Add to Elementalism (weather is air and water)</li>
+</ul>
+<p><strong>"Attack Magic"</strong> - Too general</p>
+<ul>
+<li>Problem: No clear identity, overlaps with everything</li>
+<li>Fix: Specify element or method (Elementalism for elemental damage)</li>
+<li>Or: Focus on specific attack style (Necromancy for death/decay)</li>
+</ul>
+<p><strong>"Reality Warping"</strong> - Too vague</p>
+<ul>
+<li>Problem: Could mean anything, no clear boundaries</li>
+<li>Fix: Focus on specific aspect (Fate for probability, Illusion for perception, Transmutation for matter)</li>
+</ul>
+<p><strong>"Healing Magic"</strong> - Too narrow</p>
+<ul>
+<li>Problem: Only one function, not versatile enough</li>
+<li>Fix: Broaden to "Holy" (healing + turn undead + blessings)</li>
+<li>Or: Part of divine/nature magic, not standalone Circle</li>
+</ul>
+<hr />
+<h2 id="creating-base-level-spells">Creating Base Level Spells<a class="headerlink" href="#creating-base-level-spells" title="Permanent link">&para;</a></h2>
+<p>Base level spells are the foundation of your Circle. They should be <strong>useful</strong> and <strong>scalable</strong>.</p>
+<h3 id="the-framework">The Framework<a class="headerlink" href="#the-framework" title="Permanent link">&para;</a></h3>
+<p>Every base spell needs:</p>
+<ol>
+<li><strong>Effect</strong> - What does it do?</li>
+<li><strong>Target/Area</strong> - What does it affect? (usually 1 target or 10 ft area)</li>
+<li><strong>Range</strong> - How far can you cast it? (usually 30 ft or touch)</li>
+<li><strong>Duration</strong> - How long does it last? (1 round for combat, 1 turn for exploration)</li>
+</ol>
+<h3 id="spell-creation-process">Spell Creation Process<a class="headerlink" href="#spell-creation-process" title="Permanent link">&para;</a></h3>
+<p><strong>Step 1: Start with the concept</strong></p>
+<p>"I want to summon a demon to fight for me"</p>
+<p><strong>Step 2: Find the appropriate base level</strong></p>
+<p>A demon is person-sized and powerful. That's too much for base level.</p>
+<p><strong>Analysis:</strong>
+- Size: Person-sized creatures are higher-level summons
+- Power: Combat-effective creatures need to be limited
+- Duration: Permanent summons are very high-level</p>
+<p><strong>Step 3: Scale down to base level</strong></p>
+<ul>
+<li><strong>Size</strong>: Person → Item (a small imp instead of a demon)</li>
+<li><strong>Duration</strong>: Permanent → 1 round (temporary summoning)</li>
+<li><strong>Number</strong>: Many → 1 (single creature)</li>
+<li><strong>Power</strong>: Full stats → Simple commands, basic attacks</li>
+</ul>
+<p><strong>Step 4: Write the base spell</strong></p>
+<p><strong>Summon Imp</strong> - Summon 1 imp (item-sized) to obey your commands for 1 round</p>
+<p><strong>Step 5: Identify what can scale</strong></p>
+<ul>
+<li><strong>Size</strong>: Item → Object → Person (imp → demon → greater demon)</li>
+<li><strong>Duration</strong>: 1 round → 3 rounds → 1 turn → 1 hour</li>
+<li><strong>Number</strong>: 1 → 2 → 3 → 5 imps</li>
+<li><strong>Power</strong>: Basic commands → Complex tactics → Independent action</li>
+</ul>
+<p><strong>Result:</strong> A useful base spell that can scale to meet different needs.</p>
+<h3 id="scaling-guidelines">Scaling Guidelines<a class="headerlink" href="#scaling-guidelines" title="Permanent link">&para;</a></h3>
+<p>Each enhancement should add roughly the same power level:</p>
+<p><strong>Damage spells:</strong>
+- +1d to damage = +1 DC
+- ×2 area = +1 DC
+- +10 ft range = +1 DC</p>
+<p><strong>Duration spells:</strong>
+- +1 round/turn/hour/day = +1 DC (choose appropriate to spell)</p>
+<p><strong>Target spells:</strong>
+- +1 target = +1 DC
+- Bigger target size = +2 DC per size category</p>
+<p><strong>Complexity:</strong>
+- Simple → Moderate = +1 DC
+- Moderate → Complex = +2 DC</p>
+<p><strong>Examples:</strong></p>
+<p><strong>Base:</strong> Conjure Flame - 10 ft fireball, 1d4 fire damage (DC 12)
+- 2d4 damage → DC 13 (+1 enhancement)
+- 20 ft fireball → DC 13 (+1 enhancement)
+- 2d4 damage, 20 ft → DC 14 (+2 enhancements)</p>
+<p><strong>Base:</strong> Stoneflesh - +1 AC for 1 round (DC 12)
+- +2 AC for 1 round → DC 13 (+1 enhancement)
+- +1 AC for 3 rounds → DC 14 (+2 enhancements)
+- +2 AC for 3 rounds → DC 15 (+3 enhancements)</p>
+<hr />
+<h2 id="creating-8-spells-for-your-circle">Creating 8 Spells for Your Circle<a class="headerlink" href="#creating-8-spells-for-your-circle" title="Permanent link">&para;</a></h2>
+<p>Each Circle should have 8 example spells that showcase different aspects of the theme.</p>
+<h3 id="the-eight-spell-framework">The Eight Spell Framework<a class="headerlink" href="#the-eight-spell-framework" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Basic Damage/Attack</strong> - Direct harm or obstacle</li>
+<li><strong>Control/Hinder</strong> - Slow, restrain, or debuff enemies</li>
+<li><strong>Utility/Creation</strong> - Create useful objects or effects</li>
+<li><strong>Enhancement</strong> - Buff allies or self</li>
+<li><strong>Detection/Information</strong> - Learn things or sense hidden</li>
+<li><strong>Movement/Escape</strong> - Mobility or defensive repositioning</li>
+<li><strong>Area Effect</strong> - Affect multiple targets or large area</li>
+<li><strong>Unique/Signature</strong> - Something special to this Circle</li>
+</ol>
+<p><strong>Why this framework:</strong>
+- Ensures versatility (combat + exploration + social)
+- Covers different playstyles
+- Makes Circle feel complete
+- Easy to reference during creation</p>
+<p><strong>Example: Circle of Transmutation</strong></p>
+<ol>
+<li><strong>Lightfoot</strong> (Movement) - Ignore difficult terrain, move silently</li>
+<li><strong>Stoneflesh</strong> (Enhancement) - +1 AC</li>
+<li><strong>Alter Object</strong> (Utility) - Change material of objects</li>
+<li><strong>Shrink/Enlarge</strong> (Control) - Change size of creatures</li>
+<li><strong>Mend</strong> (Utility) - Repair broken items</li>
+<li><strong>Animal Shape</strong> (Enhancement) - Gain animal traits</li>
+<li><strong>Purify Matter</strong> (Utility) - Remove poison/disease/rot</li>
+<li><strong>Liquid Form</strong> (Unique) - Become fluid</li>
+</ol>
+<p><strong>Coverage checklist:</strong>
+- Combat options (Stoneflesh for defense, Shrink/Enlarge for control)
+- Exploration utility (Alter Object, Mend, Purify, Lightfoot)
+- Social/interesting (Animal Shape, Liquid Form)
+- Versatile at different scales (all can be enhanced)</p>
+<hr />
+<h2 id="example-creating-a-new-circle">Example: Creating a New Circle<a class="headerlink" href="#example-creating-a-new-circle" title="Permanent link">&para;</a></h2>
+<p>Let's create a complete Circle from scratch.</p>
+<h3 id="circle-of-sound">Circle of Sound<a class="headerlink" href="#circle-of-sound" title="Permanent link">&para;</a></h3>
+<p><strong>Theme:</strong> Manipulation of sound, vibration, and resonance</p>
+<p><strong>Core concept:</strong> Control sound waves for communication, offense, defense, and exploration</p>
+<p><strong>Why this theme works:</strong>
+- Clear, understandable concept
+- Versatile (combat, exploration, social)
+- Distinct from existing Circles
+- Lots of creative spell possibilities</p>
+<h3 id="step-1-brainstorm-spell-concepts">Step 1: Brainstorm spell concepts<a class="headerlink" href="#step-1-brainstorm-spell-concepts" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Create loud noise to distract</li>
+<li>Silence an area</li>
+<li>Use sound as a weapon</li>
+<li>Amplify or dampen sounds</li>
+<li>Communicate over distance</li>
+<li>Shatter objects with resonance</li>
+<li>Create echoes to map area</li>
+<li>Throw voice</li>
+</ul>
+<h3 id="step-2-create-8-base-level-spells">Step 2: Create 8 base level spells<a class="headerlink" href="#step-2-create-8-base-level-spells" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Thunderclap</strong> (Damage)</li>
+<li>10 ft burst of sound, 1d4 damage</li>
+<li>
+<p>Enhancements: +1d4, ×2 area, +10 ft range</p>
+</li>
+<li>
+<p><strong>Silence</strong> (Control)</p>
+</li>
+<li>10 ft area of silence for 1 round</li>
+<li>
+<p>Enhancements: ×2 area, +1 round</p>
+</li>
+<li>
+<p><strong>Amplify Voice</strong> (Utility)</p>
+</li>
+<li>Your voice carries to far distance (60 ft) for 1 turn</li>
+<li>
+<p>Enhancements: +60 ft, +1 turn, affect sounds beyond voice</p>
+</li>
+<li>
+<p><strong>Muffle Steps</strong> (Enhancement)</p>
+</li>
+<li>One creature moves silently for 1 turn</li>
+<li>
+<p>Enhancements: +1 target, +1 turn</p>
+</li>
+<li>
+<p><strong>Echo Sense</strong> (Detection)</p>
+</li>
+<li>Send out soundwave to map near area (30 ft) through walls, 1 round</li>
+<li>
+<p>Enhancements: +30 ft, +1 round, more detail</p>
+</li>
+<li>
+<p><strong>Sonic Burst</strong> (Area)</p>
+</li>
+<li>Push creatures 10 ft in 10 ft cone with sound</li>
+<li>
+<p>Enhancements: +10 ft distance, ×2 area, 1d4 damage</p>
+</li>
+<li>
+<p><strong>Shatter</strong> (Damage)</p>
+</li>
+<li>Item-sized brittle object shatters (glass, pottery, thin wood)</li>
+<li>
+<p>Enhancements: increase size, affect tougher materials</p>
+</li>
+<li>
+<p><strong>Ventriloquism</strong> (Unique)</p>
+</li>
+<li>Project your voice to near range point (30 ft) for 1 round</li>
+<li>Enhancements: +30 ft, +1 round, multiple voices</li>
+</ol>
+<h3 id="step-3-verify-coverage">Step 3: Verify coverage<a class="headerlink" href="#step-3-verify-coverage" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Damage (Thunderclap, Shatter)</li>
+<li>Control (Silence, Sonic Burst)</li>
+<li>Utility (Amplify Voice, Ventriloquism)</li>
+<li>Enhancement (Muffle Steps)</li>
+<li>Detection (Echo Sense)</li>
+<li>Variety of situations (combat, stealth, exploration, social)</li>
+<li>Scalable options (all can be enhanced)</li>
+</ul>
+<p><strong>Analysis:</strong>
+- <strong>Combat</strong>: Thunderclap for damage, Sonic Burst for area control, Silence to counter casters
+- <strong>Exploration</strong>: Echo Sense for mapping, Muffle Steps for stealth, Shatter for breaking obstacles
+- <strong>Social</strong>: Amplify Voice for speeches/intimidation, Ventriloquism for deception/distraction
+- <strong>Unique flavor</strong>: All spells feel thematically connected to sound</p>
+<p><strong>Result:</strong> A complete, balanced Circle that's distinct from existing options.</p>
+<hr />
+<h2 id="advanced-spell-creation">Advanced Spell Creation<a class="headerlink" href="#advanced-spell-creation" title="Permanent link">&para;</a></h2>
+<h3 id="complex-spell-scaling">Complex Spell Scaling<a class="headerlink" href="#complex-spell-scaling" title="Permanent link">&para;</a></h3>
+<p>Some spells scale in multiple ways:</p>
+<p><strong>Summon Elemental</strong>
+- Base: Summon 1 item-sized elemental for 1 round
+- Can scale: size, duration, number, elemental type</p>
+<p><strong>Example scalings:</strong>
+- DC 13: Summon 1 item-sized elemental for 2 rounds (+1 duration)
+- DC 14: Summon 1 object-sized elemental for 1 round (+2 size categories)
+- DC 16: Summon 3 item-sized elementals for 1 round (+2 number)
+- DC 18: Summon 1 person-sized elemental for 3 rounds (+3 size, +2 duration)</p>
+<p><strong>Why allow multiple scaling:</strong>
+- Gives caster flexibility
+- Same spell useful at different levels
+- Rewards system mastery
+- Creates interesting choices</p>
+<h3 id="spells-with-saves">Spells with Saves<a class="headerlink" href="#spells-with-saves" title="Permanent link">&para;</a></h3>
+<p>Some spells require targets to make saves:</p>
+<p><strong>Base pattern:</strong>
+- Target makes [STAT] test vs DC 12
+- Each enhancement to DC = +1 spell DC</p>
+<p><strong>Example: Charm Person</strong>
+- Base: Target within 30 ft makes WIS test DC 12 or becomes friendly for 1 turn
+- +1 DC: WIS test DC 13 (+1 enhancement)
+- +1 turn: Lasts 2 turns (+1 enhancement)
+- +1 target: Affects 2 targets (+1 enhancement)</p>
+<p><strong>Total cost for DC 13, 2 turns, 2 targets = DC 15 spell (3 enhancements)</strong></p>
+<p><strong>Design notes:</strong>
+- Base save DC always 12 (consistent)
+- Increasing save DC costs same as other enhancements
+- Makes spells work on tougher enemies at higher cost</p>
+<h3 id="permanent-effects">Permanent Effects<a class="headerlink" href="#permanent-effects" title="Permanent link">&para;</a></h3>
+<p>Permanent effects are high level by nature:</p>
+<p><strong>Guidelines:</strong>
+- Small permanent changes: DC 15-18 (permanent light on object, minor transformation)
+- Significant permanent changes: DC 18-21 (create permanent servant, major transformation)
+- Always allow ritual casting to reduce DC
+- Consider requiring rare materials or long casting times</p>
+<p><strong>Example: Permanent Familiar from Circle of Conjuration</strong>
+- Base: Call Familiar (small creature, 1 hour) - DC 12
+- Make permanent: +6 DC
+- Total: DC 18 or DC 12 with 6 turns of ritual</p>
+<p><strong>Why permanent effects are expensive:</strong>
+- Change game world permanently
+- Can create permanent resources
+- Could be abused if too cheap
+- Should feel like major accomplishments</p>
+<hr />
+<h2 id="testing-your-circle">Testing Your Circle<a class="headerlink" href="#testing-your-circle" title="Permanent link">&para;</a></h2>
+<h3 id="balance-checklist">Balance Checklist<a class="headerlink" href="#balance-checklist" title="Permanent link">&para;</a></h3>
+<p><strong>Versatility:</strong>
+- [ ] Combat options (damage or control)
+- [ ] Exploration utility (detection, movement, or manipulation)
+- [ ] Social potential (communication, enhancement, or illusion)</p>
+<p><strong>Power Level:</strong>
+- [ ] Base damage comparable to other Circles (1d4-1d6 for damage spells)
+- [ ] Duration comparable (1 round combat, 1 turn exploration)
+- [ ] Range reasonable (30 ft or touch for most)</p>
+<p><strong>Theme:</strong>
+- [ ] Every spell fits the Circle's concept
+- [ ] Spells feel distinct from other Circles
+- [ ] Theme is easy to explain in one sentence</p>
+<p><strong>Playability:</strong>
+- [ ] Spells create interesting decisions
+- [ ] Scaling is intuitive
+- [ ] No spells are strictly better than others at base level</p>
+<h3 id="playtesting">Playtesting<a class="headerlink" href="#playtesting" title="Permanent link">&para;</a></h3>
+<p><strong>Test these scenarios:</strong></p>
+<ol>
+<li><strong>Combat encounter:</strong> Can the Circle contribute meaningfully?</li>
+<li><strong>Dungeon exploration:</strong> Does it provide useful options?</li>
+<li><strong>Social situation:</strong> Can it enhance roleplay?</li>
+<li><strong>Problem-solving:</strong> Does it enable creative solutions?</li>
+</ol>
+<p><strong>Red flags:</strong>
+- Circle only works in one type of situation
+- Spells are too similar to each other
+- Scaling feels arbitrary or confusing
+- Players confused about what the Circle does
+- One spell gets used 90% of the time</p>
+<p><strong>Green lights:</strong>
+- Players excited to try different spells
+- Creative uses emerge during play
+- Feels distinct from other Circles
+- Works at multiple character levels</p>
+<hr />
+<h2 id="circle-templates">Circle Templates<a class="headerlink" href="#circle-templates" title="Permanent link">&para;</a></h2>
+<p>Use these templates as starting points for creating new Circles:</p>
+<h3 id="template-damage-focused-circle">Template: Damage-Focused Circle<a class="headerlink" href="#template-damage-focused-circle" title="Permanent link">&para;</a></h3>
+<p><strong>Theme:</strong> [Your damage type/method]</p>
+<p><strong>Example spells:</strong></p>
+<ol>
+<li>Direct damage (1d4-1d6 base)</li>
+<li>Area damage (smaller damage or area at base)</li>
+<li>Damage over time (DoT effect)</li>
+<li>Enhanced weapon (add element to attacks)</li>
+<li>Damage shield (hurt attackers)</li>
+<li>Utility spell (non-damage, fits theme)</li>
+<li>Control/debuff (weaken enemies)</li>
+<li>Movement or defensive option</li>
+</ol>
+<p><strong>Use for:</strong> Elementalism variants, weapon magic, destruction</p>
+<p><strong>Examples:</strong> Fire magic, necrotic damage, radiant light</p>
+<hr />
+<h3 id="template-control-focused-circle">Template: Control-Focused Circle<a class="headerlink" href="#template-control-focused-circle" title="Permanent link">&para;</a></h3>
+<p><strong>Theme:</strong> [Your control method]</p>
+<p><strong>Example spells:</strong></p>
+<ol>
+<li>Single target immobilize/stun</li>
+<li>Area slow/hinder</li>
+<li>Force movement (push, pull)</li>
+<li>Create barrier/obstacle</li>
+<li>Debuff enemies</li>
+<li>Remove control from others (dispel)</li>
+<li>Utility/manipulation</li>
+<li>Enhancement/protection</li>
+</ol>
+<p><strong>Use for:</strong> Mentalism, manipulation, terrain control</p>
+<p><strong>Examples:</strong> Mind control, ice/earth binding, gravity</p>
+<hr />
+<h3 id="template-utility-focused-circle">Template: Utility-Focused Circle<a class="headerlink" href="#template-utility-focused-circle" title="Permanent link">&para;</a></h3>
+<p><strong>Theme:</strong> [Your utility focus]</p>
+<p><strong>Example spells:</strong></p>
+<ol>
+<li>Create/summon useful item</li>
+<li>Repair/modify object</li>
+<li>Enhance item or creature</li>
+<li>Detect/sense</li>
+<li>Communicate</li>
+<li>Movement utility</li>
+<li>Environmental manipulation</li>
+<li>Problem-solving spell</li>
+</ol>
+<p><strong>Use for:</strong> Artifice, conjuration, support magic</p>
+<p><strong>Examples:</strong> Creation magic, enhancement magic, detection</p>
+<hr />
+<h1 id="part-3-putting-it-all-together">Part 3: Putting It All Together<a class="headerlink" href="#part-3-putting-it-all-together" title="Permanent link">&para;</a></h1>
+<h2 id="creating-a-custom-class">Creating a Custom Class<a class="headerlink" href="#creating-a-custom-class" title="Permanent link">&para;</a></h2>
+<p>A class is simply a combination of 2 aptitudes + keywords. Here's the full process:</p>
+<h3 id="step-1-concept">Step 1: Concept<a class="headerlink" href="#step-1-concept" title="Permanent link">&para;</a></h3>
+<p>"I want to play a battle-mage who uses sound magic and fights with weapons"</p>
+<h3 id="step-2-choose-or-create-aptitudes">Step 2: Choose or Create Aptitudes<a class="headerlink" href="#step-2-choose-or-create-aptitudes" title="Permanent link">&para;</a></h3>
+<p><strong>Option A: Use existing aptitudes</strong>
+- Circle of Magic (Sound) - custom Circle
+- Swordspell (cast while wielding weapon) - existing aptitude</p>
+<p><strong>Option B: Create custom aptitude</strong>
+- Circle of Magic (Sound) - custom Circle
+- Sonic Blade - When you hit with melee weapon, can release sonic wave as free action: near range line, 1d4 damage, L times per long rest (custom aptitude)</p>
+<h3 id="step-3-assign-keywords">Step 3: Assign Keywords<a class="headerlink" href="#step-3-assign-keywords" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Species: Human (2 Skill Aptitudes)</li>
+<li>Role: Sonic Knight or Sound Blade</li>
+<li>Background: (choose during play)</li>
+</ul>
+<h3 id="step-4-stats-and-gear">Step 4: Stats and Gear<a class="headerlink" href="#step-4-stats-and-gear" title="Permanent link">&para;</a></h3>
+<p>Distribute stats focusing on INT (for magic) and STR or DEX (for combat)</p>
+<p>Choose a one-handed weapon for Swordspell</p>
+<h3 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h3>
+<p><strong>Sonic Knight</strong> (Human)
+- Aptitudes: Circle of Magic (Sound), Swordspell
+- Keywords: Human, Sonic Knight
+- Playstyle: Frontline combatant who weaves magic into weapon attacks</p>
+<hr />
+<h2 id="example-completely-custom-character">Example: Completely Custom Character<a class="headerlink" href="#example-completely-custom-character" title="Permanent link">&para;</a></h2>
+<h3 id="concept">Concept<a class="headerlink" href="#concept" title="Permanent link">&para;</a></h3>
+<p>"A construct built as a siege weapon who's gone rogue"</p>
+<h3 id="aptitudes-2-inherent-demihuman">Aptitudes (2 Inherent = Demihuman)<a class="headerlink" href="#aptitudes-2-inherent-demihuman" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Reinforced Frame</strong> (Inherent) - Advantage to resist knocked prone/pushed/grappled, count as one size larger</li>
+<li><strong>Integrated Tool</strong> (Inherent) - Built-in ballista (counts as crossbow, can't be disarmed, no inventory slots)</li>
+</ol>
+<p><strong>Result:</strong> Demihuman Construct</p>
+<h3 id="keywords">Keywords<a class="headerlink" href="#keywords" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Species: Siege Construct (custom, combines both aptitudes)</li>
+<li>Role: Artillery or Construct (could add role keyword later)</li>
+<li>Background: Rogue Weapon (adds now for flavor)</li>
+</ul>
+<h3 id="stats">Stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h3>
+<p>Distribute: 3, 2, 2, 1, 1, 0</p>
+<p><strong>Example distribution:</strong>
+- STR 2, DEX 1, INT 0, WIS 1, CON 3, CHA 2</p>
+<h3 id="gear">Gear<a class="headerlink" href="#gear" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Weapon: Integrated ballista (d8, 3 slots worth but no slots used)</li>
+<li>Armor: No armor needed (rely on AC from DEX + future armor)</li>
+<li>Starting gear: Standard equipment</li>
+</ul>
+<h3 id="result_1">Result<a class="headerlink" href="#result_1" title="Permanent link">&para;</a></h3>
+<p><strong>Artillery</strong> - Siege Construct, Rogue Weapon</p>
+<ul>
+<li>HP: 10 + 2 = 12</li>
+<li>AC: 10 + 1 (DEX) = 11</li>
+<li>Inventory: 10 + 3 = 13 slots</li>
+<li>Built-in weapon, very difficult to knock down or move, designed to be alone on battlefield</li>
+</ul>
+<p><strong>Narrative hooks:</strong>
+- Why did you go rogue?
+- Who built you and for what war?
+- How do you feel about your purpose?
+- What does freedom mean to a construct?</p>
+<hr />
+<h2 id="gm-approval-and-balance">GM Approval and Balance<a class="headerlink" href="#gm-approval-and-balance" title="Permanent link">&para;</a></h2>
+<h3 id="the-conversation">The Conversation<a class="headerlink" href="#the-conversation" title="Permanent link">&para;</a></h3>
+<p>Creating custom content is a <strong>collaborative process</strong>:</p>
+<p><strong>Player:</strong> "I want to create an aptitude called Shadow Strike that lets me teleport to an enemy and attack with advantage."</p>
+<p><strong>GM:</strong> "That's interesting. How often can you use it?"</p>
+<p><strong>Player:</strong> "Maybe once per combat?"</p>
+<p><strong>GM:</strong> "That's pretty strong since it's both movement and advantage. What if it's L times per long rest, so you start with just once but it scales?"</p>
+<p><strong>Player:</strong> "That works! And maybe I can only teleport to shadows?"</p>
+<p><strong>GM:</strong> "Perfect, that adds interesting decision-making and fits the theme."</p>
+<p><strong>Result:</strong> Both player and GM happy with balanced, thematic ability.</p>
+<h3 id="red-flags-for-gms">Red Flags for GMs<a class="headerlink" href="#red-flags-for-gms" title="Permanent link">&para;</a></h3>
+<p><strong>Aptitude concerns:</strong>
+- No limitations or costs ("I want to teleport anywhere anytime")
+- Strictly better than existing aptitudes ("Like Cleave but also +2 damage")
+- Affects too many situations ("Advantage on all tests")
+- Too complex to adjudicate quickly (requires 5 minutes of calculation)</p>
+<p><strong>Circle concerns:</strong>
+- Overlaps too much with existing Circles ("It's like Transmutation but better")
+- No clear theme or too narrow ("Magic of Tuesdays")
+- Base spells too powerful or weak (1d10 damage at base, or just cosmetic effects)
+- Scaling doesn't make sense (+1 DC for +10d6 damage)</p>
+<h3 id="green-lights">Green Lights<a class="headerlink" href="#green-lights" title="Permanent link">&para;</a></h3>
+<p><strong>Good signs:</strong>
+- Fits established patterns (similar to existing aptitudes/Circles)
+- Creates interesting decisions (when to use limited abilities)
+- Comparable power to existing options
+- Easy to understand and use
+- Enhances character concept without overshadowing others
+- Player excited about the theme, not just the power</p>
+<hr />
+<h2 id="advancement-and-growth">Advancement and Growth<a class="headerlink" href="#advancement-and-growth" title="Permanent link">&para;</a></h2>
+<h3 id="gaining-custom-aptitudes">Gaining Custom Aptitudes<a class="headerlink" href="#gaining-custom-aptitudes" title="Permanent link">&para;</a></h3>
+<p>At levels 3, 5, 7, 9: choose new aptitudes</p>
+<p><strong>Custom Skill Aptitudes:</strong> Work with GM to create, follow guidelines in this document</p>
+<p><strong>Custom Inherent Aptitudes:</strong> Require GM approval and narrative justification:
+- With demihuman keyword: Can gain related Inherent Aptitudes
+- Through transformation: Gain new keyword through major story event
+- Significant cost: Resources, time, quest, or permanent character change</p>
+<h3 id="evolving-your-character">Evolving Your Character<a class="headerlink" href="#evolving-your-character" title="Permanent link">&para;</a></h3>
+<p><strong>Keywords can change:</strong>
+- Gain new keywords through story (Exiled, Cursed, Chosen)
+- Keywords justify new aptitudes
+- Background keywords earned through play</p>
+<p><strong>Custom aptitudes can be created:</strong>
+- Work with GM at level-up
+- Base on character's experiences
+- Follow guidelines in this document
+- Iterate based on playtesting</p>
+<p><strong>Circles can be learned:</strong>
+- Must have one Circle to learn another
+- Each Circle = one aptitude choice
+- Maximum 6 total aptitudes
+- Can create custom Circles using this guide</p>
+<hr />
+<h1 id="quick-reference">Quick Reference<a class="headerlink" href="#quick-reference" title="Permanent link">&para;</a></h1>
+<h2 id="aptitude-balance-quick-check">Aptitude Balance Quick Check<a class="headerlink" href="#aptitude-balance-quick-check" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Generally useful (not too narrow)</li>
+<li>[ ] Has limitations or costs (not always-on power)</li>
+<li>[ ] Fits clear theme (profession or species trait)</li>
+<li>[ ] Comparable to existing aptitudes</li>
+<li>[ ] Creates interesting decisions</li>
+<li>[ ] Would you be excited to play this?</li>
+</ul>
+<h2 id="circle-balance-quick-check">Circle Balance Quick Check<a class="headerlink" href="#circle-balance-quick-check" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Clear theme (one sentence explanation)</li>
+<li>[ ] 8 diverse spells (combat, utility, unique)</li>
+<li>[ ] Base spells are useful and scalable</li>
+<li>[ ] Scaling is intuitive</li>
+<li>[ ] Comparable power to existing Circles</li>
+<li>[ ] Distinct from other Circles</li>
+</ul>
+<h2 id="spell-creation-quick-reference">Spell Creation Quick Reference<a class="headerlink" href="#spell-creation-quick-reference" title="Permanent link">&para;</a></h2>
+<p><strong>Base spell needs:</strong>
+- Effect (what it does)
+- Target/Area (1 target or 10 ft)
+- Range (30 ft or touch)
+- Duration (1 round or 1 turn)</p>
+<p><strong>Common enhancements:</strong>
+- +1d damage = +1 DC
+- +1 target = +1 DC
+- +1 round/turn = +1 DC
+- x2 area = +1 DC
+- +10 ft range = +1 DC
+- +1 size category = +2 DC</p>
+<hr />
+<h1 id="final-thoughts">Final Thoughts<a class="headerlink" href="#final-thoughts" title="Permanent link">&para;</a></h1>
+<p>The beauty of Rath's customization system is its flexibility. You can:</p>
+<ul>
+<li><strong>Use everything as written</strong> - The starter classes and preset Circles provide a complete, balanced game</li>
+<li><strong>Mix and match</strong> - Combine existing aptitudes in new ways</li>
+<li><strong>Create selectively</strong> - Make one custom aptitude or Circle while using the rest as written</li>
+<li><strong>Build from scratch</strong> - Design completely unique characters and magic systems</li>
+</ul>
+<p>The key is communication between players and GM. Custom content should enhance everyone's fun, not create balance problems or slow play.</p>
+<p><strong>When in doubt:</strong>
+- Compare to existing content
+- Start conservative and buff later if needed
+- Focus on what's fun and interesting
+- Remember that narrative justification matters more than mechanical perfection
+- Playtest and iterate</p>
+<p><strong>Remember:</strong> The best custom content:
+- Solves a specific problem ("I want to play X but can't with existing options")
+- Fits the game world and tone
+- Creates interesting stories
+- Makes everyone at the table happy</p>
+<p>Now go forth and create amazing characters and magic!</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

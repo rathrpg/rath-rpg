@@ -1,0 +1,163 @@
+/* Rath RPG custom theme - red/black booklet style */
+
+/* Custom fonts - must be before @import */
+@font-face {
+  font-family: 'Endor';
+  src: url('../fonts/ENDOR__.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Immortal';
+  src: url('../fonts/IMMORTAL.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Import Crimson Pro for body text */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+:root {
+  --md-primary-fg-color: #8B0000;
+  --md-primary-fg-color--light: #A52A2A;
+  --md-primary-fg-color--dark: #600000;
+  --md-accent-fg-color: #8B0000;
+  --md-text-font: "Crimson Pro", Georgia, serif;
+}
+
+/* Headings with Immortal font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Immortal', Georgia, serif !important;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  font-family: 'Immortal', Georgia, serif !important;
+}
+
+.md-typeset h1 {
+  color: #8B0000;
+}
+
+.md-typeset h2 {
+  color: #8B0000;
+  border-bottom: 1px solid #8B0000;
+  padding-bottom: 4px;
+}
+
+/* Table styling */
+.md-typeset table:not([class]) th {
+  background-color: #1a1a1a;
+  color: white;
+  font-family: 'Immortal', Georgia, serif !important;
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) td {
+  background-color: rgba(139, 0, 0, 0.05);
+}
+
+/* Navigation tabs */
+.md-tabs {
+  background-color: #1a1a1a;
+}
+
+.md-tabs__link {
+  font-family: 'Immortal', Georgia, serif !important;
+  color: white !important;
+}
+
+.md-tabs__link:hover,
+.md-tabs__link--active {
+  color: #DC143C !important;
+}
+
+/* Header */
+.md-header {
+  background-color: #1a1a1a;
+  padding-top: 8px;
+}
+
+/* Site title and icon stay red */
+.md-header__title,
+.md-header__topic {
+  color: #DC143C !important;
+}
+
+/* Other header elements white */
+.md-header__button,
+.md-header__option {
+  color: white !important;
+}
+
+/* Site title with Endor font */
+.md-header__title {
+  font-family: 'Endor', 'Immortal', Georgia, serif !important;
+  font-size: 1.4rem;
+}
+
+.md-header__topic {
+  font-family: 'Endor', 'Immortal', Georgia, serif !important;
+}
+
+/* Search bar in header */
+.md-search__input {
+  background-color: #2a2a2a;
+  color: white;
+}
+
+.md-search__input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Sidebar navigation */
+.md-nav__link {
+  font-family: 'Immortal', Georgia, serif !important;
+}
+
+/* Links */
+.md-typeset a {
+  color: #8B0000;
+}
+
+.md-typeset a:hover {
+  color: #600000;
+}
+
+/* Blockquotes */
+.md-typeset blockquote {
+  border-left: 4px solid #8B0000;
+}
+
+/* Horizontal rules */
+.md-typeset hr {
+  border-bottom: 1px solid #8B0000;
+}
+
+/* Sidebar active/highlighted state */
+.md-nav__link--active,
+.md-nav__link:focus,
+.md-nav__link:hover {
+  color: #8B0000 !important;
+}
+
+.md-nav__item--active > .md-nav__link {
+  color: #8B0000 !important;
+}
+
+/* Override accent color for all states */
+[data-md-color-accent] {
+  --md-accent-fg-color: #8B0000;
+}
+
+/* Search highlight */
+.md-search-result__link:focus,
+.md-search-result__link:hover {
+  background-color: rgba(139, 0, 0, 0.1);
+}
