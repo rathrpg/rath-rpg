@@ -26,20 +26,21 @@
   --md-primary-fg-color--dark: #600000;
   --md-accent-fg-color: #8B0000;
   --md-text-font: "Crimson Pro", Georgia, serif;
+  --md-default-bg-color: #fff;
 }
 
-/* Black background outside content area */
-body {
-  background-color: #1a1a1a;
-}
+/* Black gutters on wide screens */
+@media screen and (min-width: 76.25em) {
+  .md-container {
+    background-color: #fff;
+    max-width: 1440px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
 
-/* Keep main content area white */
-.md-main {
-  background-color: #fff;
-}
-
-.md-content {
-  background-color: #fff;
+  body {
+    background-color: #1a1a1a;
+  }
 }
 
 /* Headings with Immortal font */
