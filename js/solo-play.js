@@ -598,8 +598,10 @@ async function sendToAI(message, isInitial = false) {
   }
 
   sendBtn.disabled = false;
-  document.getElementById('chat-messages').scrollTop =
-    document.getElementById('chat-messages').scrollHeight;
+  const chatContainer = document.getElementById('chat-container');
+  setTimeout(() => {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }, 50);
 }
 
 async function callAI(provider, userMessage, isInitial) {
@@ -802,13 +804,17 @@ function processMemoryUpdate(memory) {
 
 function appendMessage(role, content) {
   const messagesDiv = document.getElementById('chat-messages');
+  const chatContainer = document.getElementById('chat-container');
   const messageDiv = document.createElement('div');
   const id = 'msg-' + Date.now();
   messageDiv.id = id;
   messageDiv.className = `message ${role}`;
   messageDiv.innerHTML = `<div class="message-content">${formatMessage(content)}</div>`;
   messagesDiv.appendChild(messageDiv);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  // Scroll the container, not the messages div
+  setTimeout(() => {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }, 50);
   return id;
 }
 
