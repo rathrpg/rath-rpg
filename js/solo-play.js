@@ -245,62 +245,200 @@ function showNewCharacterModal() {
   const modal = document.getElementById('modal-overlay');
   const content = document.getElementById('modal-content');
 
+  // Build aptitude options
+  const skillOptions = Object.entries(RATH_DATA.skillAptitudes).map(([category, apts]) =>
+    `<optgroup label="${category}">${apts.map(a => `<option value="${a.name}">${a.name}</option>`).join('')}</optgroup>`
+  ).join('');
+
+  const inherentOptions = Object.entries(RATH_DATA.inherentAptitudes).map(([category, apts]) =>
+    `<optgroup label="${category}">${apts.map(a => `<option value="${a.name}">${a.name}</option>`).join('')}</optgroup>`
+  ).join('');
+
+  // Build gear pack options
+  const packOptions = Object.keys(RATH_DATA.gearPacks).map(p => `<option value="${p}">${p}</option>`).join('');
+
+  // Build quick start options
+  const quickStartOptions = RATH_DATA.suggestedCombinations.map(c =>
+    `<option value="${c.concept}">${c.concept} (${c.aptitudes.join(' + ')})</option>`
+  ).join('');
+
   content.innerHTML = `
     <h3>Create New Character</h3>
+
+    <div class="form-group">
+      <label>Quick Start (optional):</label>
+      <select id="char-quickstart" onchange="applyQuickStart()">
+        <option value="">-- Custom Build --</option>
+        ${quickStartOptions}
+      </select>
+    </div>
+
+    <hr>
+
     <div class="form-group">
       <label>Name:</label>
       <input type="text" id="char-name" placeholder="Character name">
     </div>
+
     <div class="form-group">
       <label>Keywords (species, role, background):</label>
       <input type="text" id="char-keywords" placeholder="e.g., Human, Fighter, Soldier">
     </div>
+
     <div class="form-group">
-      <label>Stats (use standard array: 3, 2, 2, 1, 1, 0):</label>
+      <label>Stats (standard array: 3, 2, 2, 1, 1, 0):</label>
     </div>
     <div class="form-row">
       <div class="form-group">
         <label>STR:</label>
-        <input type="number" id="char-str" value="2" min="0" max="6">
+        <input type="number" id="char-str" value="2" min="0" max="6" onchange="updateCharacterPreview()">
       </div>
       <div class="form-group">
         <label>DEX:</label>
-        <input type="number" id="char-dex" value="2" min="0" max="6">
+        <input type="number" id="char-dex" value="2" min="0" max="6" onchange="updateCharacterPreview()">
       </div>
       <div class="form-group">
         <label>INT:</label>
-        <input type="number" id="char-int" value="1" min="0" max="6">
+        <input type="number" id="char-int" value="1" min="0" max="6" onchange="updateCharacterPreview()">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
         <label>WIS:</label>
-        <input type="number" id="char-wis" value="1" min="0" max="6">
+        <input type="number" id="char-wis" value="1" min="0" max="6" onchange="updateCharacterPreview()">
       </div>
       <div class="form-group">
         <label>CON:</label>
-        <input type="number" id="char-con" value="3" min="0" max="6">
+        <input type="number" id="char-con" value="3" min="0" max="6" onchange="updateCharacterPreview()">
       </div>
       <div class="form-group">
         <label>CHA:</label>
-        <input type="number" id="char-cha" value="0" min="0" max="6">
+        <input type="number" id="char-cha" value="0" min="0" max="6" onchange="updateCharacterPreview()">
       </div>
     </div>
-    <div class="form-group">
-      <label>Aptitudes (comma separated):</label>
-      <input type="text" id="char-aptitudes" placeholder="e.g., Cleave, Resilient">
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Aptitude 1:</label>
+        <select id="char-apt1" onchange="updateCharacterPreview()">
+          <option value="">-- Select --</option>
+          <optgroup label="--- Skill Aptitudes ---"></optgroup>
+          ${skillOptions}
+          <optgroup label="--- Inherent Aptitudes ---"></optgroup>
+          ${inherentOptions}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Aptitude 2:</label>
+        <select id="char-apt2" onchange="updateCharacterPreview()">
+          <option value="">-- Select --</option>
+          <optgroup label="--- Skill Aptitudes ---"></optgroup>
+          ${skillOptions}
+          <optgroup label="--- Inherent Aptitudes ---"></optgroup>
+          ${inherentOptions}
+        </select>
+      </div>
     </div>
+
+    <div id="aptitude-descriptions" class="aptitude-desc-box"></div>
+
     <div class="form-group">
-      <label>Equipment (comma separated):</label>
-      <input type="text" id="char-equipment" placeholder="e.g., Sword, Shield, Medium Armor">
+      <label>Gear Pack:</label>
+      <select id="char-gearpack" onchange="updateCharacterPreview()">
+        ${packOptions}
+      </select>
     </div>
+
+    <div id="gear-contents" class="gear-contents-box"></div>
+
+    <div id="char-preview" class="char-preview-box">
+      <strong>Preview:</strong> HP: 13 | AC: 12 | Slots: 13
+    </div>
+
     <div style="margin-top: 1rem;">
-      <button class="primary" onclick="createCharacter()">Create</button>
+      <button class="primary" onclick="createCharacter()">Create Character</button>
       <button onclick="closeModal()">Cancel</button>
     </div>
   `;
 
   modal.style.display = 'flex';
+  updateCharacterPreview();
+}
+
+function applyQuickStart() {
+  const select = document.getElementById('char-quickstart');
+  const concept = select.value;
+  if (!concept) return;
+
+  const combo = RATH_DATA.suggestedCombinations.find(c => c.concept === concept);
+  if (!combo) return;
+
+  // Set aptitudes
+  document.getElementById('char-apt1').value = combo.aptitudes[0] || '';
+  document.getElementById('char-apt2').value = combo.aptitudes[1] || '';
+
+  // Set keywords
+  document.getElementById('char-keywords').value = combo.keywords.join(', ');
+
+  // Set appropriate gear pack
+  if (['Fighter', 'Barbarian', 'Dwarf', 'Beastfolk'].includes(concept)) {
+    document.getElementById('char-gearpack').value = 'Combat';
+  } else if (['Thief', 'Assassin', 'Halfling', 'Goblin'].includes(concept)) {
+    document.getElementById('char-gearpack').value = 'Specialist';
+  } else if (['Ranger', 'Elf', 'Pixie'].includes(concept)) {
+    document.getElementById('char-gearpack').value = 'Scout';
+  } else if (['Cleric', 'Hedge Witch', 'Arcanist'].includes(concept)) {
+    document.getElementById('char-gearpack').value = 'Caster';
+  }
+
+  updateCharacterPreview();
+}
+
+function updateCharacterPreview() {
+  const con = parseInt(document.getElementById('char-con')?.value) || 0;
+  const dex = parseInt(document.getElementById('char-dex')?.value) || 0;
+  const apt1 = document.getElementById('char-apt1')?.value || '';
+  const apt2 = document.getElementById('char-apt2')?.value || '';
+  const gearPack = document.getElementById('char-gearpack')?.value || 'Combat';
+
+  const aptitudes = [apt1, apt2].filter(a => a);
+
+  // Calculate stats
+  let hp = 10 + con;
+  let ac = 10 + dex;
+  let slots = 10 + con;
+
+  if (aptitudes.includes('Resilient')) hp += 2;
+  if (aptitudes.includes('Natural Armor')) ac = 12 + dex;
+  if (aptitudes.includes('Small')) slots = Math.max(7, slots - 3);
+
+  // Add gear pack AC
+  const pack = RATH_DATA.gearPacks[gearPack];
+  if (pack && !aptitudes.includes('Natural Armor')) {
+    ac += pack.ac_bonus;
+  }
+
+  // Update preview
+  const preview = document.getElementById('char-preview');
+  if (preview) {
+    preview.innerHTML = `<strong>Preview:</strong> HP: ${hp} | AC: ${ac} | Inventory Slots: ${slots}`;
+  }
+
+  // Update aptitude descriptions
+  const descBox = document.getElementById('aptitude-descriptions');
+  if (descBox) {
+    const descs = aptitudes.map(name => {
+      const apt = findAptitude(name);
+      return apt ? `<strong>${apt.name}:</strong> ${apt.description}` : '';
+    }).filter(d => d).join('<br><br>');
+    descBox.innerHTML = descs || '<em>Select aptitudes to see descriptions</em>';
+  }
+
+  // Update gear contents
+  const gearBox = document.getElementById('gear-contents');
+  if (gearBox && pack) {
+    gearBox.innerHTML = `<strong>${gearPack} Pack:</strong> ${pack.contents.join(', ')}`;
+  }
 }
 
 function createCharacter() {
@@ -312,15 +450,35 @@ function createCharacter() {
   const wis = parseInt(document.getElementById('char-wis').value) || 0;
   const con = parseInt(document.getElementById('char-con').value) || 0;
   const cha = parseInt(document.getElementById('char-cha').value) || 0;
-  const aptitudes = document.getElementById('char-aptitudes').value.trim();
-  const equipment = document.getElementById('char-equipment').value.trim();
+  const apt1 = document.getElementById('char-apt1').value;
+  const apt2 = document.getElementById('char-apt2').value;
+  const gearPack = document.getElementById('char-gearpack').value;
 
   if (!name) {
     alert('Please enter a character name');
     return;
   }
 
-  const maxHp = 10 + con;
+  // Build aptitude list
+  const aptitudes = [apt1, apt2].filter(a => a);
+
+  // Calculate derived stats
+  let maxHp = 10 + con;
+  let ac = 10 + dex;
+  let slots = 10 + con;
+
+  if (aptitudes.includes('Resilient')) maxHp += 2;
+  if (aptitudes.includes('Natural Armor')) ac = 12 + dex;
+  if (aptitudes.includes('Small')) slots = Math.max(7, slots - 3);
+
+  // Build equipment list from gear pack
+  const pack = RATH_DATA.gearPacks[gearPack];
+  const equipment = pack ? [...pack.contents] : [];
+
+  // Apply gear pack AC bonus (unless Natural Armor)
+  if (pack && !aptitudes.includes('Natural Armor')) {
+    ac += pack.ac_bonus;
+  }
 
   gameState.character = {
     name,
@@ -328,9 +486,10 @@ function createCharacter() {
     stats: { str, dex, int, wis, con, cha },
     hp: maxHp,
     maxHp,
-    ac: 10 + dex,
-    aptitudes: aptitudes.split(',').map(a => a.trim()).filter(a => a),
-    equipment: equipment.split(',').map(e => e.trim()).filter(e => e),
+    ac,
+    slots,
+    aptitudes,
+    equipment,
     level: 1,
     fortune: 1
   };
@@ -377,6 +536,8 @@ function importCharacter() {
 }
 
 function renderCharacter(char) {
+  const slotsUsed = char.equipment?.length || 0;
+  const slotsTotal = char.slots || (10 + (char.stats?.con || 0));
   return `
     <h4>${char.name}</h4>
     <p><strong>Keywords:</strong> ${char.keywords.join(', ') || 'None'}</p>
@@ -388,7 +549,7 @@ function renderCharacter(char) {
       <div class="stat-box"><span class="stat-name">CON</span><span class="stat-value">${char.stats.con}</span></div>
       <div class="stat-box"><span class="stat-name">CHA</span><span class="stat-value">${char.stats.cha}</span></div>
     </div>
-    <p><strong>HP:</strong> ${char.hp}/${char.maxHp} | <strong>AC:</strong> ${char.ac} | <strong>Level:</strong> ${char.level}</p>
+    <p><strong>HP:</strong> ${char.hp}/${char.maxHp} | <strong>AC:</strong> ${char.ac} | <strong>Level:</strong> ${char.level} | <strong>Slots:</strong> ${slotsUsed}/${slotsTotal}</p>
     <p><strong>Aptitudes:</strong> ${char.aptitudes.join(', ') || 'None'}</p>
     <p><strong>Equipment:</strong> ${char.equipment.join(', ') || 'None'}</p>
   `;
