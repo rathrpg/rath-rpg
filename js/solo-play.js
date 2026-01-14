@@ -708,10 +708,12 @@ Equipment: ${c.equipment.join(', ') || 'None'}`);
     const locId = gameState.world.currentLocation;
     const loc = gameState.world.locations[locId];
     if (loc) {
+      const npcs = Array.isArray(loc.npcs) ? loc.npcs.join(', ') : (loc.npcs || 'None');
+      const items = Array.isArray(loc.items) ? loc.items.join(', ') : (loc.items || 'None');
       parts.push(`**Current Location:** ${loc.name}
 ${loc.description}
-NPCs here: ${loc.npcs?.join(', ') || 'None'}
-Items: ${loc.items?.join(', ') || 'None'}
+NPCs here: ${npcs}
+Items: ${items}
 Notes: ${loc.notes || 'None'}`);
     }
   }
