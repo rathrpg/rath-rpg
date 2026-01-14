@@ -120,6 +120,11 @@ When starting fresh, create an interesting opening scenario:
 // ============ Initialization ============
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Only initialize on the solo-play page
+  if (!document.getElementById('solo-play-app')) {
+    return;
+  }
+
   loadSavedState();
   setupEventListeners();
   updateUI();
