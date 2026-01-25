@@ -2092,8 +2092,10 @@
 <h2 id="spellcasting-enhancements">Spellcasting Enhancements<a class="headerlink" href="#spellcasting-enhancements" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Arcane Recovery</strong>: Once/long rest during short rest, unburn up to L spells (maximum 3)</li>
-<li><strong>Blood Magic</strong>: Cast spell: take HP = DC to auto-succeed (still burns). Can't reduce to 0 HP</li>
+<li><strong>Arcane Recall</strong>: Once/long rest, burn a prepared spell to cast any unprepared spell from your circle. Requires normal casting roll</li>
+<li><strong>Blood Magic</strong>: Your spells always succeed, regardless of roll. You still take backlash damage on failed rolls</li>
 <li><strong>Careful Ritual</strong>: Ritual: take 2x time for additional -1 DC (stacks with normal)</li>
+<li><strong>Desperate Channeling</strong>: Once/long rest, cast a burnt spell by taking HP = DC. Spell auto-succeeds. Can't reduce to 0 HP</li>
 <li><strong>Distant Spell</strong>: L times/long rest, double spell range without increasing DC</li>
 <li><strong>Extended Spell</strong>: L times/long rest, double spell duration without increasing DC</li>
 <li><strong>Familiar</strong>: Small companion 5 + (L × 2) HP. Scouts, fetches, delivers messages. Can absorb spell backlash damage. Dies: resummon next long rest</li>
@@ -2112,7 +2114,7 @@
 <li><strong>Arcane Blast</strong>: Burn spell → Ld6 + INT damage to near target, or split between targets</li>
 <li><strong>Arcane Deflection</strong>: Hit by ranged → burn spell as reaction, reduce damage by Ld6</li>
 <li><strong>Arcane Healing</strong>: Burn spell → heal Ld6 + INT HP to touch, or split between close range targets</li>
-<li><strong>Counterspell</strong>: See near creature cast → burn spell, casting stat vs their DC to counter</li>
+<li><strong>Counterspell</strong>: See near creature cast → burn spell, casting stat vs their DC to counter. Works on Circle magic and scroll casting. Does not work on Hedge Magic</li>
 <li><strong>Spell Parry</strong>: Hit by melee → burn spell as reaction, add casting stat to AC. If miss: melee spell attack vs attacker</li>
 <li><strong>Spell Strike</strong>: Hit with melee → cast spell targeting that enemy as bonus action (burns)</li>
 </ul>
@@ -2124,6 +2126,22 @@
 <li>Player rolls: d20 + INT = 18</li>
 <li>18 beats 15 -&gt; spell succeeds, spell burnt, no HP cost</li>
 </ol>
+<hr />
+<h2 id="optional-rules">Optional Rules<a class="headerlink" href="#optional-rules" title="Permanent link">&para;</a></h2>
+<h3 id="wizard-battle">Wizard Battle<a class="headerlink" href="#wizard-battle" title="Permanent link">&para;</a></h3>
+<p>When a caster with the <strong>Counterspell</strong> aptitude successfully counters a spell, they may choose to initiate a <strong>Wizard Battle</strong> - a dramatic magical duel between two Circle mages. If Counterspell is used outside of combat, immediately roll initiative.</p>
+<p><strong>Battle Level:</strong> The countered spell's DC - 10. This determines the stakes of the duel.</p>
+<p><strong>Chartomancers:</strong> Scroll casters cannot enter Wizard Battle - they lack the magical reserves to sustain a duel. If a Counterspeller declares Wizard Battle against a Chartomancer, the Chartomancer simply takes (Battle Level)d6 damage immediately. No duel occurs.</p>
+<p><strong>During Wizard Battle:</strong>
+- On each caster's turn, they must make an opposed INT test. They may still move, but cannot take any other actions, bonus actions, or reactions - they are fully focused on the duel.
+- The caster whose turn it is becomes the <strong>Attacker</strong>. The other caster is the <strong>Defender</strong>.
+- <strong>Attacker wins:</strong> Deal (Battle Level)d6 damage to the Defender. On a tie, Attacker wins.
+- <strong>Defender wins:</strong> The Defender may choose to <strong>disengage</strong> (ending the Wizard Battle) or continue.</p>
+<p><strong>Ending Wizard Battle:</strong>
+- A Defender chooses to disengage after winning their defense (their next turn proceeds normally)
+- Either caster is incapacitated (if a caster drops to 0 HP but succeeds on their CON test, the battle continues)</p>
+<p><strong>Outside Interference:</strong> Attacks against casters engaged in Wizard Battle have <strong>disadvantage</strong>. The duel warps the space around them - crackling energy, distorted air, or otherworldly phenomena make them difficult targets. A caster already engaged in Wizard Battle cannot be pulled into another, and third parties cannot join an existing duel.</p>
+<p><strong>Flavor:</strong> Wizard Battle can be described however fits the moment: streams of opposed energy, casters flying through the air exchanging magical bolts, a battle of wills in a shared mindscape, or raw arcane forces colliding. The key is that both casters are locked in magical combat until one breaks free or falls.</p>
 <hr />
 <p><strong>For core rules:</strong> See the <strong>Players Handbook</strong>
 <strong>For advanced aptitudes:</strong> See the <strong>Advanced Aptitudes</strong>
