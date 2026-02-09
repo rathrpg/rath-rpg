@@ -911,16 +911,37 @@
     <div id="game-header">
       <span id="current-location">Unknown Location</span>
       <span id="character-status">HP: --/--</span>
-      <button id="back-to-setup-btn">Menu</button>
+      <button id="toggle-character-panel" title="Show/Hide Character Sheet" style="padding:0.25rem 0.75rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;">📋 Sheet</button>
+      <button id="toggle-journal-panel" title="Show/Hide Adventure Journal" style="padding:0.25rem 0.75rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;">📖 Journal</button>
+      <button id="award-xp-btn" title="Award 1 XP for this session" style="padding:0.25rem 0.75rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;">+XP</button>
+      <button id="level-up-btn" style="display:none;padding:0.25rem 0.75rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;" title="Spend XP to level up">Level Up</button>
+      <button id="back-to-setup-btn" style="padding:0.25rem 0.5rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;">Menu</button>
     </div>
 
-    <div id="chat-container">
-      <div id="chat-messages"></div>
-    </div>
+    <div id="game-layout">
+      <div id="character-panel" class="collapsed">
+        <div id="character-panel-content"></div>
+      </div>
 
-    <div id="input-container">
-      <textarea id="player-input" placeholder="What do you do?" rows="2"></textarea>
-      <button id="send-btn">Send</button>
+      <div id="game-main">
+        <div id="chat-container">
+          <div id="chat-messages"></div>
+        </div>
+
+        <div id="input-container">
+          <textarea id="player-input" placeholder="What do you do?" rows="2"></textarea>
+          <button id="send-btn">Send</button>
+        </div>
+      </div>
+
+      <div id="journal-panel" class="collapsed">
+        <div id="journal-panel-content">
+          <div style="text-align:center;padding:2rem;color:#999;">
+            <p>No journal entries yet.</p>
+            <p style="font-size:0.875rem;margin-top:0.5rem;">Click "Update Journal" to generate a summary of your adventure.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="world-panel" style="display:none;">

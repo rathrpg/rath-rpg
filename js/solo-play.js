@@ -24,6 +24,16 @@ const MODELS = {
   openai: 'gpt-4o'
 };
 
+// ============ Configuration ============
+
+const CONFIG = {
+  MAX_HISTORY_TURNS: 10,  // Only keep last N exchanges in context
+  MAX_OUTPUT_TOKENS: 800,  // Reduced from 1500 to save costs
+  COMPRESS_HISTORY_AT: 30, // Compress old history after this many turns
+  MAX_NPCS_IN_CONTEXT: 3,  // Only include this many NPCs per location
+  MAX_EVENTS_IN_CONTEXT: 3 // Only include this many recent events
+};
+
 // ============ Game State ============
 
 let gameState = {
@@ -32,10 +42,20 @@ let gameState = {
     locations: {},
     npcs: {},
     events: [],
-    currentLocation: null
+    currentLocation: null,
+    currentTimestamp: Date.now() // Track game time for world evolution
   },
   chatHistory: [],
-  isPlaying: false
+  journal: {
+    entries: [],
+    lastUpdateTurn: 0
+  },
+  isPlaying: false,
+  tokenUsage: {
+    inputTokens: 0,
+    outputTokens: 0,
+    estimatedCost: 0
+  }
 };
 
 // ============ Rath RPG System Prompt ============
@@ -186,12 +206,36 @@ function loadSavedState() {
   if (savedChat) {
     gameState.chatHistory = JSON.parse(savedChat);
   }
+  
+  // Load token usage
+  const savedTokens = localStorage.getItem('rath_token_usage');
+  if (savedTokens) {
+    gameState.tokenUsage = JSON.parse(savedTokens);
+  }
+  
+  // Load journal
+  const savedJournal = localStorage.getItem('rath_journal');
+  if (savedJournal) {
+    gameState.journal = JSON.parse(savedJournal);
+  }
+  
+  // Ensure world has timestamp (for backwards compatibility)
+  if (!gameState.world.currentTimestamp) {
+    gameState.world.currentTimestamp = Date.now();
+  }
+  
+  // Ensure journal exists (for backwards compatibility)
+  if (!gameState.journal) {
+    gameState.journal = { entries: [], lastUpdateTurn: 0 };
+  }
 }
 
 function saveState() {
   localStorage.setItem(STORAGE_KEYS.CHARACTER, JSON.stringify(gameState.character));
   localStorage.setItem(STORAGE_KEYS.WORLD, JSON.stringify(gameState.world));
   localStorage.setItem(STORAGE_KEYS.CHAT_HISTORY, JSON.stringify(gameState.chatHistory));
+  localStorage.setItem('rath_token_usage', JSON.stringify(gameState.tokenUsage));
+  localStorage.setItem('rath_journal', JSON.stringify(gameState.journal));
 }
 
 function setupEventListeners() {
@@ -224,6 +268,138 @@ function setupEventListeners() {
       sendMessage();
     }
   });
+
+  // XP and Leveling (these buttons exist in game view, add listeners when available)
+  const awardXpBtn = document.getElementById('award-xp-btn');
+  if (awardXpBtn) {
+    awardXpBtn.addEventListener('click', awardXP);
+  }
+  
+  const levelUpBtn = document.getElementById('level-up-btn');
+  if (levelUpBtn) {
+    levelUpBtn.addEventListener('click', showLevelUpModal);
+  }
+
+  // Character panel toggle
+  const togglePanelBtn = document.getElementById('toggle-character-panel');
+  if (togglePanelBtn) {
+    togglePanelBtn.addEventListener('click', toggleCharacterPanel);
+  }
+
+  // Journal panel toggle
+  const toggleJournalBtn = document.getElementById('toggle-journal-panel');
+  if (toggleJournalBtn) {
+    toggleJournalBtn.addEventListener('click', toggleJournalPanel);
+  }
+}
+
+function toggleCharacterPanel() {
+  const panel = document.getElementById('character-panel');
+  const btn = document.getElementById('toggle-character-panel');
+  
+  if (panel.classList.contains('collapsed')) {
+    panel.classList.remove('collapsed');
+    btn.textContent = '📋 Hide';
+    updateCharacterPanel(); // Refresh content when opening
+  } else {
+    panel.classList.add('collapsed');
+    btn.textContent = '📋 Sheet';
+  }
+}
+
+function toggleJournalPanel() {
+  const panel = document.getElementById('journal-panel');
+  const btn = document.getElementById('toggle-journal-panel');
+  
+  if (panel.classList.contains('collapsed')) {
+    panel.classList.remove('collapsed');
+    btn.textContent = '📖 Hide';
+    updateJournalPanel(); // Refresh content when opening
+  } else {
+    panel.classList.add('collapsed');
+    btn.textContent = '📖 Journal';
+  }
+}
+
+function updateCharacterPanel() {
+  const content = document.getElementById('character-panel-content');
+  if (!content || !gameState.character) return;
+  
+  const char = gameState.character;
+  const slotsUsed = char.equipment?.length || 0;
+  const slotsTotal = char.slots || (10 + (char.stats?.con || 0));
+  const xp = char.xp || 0;
+  const xpNeeded = char.level;
+  const canLevelUp = xp >= xpNeeded;
+  
+  // Build aptitude descriptions
+  const aptitudeDetails = char.aptitudes.map(name => {
+    const apt = findAptitude(name);
+    return apt ? `<div style="margin-bottom:0.75rem;"><strong>${apt.name}</strong><br><span style="font-size:0.875rem;color:#555;">${apt.description}</span></div>` : `<div>${name}</div>`;
+  }).join('');
+  
+  content.innerHTML = `
+    <h4 style="margin-top:0;">${char.name}</h4>
+    
+    <div style="font-size:0.875rem;color:#666;margin-bottom:0.75rem;">
+      ${char.keywords.join(', ') || 'No keywords'}
+    </div>
+    
+    <div class="stat-grid" style="margin-bottom:1rem;">
+      <div class="stat-box"><span class="stat-name">STR</span><span class="stat-value">${char.stats.str}</span></div>
+      <div class="stat-box"><span class="stat-name">DEX</span><span class="stat-value">${char.stats.dex}</span></div>
+      <div class="stat-box"><span class="stat-name">INT</span><span class="stat-value">${char.stats.int}</span></div>
+      <div class="stat-box"><span class="stat-name">WIS</span><span class="stat-value">${char.stats.wis}</span></div>
+      <div class="stat-box"><span class="stat-name">CON</span><span class="stat-value">${char.stats.con}</span></div>
+      <div class="stat-box"><span class="stat-name">CHA</span><span class="stat-value">${char.stats.cha}</span></div>
+    </div>
+    
+    <div style="background:#fff;border:1px solid #ddd;border-radius:4px;padding:0.5rem;margin-bottom:1rem;">
+      <div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:0.25rem;">
+        <span><strong>HP:</strong> ${char.hp}/${char.maxHp}</span>
+        <span><strong>AC:</strong> ${char.ac}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:0.25rem;">
+        <span><strong>Level:</strong> ${char.level}</span>
+        <span><strong>XP:</strong> ${xp}/${xpNeeded}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+        <span><strong>Fortune:</strong> ${char.fortune}/3</span>
+        <span><strong>Slots:</strong> ${slotsUsed}/${slotsTotal}</span>
+      </div>
+    </div>
+    
+    ${canLevelUp ? '<div style="background:#d4edda;border:1px solid #c3e6cb;border-radius:4px;padding:0.5rem;margin-bottom:1rem;font-size:0.875rem;color:#155724;text-align:center;">⬆️ Ready to level up!</div>' : ''}
+    
+    <div style="margin-bottom:1rem;">
+      <strong style="font-size:0.875rem;display:block;margin-bottom:0.5rem;">Quick Actions:</strong>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+        <button onclick="quickShortRest()" style="padding:0.4rem;font-size:0.75rem;background:#4a90e2;color:#fff;border:none;border-radius:4px;cursor:pointer;" title="Heal 1d6+CON, takes 1 hour">Short Rest</button>
+        <button onclick="quickLongRest()" style="padding:0.4rem;font-size:0.75rem;background:#6b46c1;color:#fff;border:none;border-radius:4px;cursor:pointer;" title="Full heal, 8 hours">Long Rest</button>
+        <button onclick="quickSpendFortune()" style="padding:0.4rem;font-size:0.75rem;background:#f59e0b;color:#fff;border:none;border-radius:4px;cursor:pointer;${char.fortune <= 0 ? 'opacity:0.5;cursor:not-allowed;' : ''}" ${char.fortune <= 0 ? 'disabled' : ''} title="Spend 1 Fortune to reroll">Fortune (${char.fortune})</button>
+        <button onclick="quickRollStat()" style="padding:0.4rem;font-size:0.75rem;background:#10b981;color:#fff;border:none;border-radius:4px;cursor:pointer;" title="Roll d20 + stat">Roll Check</button>
+      </div>
+    </div>
+    
+    <div style="margin-bottom:1rem;">
+      <strong style="font-size:0.875rem;">Aptitudes:</strong>
+      <div style="margin-top:0.5rem;font-size:0.875rem;">
+        ${aptitudeDetails || '<em style="color:#999;">None</em>'}
+      </div>
+    </div>
+    
+    <div style="margin-bottom:1rem;">
+      <strong style="font-size:0.875rem;">Equipment:</strong>
+      <div style="margin-top:0.5rem;font-size:0.875rem;">
+        ${char.equipment.length > 0 
+          ? char.equipment.map((item, idx) => `<div style="margin-bottom:0.25rem;display:flex;justify-content:space-between;align-items:center;">
+              <span>• ${item}</span>
+              <button onclick="quickUseItem(${idx})" style="padding:0.125rem 0.375rem;font-size:0.625rem;background:#6b7280;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Use/consume this item">Use</button>
+            </div>`).join('') 
+          : '<em style="color:#999;">None</em>'}
+      </div>
+    </div>
+  `;
 }
 
 function updateUI() {
@@ -515,6 +691,7 @@ function createCharacter() {
     aptitudes,
     equipment,
     level: 1,
+    xp: 0,
     fortune: 1
   };
 
@@ -562,6 +739,10 @@ function importCharacter() {
 function renderCharacter(char) {
   const slotsUsed = char.equipment?.length || 0;
   const slotsTotal = char.slots || (10 + (char.stats?.con || 0));
+  const xp = char.xp || 0;
+  const xpNeeded = char.level;
+  const canLevelUp = xp >= xpNeeded;
+  
   return `
     <h4>${char.name}</h4>
     <p><strong>Keywords:</strong> ${char.keywords.join(', ') || 'None'}</p>
@@ -573,9 +754,10 @@ function renderCharacter(char) {
       <div class="stat-box"><span class="stat-name">CON</span><span class="stat-value">${char.stats.con}</span></div>
       <div class="stat-box"><span class="stat-name">CHA</span><span class="stat-value">${char.stats.cha}</span></div>
     </div>
-    <p><strong>HP:</strong> ${char.hp}/${char.maxHp} | <strong>AC:</strong> ${char.ac} | <strong>Level:</strong> ${char.level} | <strong>Slots:</strong> ${slotsUsed}/${slotsTotal}</p>
+    <p><strong>HP:</strong> ${char.hp}/${char.maxHp} | <strong>AC:</strong> ${char.ac} | <strong>Level:</strong> ${char.level} | <strong>XP:</strong> ${xp}/${xpNeeded} | <strong>Slots:</strong> ${slotsUsed}/${slotsTotal}</p>
     <p><strong>Aptitudes:</strong> ${char.aptitudes.join(', ') || 'None'}</p>
     <p><strong>Equipment:</strong> ${char.equipment.join(', ') || 'None'}</p>
+    ${canLevelUp ? '<p style="color: #16a34a; font-weight: bold;">⬆️ Ready to level up!</p>' : ''}
   `;
 }
 
@@ -585,7 +767,8 @@ function exportWorld() {
   const data = {
     character: gameState.character,
     world: gameState.world,
-    chatHistory: gameState.chatHistory
+    chatHistory: gameState.chatHistory,
+    journal: gameState.journal
   };
 
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -632,6 +815,8 @@ function importWorld() {
       if (data.character) gameState.character = data.character;
       if (data.world) gameState.world = data.world;
       if (data.chatHistory) gameState.chatHistory = data.chatHistory;
+      if (data.journal) gameState.journal = data.journal;
+      else gameState.journal = { entries: [], lastUpdateTurn: 0 }; // Default if not present
       saveState();
       closeModal();
       updateUI();
@@ -673,6 +858,7 @@ function startNewGame() {
   gameState.isPlaying = true;
 
   updateGameHeader();
+  updateCharacterPanel(); // Initialize character panel
 
   // Send initial prompt to AI
   sendInitialPrompt();
@@ -696,6 +882,7 @@ function continueGame() {
   });
 
   updateGameHeader();
+  updateCharacterPanel(); // Initialize character panel
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
@@ -713,8 +900,513 @@ function updateGameHeader() {
   if (gameState.character) {
     document.getElementById('character-status').textContent =
       `HP: ${gameState.character.hp}/${gameState.character.maxHp} | Fortune: ${gameState.character.fortune}`;
+    
+    // Show/hide level-up button
+    const xp = gameState.character.xp || 0;
+    const xpNeeded = gameState.character.level;
+    const levelUpBtn = document.getElementById('level-up-btn');
+    if (levelUpBtn) {
+      levelUpBtn.style.display = xp >= xpNeeded ? 'inline-block' : 'none';
+    }
+    
+    // Update character panel if visible
+    const panel = document.getElementById('character-panel');
+    if (panel && !panel.classList.contains('collapsed')) {
+      updateCharacterPanel();
+    }
   }
 }
+
+// ============ XP and Leveling ============
+
+function awardXP() {
+  if (!gameState.character) return;
+  
+  gameState.character.xp = (gameState.character.xp || 0) + 1;
+  saveState();
+  updateGameHeader();
+  
+  appendMessage('system', `✨ Awarded 1 XP! (${gameState.character.xp}/${gameState.character.level} towards next level)`);
+  
+  // Check if can level up
+  if (gameState.character.xp >= gameState.character.level) {
+    appendMessage('system', '⬆️ You have enough XP to level up! Click the Level Up button when ready.');
+  }
+}
+
+function showLevelUpModal() {
+  if (!gameState.character) return;
+  
+  const char = gameState.character;
+  const xp = char.xp || 0;
+  const xpCost = char.level;
+  
+  if (xp < xpCost) {
+    alert(`Not enough XP. Need ${xpCost} XP to level up (you have ${xp}).`);
+    return;
+  }
+  
+  const modal = document.getElementById('modal-overlay');
+  const content = document.getElementById('modal-content');
+  
+  // Build stat options
+  const statOptions = ['str', 'dex', 'int', 'wis', 'con', 'cha'].map(stat => 
+    `<option value="${stat}">${stat.toUpperCase()} (current: ${char.stats[stat]})</option>`
+  ).join('');
+  
+  // Check if gains aptitude this level
+  const newLevel = char.level + 1;
+  const gainsAptitude = [3, 5, 7, 9].includes(newLevel);
+  
+  // Build aptitude options if applicable
+  let aptitudeSection = '';
+  if (gainsAptitude) {
+    const skillOptions = Object.entries(RATH_DATA.skillAptitudes).map(([category, apts]) =>
+      `<optgroup label="${category}">${apts.map(a => `<option value="${a.name}">${a.name}</option>`).join('')}</optgroup>`
+    ).join('');
+    
+    const inherentOptions = Object.entries(RATH_DATA.inherentAptitudes).map(([category, apts]) =>
+      `<optgroup label="${category}">${apts.map(a => `<option value="${a.name}">${a.name}</option>`).join('')}</optgroup>`
+    ).join('');
+    
+    aptitudeSection = `
+      <div class="form-group">
+        <label><strong>Gain New Aptitude (Level ${newLevel}):</strong></label>
+        <select id="levelup-aptitude">
+          <option value="">-- Select Aptitude --</option>
+          <optgroup label="--- Skill Aptitudes ---"></optgroup>
+          ${skillOptions}
+          <optgroup label="--- Inherent Aptitudes ---"></optgroup>
+          ${inherentOptions}
+        </select>
+        <div id="levelup-apt-desc" style="margin-top:8px; font-size:13px; color:#666;"></div>
+      </div>
+    `;
+  }
+  
+  content.innerHTML = `
+    <h3>Level Up to Level ${newLevel}</h3>
+    
+    <p><strong>Cost:</strong> ${xpCost} XP (you have ${xp})</p>
+    
+    <div class="form-group">
+      <label><strong>1. Roll for HP:</strong></label>
+      <p style="font-size:13px; color:#666;">Roll ${newLevel}d8 + ${char.stats.con} (CON). If higher than current max (${char.maxHp}), that's your new max. Otherwise, add 1.</p>
+      <button onclick="rollLevelUpHP()">Roll HP</button>
+      <div id="hp-roll-result"></div>
+    </div>
+    
+    <div class="form-group">
+      <label><strong>2. Increase One Stat by 1:</strong></label>
+      <select id="levelup-stat">
+        <option value="">-- Select Stat --</option>
+        ${statOptions}
+      </select>
+    </div>
+    
+    ${aptitudeSection}
+    
+    <div style="margin-top: 1rem;">
+      <button class="primary" onclick="applyLevelUp()">Level Up!</button>
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+  `;
+  
+  modal.style.display = 'flex';
+  
+  // Add aptitude description listener if applicable
+  if (gainsAptitude) {
+    document.getElementById('levelup-aptitude').addEventListener('change', (e) => {
+      const aptName = e.target.value;
+      const descDiv = document.getElementById('levelup-apt-desc');
+      if (aptName) {
+        const apt = findAptitude(aptName);
+        descDiv.textContent = apt ? apt.description : '';
+      } else {
+        descDiv.textContent = '';
+      }
+    });
+  }
+}
+
+// Make these functions global so modal buttons can call them
+window.rollLevelUpHP = function() {
+  const char = gameState.character;
+  const newLevel = char.level + 1;
+  const numDice = newLevel;
+  const con = char.stats.con;
+  
+  // Roll the dice
+  const rolls = [];
+  let total = con;
+  for (let i = 0; i < numDice; i++) {
+    const roll = Math.floor(Math.random() * 8) + 1;
+    rolls.push(roll);
+    total += roll;
+  }
+  
+  const resultDiv = document.getElementById('hp-roll-result');
+  let newMaxHP;
+  
+  if (total > char.maxHp) {
+    newMaxHP = total;
+    resultDiv.innerHTML = `<p style="color:#16a34a;"><strong>Rolled:</strong> ${rolls.join(' + ')} + ${con} (CON) = ${total} → <strong>New Max HP: ${newMaxHP}</strong></p>`;
+  } else {
+    newMaxHP = char.maxHp + 1;
+    resultDiv.innerHTML = `<p style="color:#f59e0b;"><strong>Rolled:</strong> ${rolls.join(' + ')} + ${con} (CON) = ${total} (not higher than ${char.maxHp}) → <strong>New Max HP: ${newMaxHP}</strong> (+1)</p>`;
+  }
+  
+  // Store for applyLevelUp
+  window.levelUpData = { newMaxHP };
+};
+
+window.applyLevelUp = function() {
+  const char = gameState.character;
+  const newLevel = char.level + 1;
+  const xpCost = char.level;
+  
+  // Validate HP was rolled
+  if (!window.levelUpData?.newMaxHP) {
+    alert('Please roll for HP first!');
+    return;
+  }
+  
+  // Validate stat selected
+  const statSelect = document.getElementById('levelup-stat');
+  const selectedStat = statSelect.value;
+  if (!selectedStat) {
+    alert('Please select a stat to increase!');
+    return;
+  }
+  
+  // Validate aptitude if required
+  const gainsAptitude = [3, 5, 7, 9].includes(newLevel);
+  let selectedAptitude = null;
+  if (gainsAptitude) {
+    const aptSelect = document.getElementById('levelup-aptitude');
+    selectedAptitude = aptSelect.value;
+    if (!selectedAptitude) {
+      alert(`Level ${newLevel} gains an aptitude. Please select one!`);
+      return;
+    }
+  }
+  
+  // Apply level up
+  char.level = newLevel;
+  char.xp -= xpCost;
+  char.maxHp = window.levelUpData.newMaxHP;
+  char.hp = char.maxHp; // Heal to full on level up
+  char.stats[selectedStat] += 1;
+  
+  if (selectedAptitude) {
+    char.aptitudes.push(selectedAptitude);
+  }
+  
+  // Recalculate derived stats
+  char.ac = 10 + char.stats.dex;
+  if (char.aptitudes.includes('Natural Armor')) {
+    char.ac = 12 + char.stats.dex;
+  }
+  char.slots = 10 + char.stats.con;
+  if (char.aptitudes.includes('Small')) {
+    char.slots = Math.max(7, char.slots - 3);
+  }
+  
+  saveState();
+  updateUI();
+  updateGameHeader();
+  closeModal();
+  
+  const message = `🎉 <strong>Level Up!</strong> ${char.name} is now level ${newLevel}!<br>
+    HP: ${char.maxHp} | ${selectedStat.toUpperCase()} increased to ${char.stats[selectedStat]}${selectedAptitude ? `<br>Gained aptitude: ${selectedAptitude}` : ''}`;
+  
+  appendMessage('system', message);
+  
+  // Clean up
+  window.levelUpData = null;
+};
+
+// ============ Quick Action Functions ============
+
+window.quickShortRest = function() {
+  if (!gameState.character) return;
+  
+  const char = gameState.character;
+  const con = char.stats.con;
+  
+  // Roll 1d6 + CON
+  const roll = Math.floor(Math.random() * 6) + 1;
+  const healing = roll + con;
+  const oldHp = char.hp;
+  
+  char.hp = Math.min(char.maxHp, char.hp + healing);
+  const actualHealing = char.hp - oldHp;
+  
+  saveState();
+  updateGameHeader();
+  
+  appendMessage('system', `⏸️ <strong>Short Rest (1 hour)</strong><br>Rolled 1d6+${con} (CON) = ${roll}+${con} = ${healing}<br>Healed ${actualHealing} HP (${oldHp} → ${char.hp}/${char.maxHp})`);
+};
+
+window.quickLongRest = function() {
+  if (!gameState.character) return;
+  
+  const char = gameState.character;
+  const oldHp = char.hp;
+  
+  char.hp = char.maxHp;
+  char.fortune = Math.min(3, char.fortune + 1); // Regain 1 fortune
+  
+  saveState();
+  updateGameHeader();
+  
+  const healed = char.maxHp - oldHp;
+  appendMessage('system', `🛌 <strong>Long Rest (8 hours)</strong><br>Fully healed (${oldHp} → ${char.hp})<br>All abilities recharged<br>Fortune: ${char.fortune}/3`);
+};
+
+window.quickSpendFortune = function() {
+  if (!gameState.character || gameState.character.fortune <= 0) {
+    appendMessage('system', '❌ No Fortune points available!');
+    return;
+  }
+  
+  const char = gameState.character;
+  char.fortune -= 1;
+  
+  saveState();
+  updateGameHeader();
+  
+  appendMessage('system', `🍀 <strong>Spent 1 Fortune</strong><br>Reroll your last check and take the higher result.<br>Fortune remaining: ${char.fortune}/3`);
+};
+
+window.quickRollStat = function() {
+  if (!gameState.character) return;
+  
+  const char = gameState.character;
+  const stats = ['STR', 'DEX', 'INT', 'WIS', 'CON', 'CHA'];
+  
+  // Simple modal for stat selection
+  const statChoice = prompt(`Roll which stat?\n${stats.map((s, i) => `${i+1}. ${s} (+${char.stats[s.toLowerCase()]})`).join('\n')}\n\nEnter 1-6:`);
+  
+  if (!statChoice || statChoice < 1 || statChoice > 6) return;
+  
+  const statName = stats[parseInt(statChoice) - 1];
+  const statValue = char.stats[statName.toLowerCase()];
+  const roll = Math.floor(Math.random() * 20) + 1;
+  const total = roll + statValue;
+  
+  const isCrit = roll === 20;
+  const isFail = roll === 1;
+  
+  let resultClass = '';
+  let resultMsg = '';
+  
+  if (isCrit) {
+    resultClass = 'roll-crit';
+    resultMsg = ' 🎯 <strong>CRITICAL SUCCESS!</strong>';
+  } else if (isFail) {
+    resultClass = 'roll-failure';
+    resultMsg = ' 💥 <strong>Critical Failure</strong>';
+  } else if (total >= 12) {
+    resultClass = 'roll-success';
+    resultMsg = ' ✓';
+  }
+  
+  appendMessage('system', `🎲 <strong>${statName} Check</strong><br><span class="${resultClass}">d20 + ${statValue} (${statName}) = ${roll} + ${statValue} = ${total}${resultMsg}</span>`);
+};
+
+window.quickUseItem = function(itemIndex) {
+  if (!gameState.character) return;
+  
+  const char = gameState.character;
+  const item = char.equipment[itemIndex];
+  
+  if (!item) return;
+  
+  // Ask if they want to consume the item
+  const consumable = ['potion', 'ration', 'scroll', 'torch', 'arrow', 'bolt', 'charge'].some(type => 
+    item.toLowerCase().includes(type)
+  );
+  
+  let message = `Using: <strong>${item}</strong>`;
+  
+  if (consumable) {
+    const confirm = window.confirm(`Use/consume ${item}? This will remove it from your inventory.`);
+    if (confirm) {
+      char.equipment.splice(itemIndex, 1);
+      message += '<br>Item consumed and removed from inventory.';
+    } else {
+      return; // Cancelled
+    }
+  } else {
+    message += '<br>Used item (describe effect).';
+  }
+  
+  saveState();
+  updateGameHeader();
+  appendMessage('system', `📦 ${message}`);
+};
+
+// ============ Adventure Journal ============
+
+function updateJournalPanel() {
+  const content = document.getElementById('journal-panel-content');
+  if (!content) return;
+  
+  const entries = gameState.journal?.entries || [];
+  const turnCount = Math.floor(gameState.chatHistory.length / 2);
+  const lastUpdate = gameState.journal?.lastUpdateTurn || 0;
+  const newTurns = turnCount - lastUpdate;
+  
+  if (entries.length === 0) {
+    content.innerHTML = `
+      <div style="text-align:center;padding:2rem;color:#999;">
+        <p>No journal entries yet.</p>
+        <p style="font-size:0.875rem;margin-top:0.5rem;">Your adventure will be summarized here.</p>
+      </div>
+      <div style="padding:0 1rem 1rem 1rem;">
+        <button onclick="generateJournalEntry()" style="width:100%;padding:0.75rem;background:#6b46c1;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:0.875rem;">
+          📝 Update Journal
+        </button>
+      </div>
+    `;
+    return;
+  }
+  
+  // Build entries list
+  const entriesHtml = entries.map((entry, idx) => {
+    const date = new Date(entry.timestamp).toLocaleDateString();
+    return `
+      <div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #ddd;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+          <strong style="font-size:0.875rem;color:#6b46c1;">Entry ${idx + 1}</strong>
+          <span style="font-size:0.75rem;color:#999;">${date}</span>
+        </div>
+        <div style="font-size:0.875rem;line-height:1.6;color:#333;white-space:pre-wrap;">${entry.text}</div>
+      </div>
+    `;
+  }).join('');
+  
+  content.innerHTML = `
+    <div style="padding:1rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <h4 style="margin:0;">Adventure Journal</h4>
+        <button onclick="exportJournal()" style="padding:0.25rem 0.5rem;font-size:0.75rem;background:#10b981;color:#fff;border:none;border-radius:4px;cursor:pointer;" title="Export as markdown">
+          💾 Export
+        </button>
+      </div>
+      
+      ${entriesHtml}
+      
+      <div style="background:#f0f4ff;border:1px solid #c7d2fe;border-radius:4px;padding:0.75rem;margin-bottom:1rem;font-size:0.875rem;color:#4338ca;">
+        ${newTurns > 0 
+          ? `📌 ${newTurns} new turn${newTurns > 1 ? 's' : ''} since last journal update.` 
+          : '✓ Journal is up to date.'}
+      </div>
+      
+      <button onclick="generateJournalEntry()" style="width:100%;padding:0.75rem;background:#6b46c1;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:0.875rem;">
+        📝 Update Journal
+      </button>
+    </div>
+  `;
+}
+
+window.generateJournalEntry = async function() {
+  if (!gameState.character || gameState.chatHistory.length < 2) {
+    alert('Not enough adventure content yet. Play a few turns first!');
+    return;
+  }
+  
+  const btn = document.querySelector('#journal-panel-content button');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '✍️ Writing...';
+  }
+  
+  try {
+    // Get recent chat history since last journal update
+    const lastUpdate = gameState.journal?.lastUpdateTurn || 0;
+    const currentTurn = Math.floor(gameState.chatHistory.length / 2);
+    const turnsToSummarize = currentTurn - lastUpdate;
+    
+    // Get the messages to summarize (last N turns)
+    const messagesToSummarize = gameState.chatHistory.slice(lastUpdate * 2);
+    
+    // Build summary prompt
+    const summaryPrompt = `You are writing an adventure journal entry for a fantasy RPG. Summarize the following events into a compelling narrative paragraph (3-5 sentences) written from the character's perspective. Focus on key events, discoveries, and character moments. Write in past tense, first person.
+
+Character: ${gameState.character.name}
+
+Recent events:
+${messagesToSummarize.map(msg => {
+  const role = msg.role === 'gm' ? 'GM' : 'Player';
+  return `${role}: ${msg.content}`;
+}).join('\n\n')}
+
+Write a journal entry summarizing these events:`;
+    
+    // Call AI to generate summary
+    const provider = getApiProvider();
+    const summary = await callAI(provider, summaryPrompt, true);
+    
+    // Add entry to journal
+    if (!gameState.journal) {
+      gameState.journal = { entries: [], lastUpdateTurn: 0 };
+    }
+    
+    gameState.journal.entries.push({
+      text: summary,
+      timestamp: Date.now(),
+      turnRange: [lastUpdate + 1, currentTurn]
+    });
+    
+    gameState.journal.lastUpdateTurn = currentTurn;
+    
+    saveState();
+    updateJournalPanel();
+    
+    appendMessage('system', '📖 <strong>Journal Updated</strong><br>Your adventure has been recorded.');
+    
+  } catch (error) {
+    alert('Failed to generate journal entry: ' + error.message);
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '📝 Update Journal';
+    }
+  }
+};
+
+window.exportJournal = function() {
+  if (!gameState.journal?.entries || gameState.journal.entries.length === 0) {
+    alert('No journal entries to export!');
+    return;
+  }
+  
+  const char = gameState.character;
+  let markdown = `# ${char.name}'s Adventure Journal\n\n`;
+  markdown += `**Character:** ${char.name} (${char.keywords.join(', ')})\n`;
+  markdown += `**Level:** ${char.level} | **HP:** ${char.hp}/${char.maxHp}\n`;
+  markdown += `**Exported:** ${new Date().toLocaleString()}\n\n`;
+  markdown += `---\n\n`;
+  
+  gameState.journal.entries.forEach((entry, idx) => {
+    const date = new Date(entry.timestamp).toLocaleDateString();
+    markdown += `## Entry ${idx + 1} — ${date}\n\n`;
+    markdown += `${entry.text}\n\n`;
+    markdown += `---\n\n`;
+  });
+  
+  // Download as file
+  const blob = new Blob([markdown], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${char.name}-journal-${Date.now()}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  appendMessage('system', '💾 <strong>Journal Exported</strong><br>Saved as markdown file.');
+};
 
 // ============ Chat & AI ============
 
@@ -766,6 +1458,14 @@ async function sendToAI(message, isInitial = false) {
     // Process response
     const { narrative, memory } = parseAIResponse(response);
 
+    // Validate response for rule violations
+    const warnings = validateAIResponse(narrative);
+    if (warnings.length > 0) {
+      console.warn('Rule violations detected:', warnings);
+      // Optionally show warnings to user (commented out for now - can be annoying)
+      // warnings.forEach(w => appendMessage('warning', w));
+    }
+
     appendMessage('gm', narrative);
     gameState.chatHistory.push({ role: 'gm', content: narrative });
 
@@ -794,14 +1494,29 @@ async function callAI(provider, userMessage, isInitial) {
   const endpoint = API_ENDPOINTS[provider];
   const model = MODELS[provider];
 
+  // Add dynamic rules based on user action
+  const rulesContext = buildDynamicRulesContext(userMessage);
+  const enhancedMessage = isInitial ? userMessage : rulesContext + 'Player action: ' + userMessage;
+
   // Build context
   const context = buildContext();
-  const systemWithContext = SYSTEM_PROMPT + '\n\n## Current Context\n\n' + context;
+  
+  // Add periodic rules reminder every 5 turns
+  const turnCount = Math.floor(gameState.chatHistory.length / 2);
+  const rulesReminder = (turnCount > 0 && turnCount % 5 === 0) 
+    ? '\n\n**RULES REMINDER:** Tests = d20 + stat (0-6) vs DC 12. Stats are the ONLY source of bonuses. Aptitudes grant advantage (2d20 take higher), never +numbers. Keywords are narrative flavor only.'
+    : '';
+  
+  const systemWithContext = SYSTEM_PROMPT + '\n\n## Current Context\n\n' + context + rulesReminder;
+
+  // SLIDING WINDOW: Only keep recent history
+  const maxHistoryMessages = CONFIG.MAX_HISTORY_TURNS * 2; // *2 because each turn is user+assistant
+  const recentHistory = gameState.chatHistory.slice(-maxHistoryMessages);
 
   // Build messages
   let messages;
   if (provider === 'anthropic') {
-    messages = gameState.chatHistory
+    messages = recentHistory
       .filter(m => m.role !== 'system')
       .map(m => ({
         role: m.role === 'gm' ? 'assistant' : 'user',
@@ -809,14 +1524,14 @@ async function callAI(provider, userMessage, isInitial) {
       }));
 
     if (!isInitial) {
-      messages.push({ role: 'user', content: userMessage });
+      messages.push({ role: 'user', content: enhancedMessage });
     } else {
-      messages = [{ role: 'user', content: userMessage }];
+      messages = [{ role: 'user', content: enhancedMessage }];
     }
   } else {
     // OpenAI format
     messages = [{ role: 'system', content: systemWithContext }];
-    gameState.chatHistory
+    recentHistory
       .filter(m => m.role !== 'system')
       .forEach(m => {
         messages.push({
@@ -825,7 +1540,7 @@ async function callAI(provider, userMessage, isInitial) {
         });
       });
     if (!isInitial) {
-      messages.push({ role: 'user', content: userMessage });
+      messages.push({ role: 'user', content: enhancedMessage });
     }
   }
 
@@ -841,7 +1556,7 @@ async function callAI(provider, userMessage, isInitial) {
     };
     body = JSON.stringify({
       model,
-      max_tokens: 1500,
+      max_tokens: CONFIG.MAX_OUTPUT_TOKENS, // Reduced from 1500
       system: systemWithContext,
       messages
     });
@@ -852,7 +1567,7 @@ async function callAI(provider, userMessage, isInitial) {
     };
     body = JSON.stringify({
       model,
-      max_tokens: 1500,
+      max_tokens: CONFIG.MAX_OUTPUT_TOKENS, // Reduced from 1500
       messages
     });
   }
@@ -870,6 +1585,25 @@ async function callAI(provider, userMessage, isInitial) {
 
   const data = await response.json();
 
+  // Track token usage
+  if (provider === 'anthropic' && data.usage) {
+    gameState.tokenUsage.inputTokens += data.usage.input_tokens || 0;
+    gameState.tokenUsage.outputTokens += data.usage.output_tokens || 0;
+    // Anthropic pricing: $3/M input, $15/M output (for Claude Sonnet)
+    const inputCost = (data.usage.input_tokens || 0) * 3 / 1000000;
+    const outputCost = (data.usage.output_tokens || 0) * 15 / 1000000;
+    gameState.tokenUsage.estimatedCost += inputCost + outputCost;
+    updateTokenDisplay();
+  } else if (provider === 'openai' && data.usage) {
+    gameState.tokenUsage.inputTokens += data.usage.prompt_tokens || 0;
+    gameState.tokenUsage.outputTokens += data.usage.completion_tokens || 0;
+    // OpenAI pricing varies by model, using GPT-4o estimate: $2.50/M input, $10/M output
+    const inputCost = (data.usage.prompt_tokens || 0) * 2.5 / 1000000;
+    const outputCost = (data.usage.completion_tokens || 0) * 10 / 1000000;
+    gameState.tokenUsage.estimatedCost += inputCost + outputCost;
+    updateTokenDisplay();
+  }
+
   if (provider === 'anthropic') {
     return data.content[0].text;
   } else {
@@ -877,51 +1611,208 @@ async function callAI(provider, userMessage, isInitial) {
   }
 }
 
+function updateTokenDisplay() {
+  const statusElem = document.getElementById('character-status');
+  if (statusElem && gameState.character) {
+    const cost = gameState.tokenUsage.estimatedCost.toFixed(3);
+    const tokens = gameState.tokenUsage.inputTokens + gameState.tokenUsage.outputTokens;
+    statusElem.textContent = 
+      `HP: ${gameState.character.hp}/${gameState.character.maxHp} | Fortune: ${gameState.character.fortune} | Cost: $${cost} (${(tokens/1000).toFixed(1)}k tokens)`;
+  }
+}
+
 function buildContext() {
   const parts = [];
 
-  // Character
+  // Character (ALWAYS include - this is the stat reference)
   if (gameState.character) {
     const c = gameState.character;
-    parts.push(`**Character:** ${c.name} (${c.keywords.join(', ')})
-Level ${c.level} | HP: ${c.hp}/${c.maxHp} | AC: ${c.ac} | Fortune: ${c.fortune}
-Stats: STR ${c.stats.str}, DEX ${c.stats.dex}, INT ${c.stats.int}, WIS ${c.stats.wis}, CON ${c.stats.con}, CHA ${c.stats.cha}
+    parts.push(`**ACTIVE CHARACTER:**
+${c.name} | L${c.level} | HP ${c.hp}/${c.maxHp} | AC ${c.ac} | Fortune ${c.fortune}
+STR +${c.stats.str}, DEX +${c.stats.dex}, INT +${c.stats.int}, WIS +${c.stats.wis}, CON +${c.stats.con}, CHA +${c.stats.cha}
 Aptitudes: ${c.aptitudes.join(', ') || 'None'}
-Equipment: ${c.equipment.join(', ') || 'None'}`);
+Equipment: ${c.equipment.join(', ') || 'None'}
+
+These are the ONLY modifiers that exist for this character. No proficiency, skill bonuses, or expertise exist.`);
   }
 
-  // Current location
+  // Current location ONLY (not all locations)
   if (gameState.world.currentLocation) {
     const locId = gameState.world.currentLocation;
     const loc = gameState.world.locations[locId];
     if (loc) {
-      const npcs = Array.isArray(loc.npcs) ? loc.npcs.join(', ') : (loc.npcs || 'None');
-      const items = Array.isArray(loc.items) ? loc.items.join(', ') : (loc.items || 'None');
+      // Limit NPCs to prevent bloat
+      const npcList = Array.isArray(loc.npcs) 
+        ? loc.npcs.slice(0, CONFIG.MAX_NPCS_IN_CONTEXT)
+        : [];
+      const npcs = npcList.length > 0 ? npcList.join(', ') : 'None';
+      
       parts.push(`**Current Location:** ${loc.name}
 ${loc.description}
-NPCs here: ${npcs}
-Items: ${items}
+NPCs here: ${npcs}${loc.npcs?.length > CONFIG.MAX_NPCS_IN_CONTEXT ? ' (and others)' : ''}
 Notes: ${loc.notes || 'None'}`);
+      
+      // Include world evolution hint if location has changed
+      if (loc.lastVisit && loc.lastVisit < gameState.world.currentTimestamp - 3600000) {
+        const hoursPassed = Math.floor((gameState.world.currentTimestamp - loc.lastVisit) / 3600000);
+        parts.push(`Time since last visit: ~${hoursPassed} hours`);
+      }
     }
   }
 
-  // Known NPCs
-  const npcIds = Object.keys(gameState.world.npcs);
-  if (npcIds.length > 0) {
-    const npcList = npcIds.map(id => {
-      const npc = gameState.world.npcs[id];
-      return `- ${npc.name}: ${npc.description} (${npc.notes || 'no notes'})`;
-    }).join('\n');
-    parts.push(`**Known NPCs:**\n${npcList}`);
-  }
-
-  // Recent events
-  const recentEvents = gameState.world.events.slice(-5);
+  // Recent events ONLY (not entire history)
+  const recentEvents = gameState.world.events.slice(-CONFIG.MAX_EVENTS_IN_CONTEXT);
   if (recentEvents.length > 0) {
-    parts.push(`**Recent Events:**\n${recentEvents.map(e => '- ' + e).join('\n')}`);
+    const eventList = recentEvents.map(e => {
+      // Handle both old format (string) and new format (object with timestamp)
+      return typeof e === 'string' ? `- ${e}` : `- ${e.text}`;
+    }).join('\n');
+    parts.push(`**Recent Events:**\n${eventList}`);
+  }
+  
+  // Check for world evolution
+  const evolutionHint = evolveWorld();
+  if (evolutionHint) {
+    parts.push(`**World State:** ${evolutionHint}`);
   }
 
   return parts.join('\n\n');
+}
+
+// Helper: Find aptitude definition from RATH_DATA
+function findAptitude(name) {
+  // Search skill aptitudes
+  for (const category in RATH_DATA.skillAptitudes) {
+    const apt = RATH_DATA.skillAptitudes[category].find(a => a.name === name);
+    if (apt) return apt;
+  }
+  // Search inherent aptitudes
+  for (const category in RATH_DATA.inherentAptitudes) {
+    const apt = RATH_DATA.inherentAptitudes[category].find(a => a.name === name);
+    if (apt) return apt;
+  }
+  return null;
+}
+
+// Build dynamic rules reminders based on player action
+function buildDynamicRulesContext(userMessage) {
+  const rules = [];
+  const lower = userMessage.toLowerCase();
+  
+  // Combat reminders
+  if (lower.match(/attack|hit|strike|shoot|fight|stab|slash/)) {
+    rules.push(`**COMBAT REMINDER:** Attack = d20 + STR (melee) or DEX (ranged) vs target AC. Damage = weapon die + STR for melee. Natural 20 = target loses 1 AC until combat ends. NO other bonuses exist.`);
+  }
+  
+  // Skill test reminders
+  if (lower.match(/sneak|hide|track|pick|unlock|climb|swim|jump|search/)) {
+    rules.push(`**SKILL REMINDER:** Test = d20 + relevant stat vs DC 12. Aptitudes grant ADVANTAGE (roll 2d20, take higher), never numerical bonuses. Keywords are purely narrative flavor.`);
+  }
+  
+  // Magic reminders
+  if (lower.match(/cast|spell|magic|scroll/)) {
+    rules.push(`**MAGIC REMINDER:** Hedge Magic = DC 12 INT test, always works if passed, utility only. Chartomancer = scroll-dependent, INT test DC 12 to preserve scroll after casting.`);
+  }
+  
+  // Smart aptitude detection - match player intent to aptitude triggers
+  if (gameState.character?.aptitudes) {
+    const relevantAptitudes = [];
+    
+    // Build keyword → aptitude mapping
+    const aptitudeMap = [
+      { keywords: ['track', 'hunt', 'forage', 'navigate', 'wilderness', 'survive'], aptNames: ['Wild Walker'] },
+      { keywords: ['sneak', 'hide', 'quiet', 'undetected', 'stealth'], aptNames: ['Move Silently and Unseen'] },
+      { keywords: ['lock', 'pick', 'trap', 'disable', 'break', 'enter'], aptNames: ['Break and Enter'] },
+      { keywords: ['attack', 'stab', 'backstab', 'ambush', 'surprise'], aptNames: ['Backstab', 'Dagger Master'] },
+      { keywords: ['attack', 'kill', 'defeat', 'slay'], aptNames: ['Cleave'] },
+      { keywords: ['persuade', 'convince', 'negotiate', 'talk', 'diplomacy'], aptNames: ['Silver Tongue'] },
+      { keywords: ['heal', 'tend', 'cure', 'medicine'], aptNames: ['Heal'] },
+      { keywords: ['rage', 'fury', 'berserk', 'angry'], aptNames: ['Berserker'] },
+      { keywords: ['aim', 'target', 'shoot', 'archery'], aptNames: ['Marksman', 'Hawkeye'] },
+      { keywords: ['secret', 'trap', 'hidden', 'construction'], aptNames: ['Dungeon Sense'] },
+      { keywords: ['undead', 'zombie', 'skeleton', 'ghost'], aptNames: ['Turn Undead'] }
+    ];
+    
+    // Check which aptitudes might apply
+    for (const mapping of aptitudeMap) {
+      const triggered = mapping.keywords.some(kw => lower.includes(kw));
+      if (triggered) {
+        for (const aptName of mapping.aptNames) {
+          if (gameState.character.aptitudes.includes(aptName)) {
+            const apt = findAptitude(aptName);
+            if (apt && !relevantAptitudes.find(a => a.name === aptName)) {
+              relevantAptitudes.push(apt);
+            }
+          }
+        }
+      }
+    }
+    
+    // Add relevant aptitudes to context
+    if (relevantAptitudes.length > 0) {
+      const aptText = relevantAptitudes.map(apt => 
+        `**${apt.name}:** ${apt.description}`
+      ).join('\n\n');
+      rules.push(`**RELEVANT APTITUDES:**\n\n${aptText}`);
+    }
+  }
+  
+  return rules.length > 0 ? rules.join('\n\n') + '\n\n---\n\n' : '';
+}
+
+// Validate AI response for rule violations
+function validateAIResponse(response) {
+  const warnings = [];
+  
+  // Check for illegal bonuses (proficiency, skill, expertise)
+  const illegalBonus = response.match(/\+\d+\s+(proficiency|skill|expertise|background)/gi);
+  if (illegalBonus) {
+    illegalBonus.forEach(match => 
+      warnings.push(`🚫 Illegal bonus detected: "${match}" - Only stats grant bonuses`)
+    );
+  }
+  
+  // Check for missing stat labels in roll notation
+  const rolls = response.match(/d20\s*\+\s*\d+/gi);
+  if (rolls) {
+    rolls.forEach(roll => {
+      const context = response.substring(
+        Math.max(0, response.indexOf(roll) - 30),
+        Math.min(response.length, response.indexOf(roll) + 30)
+      );
+      const hasStatLabel = context.match(/(STR|DEX|INT|WIS|CON|CHA)/i);
+      
+      if (!hasStatLabel) {
+        warnings.push(`⚠️ Roll "${roll}" is missing stat label (STR/DEX/INT/WIS/CON/CHA)`);
+      }
+    });
+  }
+  
+  // Check for wrong default DC (should be 12 unless specified otherwise)
+  const dcMatches = response.match(/DC\s+(\d+)/gi);
+  if (dcMatches) {
+    dcMatches.forEach(match => {
+      const dc = parseInt(match.match(/\d+/)[0]);
+      // Valid DCs in Rath: 10 (easy), 12 (standard), 15 (hard), 18 (very hard), 20 (nearly impossible)
+      if (![10, 12, 15, 18, 20].includes(dc)) {
+        warnings.push(`⚠️ Non-standard DC: ${match} (Rath uses DC 10/12/15/18/20)`);
+      }
+    });
+  }
+  
+  // Check for flat damage bonuses on non-melee attacks
+  const rangedDamage = response.match(/(bow|crossbow|arrow|shoot|ranged).*?(\d+d\d+)\s*\+\s*\d+/gi);
+  if (rangedDamage) {
+    warnings.push(`⚠️ Ranged attacks should not add STR to damage (only melee does)`);
+  }
+  
+  // Check for advantage stacking
+  const advantageStacking = response.match(/advantage.*?advantage/gi);
+  if (advantageStacking && advantageStacking.length > 1) {
+    warnings.push(`⚠️ Multiple "advantage" mentions - advantage doesn't stack in Rath`);
+  }
+  
+  return warnings;
 }
 
 function parseAIResponse(response) {
@@ -943,14 +1834,25 @@ function parseAIResponse(response) {
 }
 
 function processMemoryUpdate(memory) {
-  // Update location
+  // Update location with timestamp
   if (memory.location_update) {
     const loc = memory.location_update;
+    const prevLocation = gameState.world.currentLocation;
+    
+    // Store when we last visited the previous location
+    if (prevLocation && prevLocation !== loc.id && gameState.world.locations[prevLocation]) {
+      gameState.world.locations[prevLocation].lastVisit = gameState.world.currentTimestamp;
+    }
+    
     gameState.world.locations[loc.id] = {
       ...gameState.world.locations[loc.id],
-      ...loc
+      ...loc,
+      lastVisit: gameState.world.currentTimestamp
     };
     gameState.world.currentLocation = loc.id;
+    
+    // Update game timestamp (simulate time passing)
+    gameState.world.currentTimestamp = Date.now();
   }
 
   // Update NPC
@@ -958,13 +1860,22 @@ function processMemoryUpdate(memory) {
     const npc = memory.npc_update;
     gameState.world.npcs[npc.id] = {
       ...gameState.world.npcs[npc.id],
-      ...npc
+      ...npc,
+      lastSeen: gameState.world.currentTimestamp
     };
   }
 
-  // Add event
+  // Add event with timestamp
   if (memory.event) {
-    gameState.world.events.push(memory.event);
+    gameState.world.events.push({
+      text: memory.event,
+      timestamp: gameState.world.currentTimestamp
+    });
+    
+    // Trim old events to prevent bloat (keep last 20)
+    if (gameState.world.events.length > 20) {
+      gameState.world.events = gameState.world.events.slice(-20);
+    }
   }
 
   // Update character
@@ -982,7 +1893,41 @@ function processMemoryUpdate(memory) {
       const idx = gameState.character.equipment.indexOf(update.item_lost);
       if (idx > -1) gameState.character.equipment.splice(idx, 1);
     }
+    if (update.fortune_change) {
+      gameState.character.fortune = Math.max(0, 
+        Math.min(3, gameState.character.fortune + update.fortune_change));
+    }
   }
+}
+
+// World evolution: Update locations when returning after time has passed
+function evolveWorld() {
+  const currentTime = gameState.world.currentTimestamp;
+  const evolvedLocations = [];
+  
+  Object.entries(gameState.world.locations).forEach(([id, loc]) => {
+    if (!loc.lastVisit) return;
+    if (id === gameState.world.currentLocation) return; // Don't evolve current location
+    
+    const hoursSinceVisit = (currentTime - loc.lastVisit) / 3600000;
+    
+    // If more than 6 hours have passed, location might have changed
+    if (hoursSinceVisit > 6) {
+      evolvedLocations.push({
+        id,
+        name: loc.name,
+        hoursPassed: Math.floor(hoursSinceVisit)
+      });
+    }
+  });
+  
+  // If any locations have evolved, add hint to context
+  if (evolvedLocations.length > 0 && gameState.chatHistory.length > 0) {
+    // This will be picked up by buildContext on next turn
+    return `The world has moved on while you were away: ${evolvedLocations.map(l => `${l.name} (${l.hoursPassed}h)`).join(', ')}.`;
+  }
+  
+  return null;
 }
 
 // ============ UI Helpers ============
