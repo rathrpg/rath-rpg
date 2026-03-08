@@ -16,7 +16,7 @@
         <link rel="prev" href="../GM%20Handbook/">
       
       
-        <link rel="next" href="../Homebrew%20Guide/">
+        <link rel="next" href="../point-crawl/">
       
       
         
@@ -56,6 +56,8 @@
       <link rel="stylesheet" href="../stylesheets/extra.css">
     
       <link rel="stylesheet" href="../stylesheets/solo-play.css">
+    
+      <link rel="stylesheet" href="../stylesheets/point-crawl.css">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -279,6 +281,25 @@
     
   
   Solo Play
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../point-crawl/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Point Crawl Adventures
 
       </a>
     </li>
@@ -686,6 +707,33 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../point-crawl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point Crawl Adventures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -702,10 +750,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -723,8 +771,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -909,13 +957,17 @@
 
   <div id="game-section" style="display:none;">
     <div id="game-header">
-      <span id="current-location">Unknown Location</span>
-      <span id="character-status">HP: --/--</span>
-      <button id="toggle-character-panel" title="Show/Hide Character Sheet" style="padding:0.25rem 0.75rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;">📋 Sheet</button>
-      <button id="toggle-journal-panel" title="Show/Hide Adventure Journal" style="padding:0.25rem 0.75rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;">📖 Journal</button>
-      <button id="award-xp-btn" title="Award 1 XP for this session" style="padding:0.25rem 0.75rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;">+XP</button>
-      <button id="level-up-btn" style="display:none;padding:0.25rem 0.75rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;" title="Spend XP to level up">Level Up</button>
-      <button id="back-to-setup-btn" style="padding:0.25rem 0.5rem;font-size:0.875rem;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;white-space:nowrap;">Menu</button>
+      <div id="game-header-info">
+        <span id="current-location">Unknown Location</span>
+        <span id="character-status">HP: --/--</span>
+      </div>
+      <div id="game-header-actions">
+        <button id="toggle-character-panel" title="Show/Hide Character Sheet">📋 Character</button>
+        <button id="toggle-journal-panel" title="Show/Hide Adventure Journal">📖 Journal</button>
+        <button id="award-xp-btn" title="Award 1 XP for this session">+XP</button>
+        <button id="level-up-btn" style="display:none;" title="Spend XP to level up">Level Up</button>
+        <button id="back-to-setup-btn">Menu</button>
+      </div>
     </div>
 
     <div id="game-layout">
@@ -1021,6 +1073,8 @@
         <script src="../js/rath-data.js"></script>
       
         <script src="../js/solo-play.js"></script>
+      
+        <script src="../js/point-crawl.js"></script>
       
     
   </body>

@@ -8,10 +8,14 @@
 const STORAGE_KEYS = {
   API_KEY: 'rath_api_key',
   API_PROVIDER: 'rath_api_provider',
-  CHARACTER: 'rath_character',
-  WORLD: 'rath_world',
+  CHARACTER: 'rath_character', // Legacy - for migration
+  CHARACTER_LIBRARY: 'rath_character_library',
+  ACTIVE_CHARACTER_ID: 'rath_active_character_id',
+  SAVED_GAMES: 'rath_saved_games',
+  ACTIVE_SAVE_ID: 'rath_active_save_id',
+  WORLD: 'rath_world', // Legacy - for migration
   GAME_STATE: 'rath_game_state',
-  CHAT_HISTORY: 'rath_chat_history'
+  CHAT_HISTORY: 'rath_chat_history' // Legacy - for migration
 };
 
 const API_ENDPOINTS = {
@@ -36,8 +40,14 @@ const CONFIG = {
 
 // ============ Game State ============
 
+let characterLibrary = []; // Array of all saved characters
+let activeCharacterId = null; // ID of currently selected character
+
+let savedGames = []; // Array of all saved games
+let activeSaveId = null; // ID of currently active save
+
 let gameState = {
-  character: null,
+  character: null, // Reference to active character (computed from library)
   world: {
     locations: {},
     npcs: {},
@@ -87,10 +97,20 @@ const SYSTEM_PROMPT = `You are a Game Master for Rath RPG, a rules-light fantasy
 
 **Advantage/Disadvantage:** Roll 2d20, take higher (advantage) or lower (disadvantage). Multiple sources don't stack. Advantage and disadvantage cancel out.
 
-**Aptitudes:** Grant advantage on specific actions OR special abilities. They NEVER grant flat numerical bonuses. Examples:
-- "Wild Walker" = advantage to track/hunt/forage in wilderness (not +4)
-- "Move Silently and Unseen" = advantage to sneak/hide (not +2)
-- "Silver Tongue" = advantage on CHA to negotiate (not +3)
+**Keywords vs Aptitudes - CRITICAL DISTINCTION:**
+- **Keywords** (like "Ranger", "Dwarf", "Sailor") grant advantage when narratively relevant. These are the primary source of situational advantage.
+- **Aptitudes** have specific mechanical effects (Cleave chains attacks, Backstab adds damage dice, Heal restores HP). They don't automatically grant advantage unless their description specifically says so (rare).
+
+Examples:
+- "Wild Walker" aptitude = advantage to track/hunt/forage in wilderness (stated in aptitude)
+- "Move Silently" aptitude = advantage to sneak/hide (stated in aptitude)
+- "Silver Tongue" aptitude = advantage on CHA to negotiate (stated in aptitude)
+- But most aptitudes (Cleave, Backstab, Protect) have unique mechanics instead
+
+When checking for advantage, look at:
+1. Keywords first (primary source)
+2. Specific aptitude text if it grants advantage
+3. Favorable conditions, good tools, clever tactics
 
 **Combat:**
 - Initiative: Roll d6 each round. 1-3 enemies first, 4-6 players first.
@@ -102,6 +122,30 @@ const SYSTEM_PROMPT = `You are a Game Master for Rath RPG, a rules-light fantasy
 **Rest:** Short (1 hr) = 1d6 + CON HP. Long (8 hr) = Full HP, abilities recharge.
 
 **Distance:** Close (5-10ft melee), Near (20-30ft one move), Far (40-60ft running), Distant (60ft+)
+
+**Inventory & Slots:** Characters have limited carrying capacity (10 + CON slots). Items have different slot costs:
+- Small items (torch, rations, rope, potion, dagger): 1 slot
+- Standard weapons (sword, axe, spear, bow): 2 slots
+- Heavy weapons (greathammer, halberd, crossbow): 3 slots
+- Light armor: 2 slots
+- Medium armor: 3 slots
+- Heavy armor: 4 slots
+- Shield: 1 slot
+- Small containers (pouch, satchel): 1 slot
+- Large containers (backpack, chest): 2 slots
+
+IMPORTANT - Inventory is a HARD LIMIT:
+- Characters CANNOT pick up items if they would exceed their slot capacity
+- When at capacity, they must DROP something before picking up new items
+- Always check current slot usage before allowing pickups
+- Tell the player how many slots an item would take and what they'd need to drop
+
+**CRITICAL - When items are dropped/discarded:**
+- You MUST include "item_lost" in character_update
+- This removes the items from the character sheet
+- Example: Player says "I drop the torch and rope" → include "item_lost": "torch, rope" in your response
+
+Example: "The plate armor (3 slots) looks valuable, but you're at 9/10 slots. You'd need to drop something to make room."
 
 ## Your Role
 
@@ -145,11 +189,42 @@ After each response, if anything significant happened, output a JSON block for m
   "event": "Brief description of significant event",
   "character_update": {
     "hp_change": -5,
-    "item_gained": "rusty sword",
-    "item_lost": null
+    "item_gained": "rusty sword, torch",
+    "item_lost": "rations",
+    "money_change": {
+      "copper": -5,
+      "silver": 0,
+      "gold": 0
+    },
+    "fortune_change": -1,
+    "xp_award": 1
   }
 }
 \`\`\`
+
+**Character Update Rules:**
+- item_gained: Can be a single item OR comma-separated list. Each item will be added as separate equipment.
+- item_lost: Can be a single item OR comma-separated list to remove multiple items.
+- money_change: Track spending/looting with copper/silver/gold changes (positive or negative).
+- hp_change: Positive for healing, negative for damage.
+- fortune_change: ±1 for Fortune point changes.
+- xp_award: Award 1 XP when the character accomplishes something meaningful.
+
+**XP Award Guidelines:**
+Award 1 XP for meaningful accomplishments that take effort:
+- Completing a quest or rescue mission
+- Defeating a significant enemy or overcoming a major challenge
+- Successfully navigating a dangerous journey
+- Solving a complex problem or puzzle
+- Achieving an important goal
+
+Do NOT award XP for:
+- Minor encounters or trivial tasks
+- Automatic story progression
+- Simple skill checks
+- Short conversations
+
+Think of it as: "Would this feel like a meaningful session milestone?" If yes, award XP.
 
 Only include fields that changed. Omit the block if nothing significant happened.
 
@@ -172,7 +247,74 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSavedState();
   setupEventListeners();
   updateUI();
+  
+  // Check for ?play=<saveId> parameter (game opened in new window)
+  const urlParams = new URLSearchParams(window.location.search);
+  const playSaveId = urlParams.get('play');
+  if (playSaveId) {
+    autoLoadGame(playSaveId);
+  }
 });
+
+function autoLoadGame(saveId) {
+  const save = savedGames.find(s => s.id === saveId);
+  if (!save) {
+    alert('Save not found');
+    return;
+  }
+  
+  // Load character
+  const char = characterLibrary.find(c => c.id === save.characterId);
+  if (!char) {
+    alert('Character for this save not found');
+    return;
+  }
+  
+  activeCharacterId = save.characterId;
+  gameState.character = char;
+  activeSaveId = saveId;
+  
+  // Load game state
+  gameState.world = save.world;
+  gameState.chatHistory = save.chatHistory;
+  gameState.journal = save.journal || { entries: [], lastUpdateTurn: 0 };
+  gameState.tokenUsage = save.tokenUsage || { inputTokens: 0, outputTokens: 0, estimatedCost: 0 };
+  
+  // Hide setup, show game
+  document.getElementById('setup-section').style.display = 'none';
+  document.getElementById('game-section').style.display = 'flex';
+  gameState.isPlaying = true;
+  
+  // Hide MkDocs header/navigation for cleaner game view
+  const mdHeader = document.querySelector('.md-header');
+  if (mdHeader) mdHeader.style.display = 'none';
+  
+  const mdSidebar = document.querySelectorAll('.md-sidebar');
+  mdSidebar.forEach(s => s.style.display = 'none');
+  
+  // Restore chat history
+  const messagesDiv = document.getElementById('chat-messages');
+  messagesDiv.innerHTML = '';
+  gameState.chatHistory.forEach(msg => {
+    appendMessage(msg.role, msg.content);
+  });
+  
+  updateGameHeader();
+  
+  // Ensure character panel is visible
+  const charPanel = document.getElementById('character-panel');
+  if (charPanel) {
+    charPanel.classList.remove('collapsed');
+  }
+  
+  updateCharacterPanel();
+  updateJournalPanel();
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  
+  // Update last played
+  save.lastPlayed = Date.now();
+  saveSavedGames();
+}
 
 function loadSavedState() {
   // Load API settings
@@ -189,34 +331,94 @@ function loadSavedState() {
     document.getElementById('api-provider').value = savedProvider;
   }
 
-  // Load character
-  const savedCharacter = localStorage.getItem(STORAGE_KEYS.CHARACTER);
-  if (savedCharacter) {
-    gameState.character = JSON.parse(savedCharacter);
-  }
-
-  // Load world
-  const savedWorld = localStorage.getItem(STORAGE_KEYS.WORLD);
-  if (savedWorld) {
-    gameState.world = JSON.parse(savedWorld);
-  }
-
-  // Load chat history
-  const savedChat = localStorage.getItem(STORAGE_KEYS.CHAT_HISTORY);
-  if (savedChat) {
-    gameState.chatHistory = JSON.parse(savedChat);
+  // Load character library
+  const savedLibrary = localStorage.getItem(STORAGE_KEYS.CHARACTER_LIBRARY);
+  if (savedLibrary) {
+    characterLibrary = JSON.parse(savedLibrary);
   }
   
-  // Load token usage
-  const savedTokens = localStorage.getItem('rath_token_usage');
-  if (savedTokens) {
-    gameState.tokenUsage = JSON.parse(savedTokens);
+  // MIGRATION: Convert old single-character storage to library
+  const legacyCharacter = localStorage.getItem(STORAGE_KEYS.CHARACTER);
+  if (legacyCharacter && characterLibrary.length === 0) {
+    const char = JSON.parse(legacyCharacter);
+    char.id = generateCharacterId();
+    char.createdAt = Date.now();
+    characterLibrary.push(char);
+    activeCharacterId = char.id;
+    localStorage.setItem(STORAGE_KEYS.CHARACTER_LIBRARY, JSON.stringify(characterLibrary));
+    localStorage.setItem(STORAGE_KEYS.ACTIVE_CHARACTER_ID, activeCharacterId);
+    localStorage.removeItem(STORAGE_KEYS.CHARACTER); // Clean up old storage
   }
   
-  // Load journal
-  const savedJournal = localStorage.getItem('rath_journal');
-  if (savedJournal) {
-    gameState.journal = JSON.parse(savedJournal);
+  // Load active character ID
+  const savedActiveId = localStorage.getItem(STORAGE_KEYS.ACTIVE_CHARACTER_ID);
+  if (savedActiveId) {
+    activeCharacterId = savedActiveId;
+  }
+  
+  // Set active character reference
+  if (activeCharacterId) {
+    gameState.character = characterLibrary.find(c => c.id === activeCharacterId) || null;
+  }
+
+  // Load saved games library
+  const savedGamesData = localStorage.getItem(STORAGE_KEYS.SAVED_GAMES);
+  if (savedGamesData) {
+    savedGames = JSON.parse(savedGamesData);
+  }
+  
+  // MIGRATION: Convert old world/chatHistory storage to a saved game
+  const legacyWorld = localStorage.getItem(STORAGE_KEYS.WORLD);
+  const legacyChat = localStorage.getItem(STORAGE_KEYS.CHAT_HISTORY);
+  if ((legacyWorld || legacyChat) && savedGames.length === 0 && activeCharacterId) {
+    const legacyJournal = localStorage.getItem('rath_journal');
+    const legacyTokens = localStorage.getItem('rath_token_usage');
+    
+    const migrationSave = {
+      id: generateSaveId(),
+      name: 'Migrated Game',
+      characterId: activeCharacterId,
+      createdAt: Date.now(),
+      lastPlayed: Date.now(),
+      world: legacyWorld ? JSON.parse(legacyWorld) : { locations: {}, npcs: {}, events: [], currentLocation: null, currentTimestamp: Date.now() },
+      chatHistory: legacyChat ? JSON.parse(legacyChat) : [],
+      journal: legacyJournal ? JSON.parse(legacyJournal) : { entries: [], lastUpdateTurn: 0 },
+      tokenUsage: legacyTokens ? JSON.parse(legacyTokens) : { inputTokens: 0, outputTokens: 0, estimatedCost: 0 }
+    };
+    
+    savedGames.push(migrationSave);
+    activeSaveId = migrationSave.id;
+    localStorage.setItem(STORAGE_KEYS.SAVED_GAMES, JSON.stringify(savedGames));
+    localStorage.setItem(STORAGE_KEYS.ACTIVE_SAVE_ID, activeSaveId);
+    
+    // Clean up old storage
+    localStorage.removeItem(STORAGE_KEYS.WORLD);
+    localStorage.removeItem(STORAGE_KEYS.CHAT_HISTORY);
+    localStorage.removeItem('rath_journal');
+    localStorage.removeItem('rath_token_usage');
+  }
+  
+  // Load active save ID
+  const savedActiveSaveId = localStorage.getItem(STORAGE_KEYS.ACTIVE_SAVE_ID);
+  if (savedActiveSaveId) {
+    activeSaveId = savedActiveSaveId;
+  }
+  
+  // Load active save into gameState
+  if (activeSaveId) {
+    const activeSave = savedGames.find(s => s.id === activeSaveId);
+    if (activeSave) {
+      gameState.world = activeSave.world;
+      gameState.chatHistory = activeSave.chatHistory;
+      gameState.journal = activeSave.journal || { entries: [], lastUpdateTurn: 0 };
+      gameState.tokenUsage = activeSave.tokenUsage || { inputTokens: 0, outputTokens: 0, estimatedCost: 0 };
+      
+      // Set active character from save
+      if (activeSave.characterId) {
+        activeCharacterId = activeSave.characterId;
+        gameState.character = characterLibrary.find(c => c.id === activeCharacterId) || null;
+      }
+    }
   }
   
   // Ensure world has timestamp (for backwards compatibility)
@@ -228,14 +430,93 @@ function loadSavedState() {
   if (!gameState.journal) {
     gameState.journal = { entries: [], lastUpdateTurn: 0 };
   }
+  
+  // Ensure all characters have required fields (for backwards compatibility)
+  characterLibrary.forEach(char => {
+    if (!char.id) char.id = generateCharacterId();
+    if (!char.createdAt) char.createdAt = Date.now();
+    if (!char.money) char.money = { copper: 0, silver: 0, gold: 0 };
+    if (!char.backstory) char.backstory = 'A wandering adventurer.';
+  });
+  
+  // Update gameState.character reference if it exists
+  if (gameState.character) {
+    if (!gameState.character.money) gameState.character.money = { copper: 0, silver: 0, gold: 0 };
+    if (!gameState.character.backstory) gameState.character.backstory = 'A wandering adventurer.';
+  }
+}
+
+function generateCharacterId() {
+  return 'char_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function generateSaveId() {
+  return 'save_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function estimateSlotCost(itemName) {
+  const name = itemName.toLowerCase();
+  
+  // Heavy armor
+  if (name.includes('plate') || name.includes('heavy armor')) return 4;
+  
+  // Medium armor
+  if (name.includes('chainmail') || name.includes('medium armor') || name.includes('scale')) return 3;
+  
+  // Heavy weapons
+  if (name.includes('greatsword') || name.includes('greataxe') || name.includes('halberd') || 
+      name.includes('warhammer') || name.includes('crossbow') || name.includes('heavy')) return 3;
+  
+  // Light armor or standard weapons
+  if (name.includes('sword') || name.includes('axe') || name.includes('spear') || 
+      name.includes('bow') || name.includes('staff') || name.includes('mace') ||
+      name.includes('light armor') || name.includes('leather') || 
+      name.includes('backpack') || name.includes('chest')) return 2;
+  
+  // Everything else defaults to 1 slot (torch, rope, dagger, potion, rations, etc.)
+  return 1;
+}
+
+function calculateTotalSlots(equipment) {
+  return equipment.reduce((total, item) => total + estimateSlotCost(item), 0);
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEYS.CHARACTER, JSON.stringify(gameState.character));
-  localStorage.setItem(STORAGE_KEYS.WORLD, JSON.stringify(gameState.world));
-  localStorage.setItem(STORAGE_KEYS.CHAT_HISTORY, JSON.stringify(gameState.chatHistory));
-  localStorage.setItem('rath_token_usage', JSON.stringify(gameState.tokenUsage));
-  localStorage.setItem('rath_journal', JSON.stringify(gameState.journal));
+  // Save character library and active ID
+  localStorage.setItem(STORAGE_KEYS.CHARACTER_LIBRARY, JSON.stringify(characterLibrary));
+  if (activeCharacterId) {
+    localStorage.setItem(STORAGE_KEYS.ACTIVE_CHARACTER_ID, activeCharacterId);
+  }
+  
+  // Save current game state to active save
+  if (activeSaveId && gameState.character) {
+    const activeSave = savedGames.find(s => s.id === activeSaveId);
+    if (activeSave) {
+      activeSave.world = gameState.world;
+      activeSave.chatHistory = gameState.chatHistory;
+      activeSave.journal = gameState.journal;
+      activeSave.tokenUsage = gameState.tokenUsage;
+      activeSave.lastPlayed = Date.now();
+      activeSave.characterId = activeCharacterId;
+      
+      // Update metadata
+      activeSave.turnCount = Math.floor(gameState.chatHistory.length / 2);
+      activeSave.currentLocation = gameState.world.currentLocation;
+      
+      saveSavedGames();
+    }
+  }
+}
+
+function saveCharacterLibrary() {
+  localStorage.setItem(STORAGE_KEYS.CHARACTER_LIBRARY, JSON.stringify(characterLibrary));
+}
+
+function saveSavedGames() {
+  localStorage.setItem(STORAGE_KEYS.SAVED_GAMES, JSON.stringify(savedGames));
+  if (activeSaveId) {
+    localStorage.setItem(STORAGE_KEYS.ACTIVE_SAVE_ID, activeSaveId);
+  }
 }
 
 function setupEventListeners() {
@@ -280,30 +561,15 @@ function setupEventListeners() {
     levelUpBtn.addEventListener('click', showLevelUpModal);
   }
 
-  // Character panel toggle
-  const togglePanelBtn = document.getElementById('toggle-character-panel');
-  if (togglePanelBtn) {
-    togglePanelBtn.addEventListener('click', toggleCharacterPanel);
-  }
-
   // Journal panel toggle
   const toggleJournalBtn = document.getElementById('toggle-journal-panel');
   if (toggleJournalBtn) {
     toggleJournalBtn.addEventListener('click', toggleJournalPanel);
   }
-}
 
-function toggleCharacterPanel() {
-  const panel = document.getElementById('character-panel');
-  const btn = document.getElementById('toggle-character-panel');
-  
-  if (panel.classList.contains('collapsed')) {
-    panel.classList.remove('collapsed');
-    btn.textContent = '📋 Hide';
-    updateCharacterPanel(); // Refresh content when opening
-  } else {
-    panel.classList.add('collapsed');
-    btn.textContent = '📋 Sheet';
+  const toggleCharacterBtn = document.getElementById('toggle-character-panel');
+  if (toggleCharacterBtn) {
+    toggleCharacterBtn.addEventListener('click', toggleCharacterPanel);
   }
 }
 
@@ -321,13 +587,27 @@ function toggleJournalPanel() {
   }
 }
 
+function toggleCharacterPanel() {
+  const panel = document.getElementById('character-panel');
+  const btn = document.getElementById('toggle-character-panel');
+  
+  if (panel.classList.contains('collapsed')) {
+    panel.classList.remove('collapsed');
+    btn.textContent = '📋 Hide';
+  } else {
+    panel.classList.add('collapsed');
+    btn.textContent = '📋 Character';
+  }
+}
+
 function updateCharacterPanel() {
   const content = document.getElementById('character-panel-content');
   if (!content || !gameState.character) return;
   
   const char = gameState.character;
-  const slotsUsed = char.equipment?.length || 0;
+  const slotsUsed = calculateTotalSlots(char.equipment || []);
   const slotsTotal = char.slots || (10 + (char.stats?.con || 0));
+  const isOverCapacity = slotsUsed > slotsTotal;
   const xp = char.xp || 0;
   const xpNeeded = char.level;
   const canLevelUp = xp >= xpNeeded;
@@ -365,9 +645,11 @@ function updateCharacterPanel() {
       </div>
       <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
         <span><strong>Fortune:</strong> ${char.fortune}/3</span>
-        <span><strong>Slots:</strong> ${slotsUsed}/${slotsTotal}</span>
+        <span ${isOverCapacity ? 'style="color:#ef4444;font-weight:bold;"' : ''}><strong>Slots:</strong> ${slotsUsed}/${slotsTotal}${isOverCapacity ? ' ⚠️' : ''}</span>
       </div>
     </div>
+    
+    ${isOverCapacity ? '<div style="background:#fee2e2;border:1px solid #fecaca;border-radius:4px;padding:0.5rem;margin-bottom:1rem;font-size:0.875rem;color:#991b1b;text-align:center;">⚠️ Over capacity! Drop items to continue.</div>' : ''}
     
     ${canLevelUp ? '<div style="background:#d4edda;border:1px solid #c3e6cb;border-radius:4px;padding:0.5rem;margin-bottom:1rem;font-size:0.875rem;color:#155724;text-align:center;">⬆️ Ready to level up!</div>' : ''}
     
@@ -389,29 +671,198 @@ function updateCharacterPanel() {
     </div>
     
     <div style="margin-bottom:1rem;">
-      <strong style="font-size:0.875rem;">Equipment:</strong>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+        <strong style="font-size:0.875rem;">Equipment:</strong>
+        <button onclick="showEditEquipmentModal()" style="padding:0.25rem 0.5rem;font-size:0.75rem;background:#6366f1;color:#fff;border:none;border-radius:4px;cursor:pointer;">✏️ Edit</button>
+      </div>
       <div style="margin-top:0.5rem;font-size:0.875rem;">
         ${char.equipment.length > 0 
-          ? char.equipment.map((item, idx) => `<div style="margin-bottom:0.25rem;display:flex;justify-content:space-between;align-items:center;">
-              <span>• ${item}</span>
-              <button onclick="quickUseItem(${idx})" style="padding:0.125rem 0.375rem;font-size:0.625rem;background:#6b7280;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Use/consume this item">Use</button>
-            </div>`).join('') 
+          ? char.equipment.map((item, idx) => {
+              const slots = estimateSlotCost(item);
+              return `<div style="margin-bottom:0.25rem;display:flex;justify-content:space-between;align-items:center;">
+                <span>• ${item} <span style="color:#999;font-size:0.75rem;">(${slots} slot${slots > 1 ? 's' : ''})</span></span>
+                <button onclick="quickUseItem(${idx})" style="padding:0.125rem 0.375rem;font-size:0.625rem;background:#6b7280;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Use/consume this item">Use</button>
+              </div>`;
+            }).join('') 
           : '<em style="color:#999;">None</em>'}
       </div>
     </div>
   `;
 }
 
-function updateUI() {
-  // Update character display
-  if (gameState.character) {
-    document.getElementById('no-character').style.display = 'none';
-    document.getElementById('character-display').style.display = 'block';
-    document.getElementById('character-info').innerHTML = renderCharacter(gameState.character);
-  }
+window.showEditEquipmentModal = function() {
+  const modal = document.getElementById('modal-overlay');
+  const content = document.getElementById('modal-content');
+  
+  const char = gameState.character;
+  if (!char) return;
+  
+  const slotsUsed = calculateTotalSlots(char.equipment || []);
+  const slotsTotal = char.slots || (10 + (char.stats?.con || 0));
+  const isOverCapacity = slotsUsed > slotsTotal;
+  
+  content.innerHTML = `
+    <h3>Edit Equipment</h3>
+    
+    <div style="background:${isOverCapacity ? '#fee2e2' : '#f3f4f6'};border:1px solid ${isOverCapacity ? '#fecaca' : '#d1d5db'};border-radius:4px;padding:0.75rem;margin-bottom:1rem;text-align:center;">
+      <strong style="font-size:0.875rem;color:${isOverCapacity ? '#991b1b' : '#374151'};">
+        Slots: ${slotsUsed}/${slotsTotal}${isOverCapacity ? ' ⚠️ Over Capacity!' : ''}
+      </strong>
+    </div>
+    
+    <div style="max-height:300px;overflow-y:auto;margin-bottom:1rem;">
+      <div id="equipment-list">
+        ${char.equipment.length > 0 
+          ? char.equipment.map((item, idx) => {
+              const slots = estimateSlotCost(item);
+              return `
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem;border:1px solid #ddd;border-radius:4px;margin-bottom:0.5rem;">
+                <div style="flex:1;display:flex;align-items:center;gap:0.5rem;">
+                  <input type="text" value="${item}" id="equip-${idx}" style="flex:1;padding:0.25rem;border:1px solid #ccc;border-radius:4px;">
+                  <span style="color:#999;font-size:0.75rem;white-space:nowrap;">(${slots} slot${slots > 1 ? 's' : ''})</span>
+                </div>
+                <button onclick="removeEquipmentItem(${idx})" style="padding:0.25rem 0.5rem;background:#ef4444;color:#fff;border:none;border-radius:4px;cursor:pointer;margin-left:0.5rem;">Remove</button>
+              </div>
+            `;
+            }).join('')
+          : '<p style="text-align:center;color:#999;">No equipment</p>'}
+      </div>
+    </div>
+    
+    <div style="margin-bottom:1rem;">
+      <label style="font-size:0.875rem;display:block;margin-bottom:0.25rem;">Add New Item:</label>
+      <div style="display:flex;gap:0.5rem;">
+        <input type="text" id="new-equipment-item" placeholder="e.g., rope, torch" style="flex:1;padding:0.5rem;border:1px solid #ccc;border-radius:4px;">
+        <button onclick="addEquipmentItem()" style="padding:0.5rem 1rem;background:#10b981;color:#fff;border:none;border-radius:4px;cursor:pointer;">Add</button>
+      </div>
+    </div>
+    
+    <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
+      <button onclick="saveEquipmentChanges()" class="primary">Save Changes</button>
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+  `;
+  
+  modal.style.display = 'flex';
+};
 
-  // Enable continue button if there's chat history
-  document.getElementById('continue-game-btn').disabled = gameState.chatHistory.length === 0;
+window.addEquipmentItem = function() {
+  const input = document.getElementById('new-equipment-item');
+  const itemName = input.value.trim();
+  
+  if (!itemName) {
+    alert('Please enter an item name');
+    return;
+  }
+  
+  gameState.character.equipment.push(itemName);
+  input.value = '';
+  
+  // Refresh the modal
+  showEditEquipmentModal();
+};
+
+window.removeEquipmentItem = function(idx) {
+  if (confirm('Remove this item?')) {
+    gameState.character.equipment.splice(idx, 1);
+    showEditEquipmentModal(); // Refresh
+  }
+};
+
+window.saveEquipmentChanges = function() {
+  // Update item names from text inputs
+  const char = gameState.character;
+  char.equipment.forEach((item, idx) => {
+    const input = document.getElementById(`equip-${idx}`);
+    if (input) {
+      char.equipment[idx] = input.value.trim();
+    }
+  });
+  
+  // Filter out empty items
+  char.equipment = char.equipment.filter(item => item.length > 0);
+  
+  // Update character in library
+  const libChar = characterLibrary.find(c => c.id === char.id);
+  if (libChar) {
+    libChar.equipment = char.equipment;
+  }
+  
+  saveCharacterLibrary();
+  saveState();
+  updateCharacterPanel();
+  closeModal();
+};
+
+function updateUI() {
+  // Update character library display
+  updateCharacterLibraryUI();
+
+  // Update saved games display
+  updateSavedGamesUI();
+}
+
+function updateSavedGamesUI() {
+  const continueBtn = document.getElementById('continue-game-btn');
+  
+  if (savedGames.length === 0) {
+    continueBtn.disabled = true;
+    continueBtn.textContent = 'Continue Game';
+  } else {
+    continueBtn.disabled = false;
+    continueBtn.textContent = `Load Game (${savedGames.length})`;
+  }
+}
+
+function updateCharacterLibraryUI() {
+  const noCharDiv = document.getElementById('no-character');
+  const charDisplay = document.getElementById('character-display');
+  
+  if (characterLibrary.length === 0) {
+    noCharDiv.style.display = 'block';
+    charDisplay.style.display = 'none';
+  } else {
+    noCharDiv.style.display = 'none';
+    charDisplay.style.display = 'block';
+    
+    // Render character list
+    const charInfo = document.getElementById('character-info');
+    charInfo.innerHTML = `
+      <h4>Character Library (${characterLibrary.length})</h4>
+      <div style="max-height: 400px; overflow-y: auto;">
+        ${characterLibrary.map(char => renderCharacterCard(char)).join('')}
+      </div>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <button onclick="exportAllCharacters()" style="padding: 0.5rem 1rem; background: #10b981; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+          💾 Export All
+        </button>
+        <button onclick="importAllCharacters()" style="padding: 0.5rem 1rem; background: #6366f1; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+          📥 Import All
+        </button>
+      </div>
+    `;
+  }
+}
+
+function renderCharacterCard(char) {
+  const isActive = char.id === activeCharacterId;
+  const borderStyle = isActive ? 'border: 2px solid #10b981;' : 'border: 1px solid #ddd;';
+  
+  return `
+    <div style="${borderStyle} padding: 0.75rem; margin-bottom: 0.75rem; border-radius: 4px; background: ${isActive ? '#f0fdf4' : '#fff'};">
+      <div style="display: flex; justify-content: space-between; align-items: start;">
+        <div style="flex: 1;">
+          <strong>${char.name}</strong> ${isActive ? '<span style="color: #10b981;">✓ Active</span>' : ''}
+          <br><small style="color: #666;">${char.keywords.join(', ')} | Level ${char.level}</small>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+          ${!isActive ? `<button onclick="selectCharacter('${char.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; background: #10b981; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Select</button>` : ''}
+          <button onclick="exportCharacter('${char.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; background: #6366f1; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Export</button>
+          <button onclick="deleteCharacter('${char.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; background: #ef4444; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Delete</button>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ============ API Key Management ============
@@ -483,6 +934,12 @@ function showNewCharacterModal() {
     <div class="form-group">
       <label>Keywords (species, role, background):</label>
       <input type="text" id="char-keywords" placeholder="e.g., Human, Fighter, Soldier">
+    </div>
+
+    <div class="form-group">
+      <label>Backstory (optional):</label>
+      <textarea id="char-backstory" placeholder="e.g., A wandering mercenary seeking redemption..." rows="2"></textarea>
+      <small style="color:#666;">Brief description or history for the AI to incorporate</small>
     </div>
 
     <div class="form-group">
@@ -644,6 +1101,7 @@ function updateCharacterPreview() {
 function createCharacter() {
   const name = document.getElementById('char-name').value.trim();
   const keywords = document.getElementById('char-keywords').value.trim();
+  const backstory = document.getElementById('char-backstory').value.trim() || 'A wandering adventurer.';
   const str = parseInt(document.getElementById('char-str').value) || 0;
   const dex = parseInt(document.getElementById('char-dex').value) || 0;
   const int = parseInt(document.getElementById('char-int').value) || 0;
@@ -653,6 +1111,9 @@ function createCharacter() {
   const apt1 = document.getElementById('char-apt1').value;
   const apt2 = document.getElementById('char-apt2').value;
   const gearPack = document.getElementById('char-gearpack').value;
+  
+  // Roll starting money: 2d6+5 copper pieces
+  const startingCopper = Math.floor(Math.random() * 6) + 1 + Math.floor(Math.random() * 6) + 1 + 5;
 
   if (!name) {
     alert('Please enter a character name');
@@ -680,9 +1141,12 @@ function createCharacter() {
     ac += pack.ac_bonus;
   }
 
-  gameState.character = {
+  const newCharacter = {
+    id: generateCharacterId(),
+    createdAt: Date.now(),
     name,
     keywords: keywords.split(',').map(k => k.trim()).filter(k => k),
+    backstory,
     stats: { str, dex, int, wis, con, cha },
     hp: maxHp,
     maxHp,
@@ -692,9 +1156,20 @@ function createCharacter() {
     equipment,
     level: 1,
     xp: 0,
-    fortune: 1
+    fortune: 1,
+    money: {
+      copper: startingCopper,
+      silver: 0,
+      gold: 0
+    }
   };
 
+  // Add to library and set as active
+  characterLibrary.push(newCharacter);
+  activeCharacterId = newCharacter.id;
+  gameState.character = newCharacter;
+
+  saveCharacterLibrary();
   saveState();
   closeModal();
   updateUI();
@@ -727,7 +1202,19 @@ function importCharacter() {
     if (!char.name || !char.stats) {
       throw new Error('Invalid character format');
     }
+    
+    // Ensure character has required fields
+    if (!char.id) char.id = generateCharacterId();
+    if (!char.createdAt) char.createdAt = Date.now();
+    if (!char.money) char.money = { copper: 0, silver: 0, gold: 0 };
+    if (!char.backstory) char.backstory = 'A wandering adventurer.';
+    
+    // Add to library and set as active
+    characterLibrary.push(char);
+    activeCharacterId = char.id;
     gameState.character = char;
+    
+    saveCharacterLibrary();
     saveState();
     closeModal();
     updateUI();
@@ -736,16 +1223,269 @@ function importCharacter() {
   }
 }
 
+window.selectCharacter = function(charId) {
+  const char = characterLibrary.find(c => c.id === charId);
+  if (!char) {
+    alert('Character not found');
+    return;
+  }
+  
+  activeCharacterId = charId;
+  gameState.character = char;
+  localStorage.setItem(STORAGE_KEYS.ACTIVE_CHARACTER_ID, charId);
+  updateUI();
+};
+
+window.exportCharacter = function(charId) {
+  const char = characterLibrary.find(c => c.id === charId);
+  if (!char) {
+    alert('Character not found');
+    return;
+  }
+  
+  const json = JSON.stringify(char, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${char.name.replace(/[^a-z0-9]/gi, '_')}_character.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+window.deleteCharacter = function(charId) {
+  const char = characterLibrary.find(c => c.id === charId);
+  if (!char) {
+    alert('Character not found');
+    return;
+  }
+  
+  if (!confirm(`Delete ${char.name}? This cannot be undone.`)) {
+    return;
+  }
+  
+  characterLibrary = characterLibrary.filter(c => c.id !== charId);
+  
+  // If we deleted the active character, clear active state
+  if (activeCharacterId === charId) {
+    activeCharacterId = null;
+    gameState.character = null;
+    localStorage.removeItem(STORAGE_KEYS.ACTIVE_CHARACTER_ID);
+  }
+  
+  saveCharacterLibrary();
+  updateUI();
+};
+
+window.exportAllCharacters = function() {
+  if (characterLibrary.length === 0) {
+    alert('No characters to export');
+    return;
+  }
+  
+  const json = JSON.stringify(characterLibrary, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `rath_character_library_${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+window.importAllCharacters = function() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const imported = JSON.parse(event.target.result);
+        if (!Array.isArray(imported)) {
+          throw new Error('File must contain an array of characters');
+        }
+        
+        // Validate and add imported characters
+        imported.forEach(char => {
+          if (!char.name || !char.stats) {
+            throw new Error('Invalid character format in file');
+          }
+          
+          // Ensure required fields
+          if (!char.id) char.id = generateCharacterId();
+          if (!char.createdAt) char.createdAt = Date.now();
+          if (!char.money) char.money = { copper: 0, silver: 0, gold: 0 };
+          if (!char.backstory) char.backstory = 'A wandering adventurer.';
+          
+          // Check for duplicate IDs and regenerate if needed
+          if (characterLibrary.find(c => c.id === char.id)) {
+            char.id = generateCharacterId();
+          }
+          
+          characterLibrary.push(char);
+        });
+        
+        saveCharacterLibrary();
+        updateUI();
+        alert(`Imported ${imported.length} character(s)`);
+      } catch (err) {
+        alert('Failed to import: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+};
+
+// ============ Save Game Management ============
+
+window.renameSave = function(saveId) {
+  const save = savedGames.find(s => s.id === saveId);
+  if (!save) {
+    alert('Save not found');
+    return;
+  }
+  
+  const newName = prompt('Enter new save name:', save.name);
+  if (newName && newName.trim()) {
+    save.name = newName.trim();
+    saveSavedGames();
+    showLoadGameModal(); // Refresh the modal
+  }
+};
+
+window.exportSave = function(saveId) {
+  const save = savedGames.find(s => s.id === saveId);
+  if (!save) {
+    alert('Save not found');
+    return;
+  }
+  
+  const json = JSON.stringify(save, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${save.name.replace(/[^a-z0-9]/gi, '_')}_save.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+window.deleteSave = function(saveId) {
+  const save = savedGames.find(s => s.id === saveId);
+  if (!save) {
+    alert('Save not found');
+    return;
+  }
+  
+  if (!confirm(`Delete save "${save.name}"? This cannot be undone.`)) {
+    return;
+  }
+  
+  savedGames = savedGames.filter(s => s.id !== saveId);
+  
+  // If we deleted the active save, clear active state
+  if (activeSaveId === saveId) {
+    activeSaveId = null;
+    localStorage.removeItem(STORAGE_KEYS.ACTIVE_SAVE_ID);
+  }
+  
+  saveSavedGames();
+  showLoadGameModal(); // Refresh the modal
+  updateUI();
+};
+
+window.exportAllSaves = function() {
+  if (savedGames.length === 0) {
+    alert('No saves to export');
+    return;
+  }
+  
+  const json = JSON.stringify(savedGames, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `rath_saved_games_${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+window.importSavesFile = function() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const imported = JSON.parse(event.target.result);
+        
+        // Handle single save or array of saves
+        const savesToImport = Array.isArray(imported) ? imported : [imported];
+        
+        let importedCount = 0;
+        savesToImport.forEach(save => {
+          if (!save.characterId || !save.world) {
+            throw new Error('Invalid save format in file');
+          }
+          
+          // Ensure required fields
+          if (!save.id) save.id = generateSaveId();
+          if (!save.createdAt) save.createdAt = Date.now();
+          if (!save.lastPlayed) save.lastPlayed = Date.now();
+          if (!save.name) save.name = 'Imported Save';
+          if (!save.journal) save.journal = { entries: [], lastUpdateTurn: 0 };
+          if (!save.tokenUsage) save.tokenUsage = { inputTokens: 0, outputTokens: 0, estimatedCost: 0 };
+          
+          // Check for duplicate IDs and regenerate if needed
+          if (savedGames.find(s => s.id === save.id)) {
+            save.id = generateSaveId();
+          }
+          
+          savedGames.push(save);
+          importedCount++;
+        });
+        
+        saveSavedGames();
+        showLoadGameModal(); // Refresh the modal
+        updateUI();
+        alert(`Imported ${importedCount} save(s)`);
+      } catch (err) {
+        alert('Failed to import: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+};
+
 function renderCharacter(char) {
-  const slotsUsed = char.equipment?.length || 0;
+  const slotsUsed = calculateTotalSlots(char.equipment || []);
   const slotsTotal = char.slots || (10 + (char.stats?.con || 0));
   const xp = char.xp || 0;
   const xpNeeded = char.level;
   const canLevelUp = xp >= xpNeeded;
   
+  // Format money display
+  const money = char.money || { copper: 0, silver: 0, gold: 0 };
+  const moneyDisplay = [];
+  if (money.gold > 0) moneyDisplay.push(`${money.gold}gp`);
+  if (money.silver > 0) moneyDisplay.push(`${money.silver}sp`);
+  if (money.copper > 0) moneyDisplay.push(`${money.copper}cp`);
+  const moneyText = moneyDisplay.length > 0 ? moneyDisplay.join(', ') : '0cp';
+  
   return `
     <h4>${char.name}</h4>
     <p><strong>Keywords:</strong> ${char.keywords.join(', ') || 'None'}</p>
+    ${char.backstory ? `<p><em>${char.backstory}</em></p>` : ''}
     <div class="stat-grid">
       <div class="stat-box"><span class="stat-name">STR</span><span class="stat-value">${char.stats.str}</span></div>
       <div class="stat-box"><span class="stat-name">DEX</span><span class="stat-value">${char.stats.dex}</span></div>
@@ -755,6 +1495,7 @@ function renderCharacter(char) {
       <div class="stat-box"><span class="stat-name">CHA</span><span class="stat-value">${char.stats.cha}</span></div>
     </div>
     <p><strong>HP:</strong> ${char.hp}/${char.maxHp} | <strong>AC:</strong> ${char.ac} | <strong>Level:</strong> ${char.level} | <strong>XP:</strong> ${xp}/${xpNeeded} | <strong>Slots:</strong> ${slotsUsed}/${slotsTotal}</p>
+    <p><strong>Money:</strong> ${moneyText}</p>
     <p><strong>Aptitudes:</strong> ${char.aptitudes.join(', ') || 'None'}</p>
     <p><strong>Equipment:</strong> ${char.equipment.join(', ') || 'None'}</p>
     ${canLevelUp ? '<p style="color: #16a34a; font-weight: bold;">⬆️ Ready to level up!</p>' : ''}
@@ -764,18 +1505,23 @@ function renderCharacter(char) {
 // ============ World Management ============
 
 function exportWorld() {
-  const data = {
-    character: gameState.character,
-    world: gameState.world,
-    chatHistory: gameState.chatHistory,
-    journal: gameState.journal
-  };
-
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  if (!activeSaveId) {
+    alert('No active save to export');
+    return;
+  }
+  
+  const save = savedGames.find(s => s.id === activeSaveId);
+  if (!save) {
+    alert('Active save not found');
+    return;
+  }
+  
+  // Export in the new save format
+  const blob = new Blob([JSON.stringify(save, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `rath-save-${Date.now()}.json`;
+  a.download = `${save.name.replace(/[^a-z0-9]/gi, '_')}_save.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -812,15 +1558,83 @@ function importWorld() {
   reader.onload = (e) => {
     try {
       const data = JSON.parse(e.target.result);
-      if (data.character) gameState.character = data.character;
-      if (data.world) gameState.world = data.world;
-      if (data.chatHistory) gameState.chatHistory = data.chatHistory;
-      if (data.journal) gameState.journal = data.journal;
-      else gameState.journal = { entries: [], lastUpdateTurn: 0 }; // Default if not present
-      saveState();
-      closeModal();
-      updateUI();
-      alert('World imported successfully!');
+      
+      // Detect format: new save format has characterId, old format has character object
+      const isNewFormat = data.characterId !== undefined;
+      
+      if (isNewFormat) {
+        // New save format - import as a save
+        const save = data;
+        
+        // Ensure required fields
+        if (!save.id) save.id = generateSaveId();
+        if (!save.createdAt) save.createdAt = Date.now();
+        if (!save.lastPlayed) save.lastPlayed = Date.now();
+        if (!save.name) save.name = file.name.replace('.json', '');
+        if (!save.journal) save.journal = { entries: [], lastUpdateTurn: 0 };
+        if (!save.tokenUsage) save.tokenUsage = { inputTokens: 0, outputTokens: 0, estimatedCost: 0 };
+        
+        // Check if character exists in library
+        const char = characterLibrary.find(c => c.id === save.characterId);
+        if (!char) {
+          alert('Character for this save not found. Please import the character first.');
+          return;
+        }
+        
+        // Add to saved games
+        if (savedGames.find(s => s.id === save.id)) {
+          save.id = generateSaveId(); // Regenerate if duplicate
+        }
+        savedGames.push(save);
+        saveSavedGames();
+        
+        closeModal();
+        updateUI();
+        alert('Save imported successfully!');
+        
+      } else {
+        // Old format - import character and create a new save
+        if (!data.character || !data.world) {
+          throw new Error('Invalid file format');
+        }
+        
+        const char = data.character;
+        
+        // Ensure character has required fields
+        if (!char.id) char.id = generateCharacterId();
+        if (!char.createdAt) char.createdAt = Date.now();
+        if (!char.money) char.money = { copper: 0, silver: 0, gold: 0 };
+        if (!char.backstory) char.backstory = 'A wandering adventurer.';
+        
+        // Check if character already exists in library
+        const existing = characterLibrary.find(c => c.id === char.id);
+        if (!existing) {
+          characterLibrary.push(char);
+          saveCharacterLibrary();
+        }
+        
+        // Create a new save from the imported data
+        const newSave = {
+          id: generateSaveId(),
+          name: file.name.replace('.json', '') || 'Imported Game',
+          characterId: char.id,
+          createdAt: Date.now(),
+          lastPlayed: Date.now(),
+          turnCount: data.chatHistory ? Math.floor(data.chatHistory.length / 2) : 0,
+          currentLocation: data.world?.currentLocation || null,
+          world: data.world || { locations: {}, npcs: {}, events: [], currentLocation: null, currentTimestamp: Date.now() },
+          chatHistory: data.chatHistory || [],
+          journal: data.journal || { entries: [], lastUpdateTurn: 0 },
+          tokenUsage: data.tokenUsage || { inputTokens: 0, outputTokens: 0, estimatedCost: 0 }
+        };
+        
+        savedGames.push(newSave);
+        saveSavedGames();
+        
+        closeModal();
+        updateUI();
+        alert('Legacy save imported successfully and converted to new format!');
+      }
     } catch (err) {
       alert('Invalid save file: ' + err.message);
     }
@@ -836,32 +1650,107 @@ function startNewGame() {
     return;
   }
 
-  if (!gameState.character) {
+  if (characterLibrary.length === 0) {
     alert('Please create or import a character first');
     return;
   }
 
-  // Clear previous game state but keep character
-  gameState.world = {
-    locations: {},
-    npcs: {},
-    events: [],
-    currentLocation: null
+  // Show world settings modal (with character selection)
+  showWorldSettingsModal();
+}
+
+function showWorldSettingsModal() {
+  const modal = document.getElementById('modal-overlay');
+  const content = document.getElementById('modal-content');
+
+  // Build character selection dropdown
+  const charOptions = characterLibrary.map(char => {
+    const selected = char.id === activeCharacterId ? 'selected' : '';
+    return `<option value="${char.id}" ${selected}>${char.name} (L${char.level}, ${char.keywords.slice(0, 2).join(', ')})</option>`;
+  }).join('');
+
+  content.innerHTML = `
+    <h3>Start New Adventure</h3>
+    
+    <div class="form-group">
+      <label>Save Name:</label>
+      <input type="text" id="save-name" placeholder="e.g., Millhaven Quest, Desert Campaign..." value="New Adventure">
+      <small style="color:#666;">Name this save for easy identification later</small>
+    </div>
+    
+    <div class="form-group">
+      <label>Select Character:</label>
+      <select id="game-character-select">
+        ${charOptions}
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>World Setting (optional):</label>
+      <textarea id="world-primer" placeholder="e.g., A dark gothic kingdom plagued by undead, or a sun-scorched desert of ancient ruins..." rows="3"></textarea>
+      <small style="color:#666;">Describe the world, tone, or setting. Leave blank for standard fantasy.</small>
+    </div>
+
+    <div style="margin-top: 1rem;">
+      <button class="primary" onclick="beginNewGame()">Start Adventure</button>
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+  `;
+
+  modal.style.display = 'flex';
+}
+
+function beginNewGame() {
+  const saveName = document.getElementById('save-name').value.trim() || 'New Adventure';
+  const selectedCharId = document.getElementById('game-character-select').value;
+  const worldPrimer = document.getElementById('world-primer').value.trim();
+  
+  // Set active character to the selected one
+  const selectedChar = characterLibrary.find(c => c.id === selectedCharId);
+  if (!selectedChar) {
+    alert('Selected character not found');
+    return;
+  }
+  
+  // Create new saved game
+  const newSave = {
+    id: generateSaveId(),
+    name: saveName,
+    characterId: selectedCharId,
+    createdAt: Date.now(),
+    lastPlayed: Date.now(),
+    turnCount: 0,
+    currentLocation: null,
+    world: {
+      locations: {},
+      npcs: {},
+      events: [],
+      currentLocation: null,
+      primer: worldPrimer || null,
+      currentTimestamp: Date.now()
+    },
+    chatHistory: [],
+    journal: {
+      entries: [],
+      lastUpdateTurn: 0
+    },
+    tokenUsage: {
+      inputTokens: 0,
+      outputTokens: 0,
+      estimatedCost: 0
+    }
   };
-  gameState.chatHistory = [];
-  saveState();
-
-  // Switch to game view
-  document.getElementById('setup-section').style.display = 'none';
-  document.getElementById('game-section').style.display = 'flex';
-  document.getElementById('chat-messages').innerHTML = '';
-  gameState.isPlaying = true;
-
-  updateGameHeader();
-  updateCharacterPanel(); // Initialize character panel
-
-  // Send initial prompt to AI
-  sendInitialPrompt();
+  
+  // Add to saved games and set as active
+  savedGames.push(newSave);
+  activeSaveId = newSave.id;
+  saveSavedGames();
+  
+  closeModal();
+  
+  // Open game in new window/tab
+  const gameUrl = window.location.href.split('?')[0] + '?play=' + newSave.id;
+  window.open(gameUrl, '_blank');
 }
 
 function continueGame() {
@@ -869,22 +1758,99 @@ function continueGame() {
     alert('Please enter and save your API key first');
     return;
   }
-
-  document.getElementById('setup-section').style.display = 'none';
-  document.getElementById('game-section').style.display = 'flex';
-  gameState.isPlaying = true;
-
-  // Restore chat history
-  const messagesDiv = document.getElementById('chat-messages');
-  messagesDiv.innerHTML = '';
-  gameState.chatHistory.forEach(msg => {
-    appendMessage(msg.role, msg.content);
-  });
-
-  updateGameHeader();
-  updateCharacterPanel(); // Initialize character panel
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  
+  if (savedGames.length === 0) {
+    alert('No saved games found');
+    return;
+  }
+  
+  showLoadGameModal();
 }
+
+function showLoadGameModal() {
+  const modal = document.getElementById('modal-overlay');
+  const content = document.getElementById('modal-content');
+  
+  // Sort saved games by last played (most recent first)
+  const sortedSaves = [...savedGames].sort((a, b) => b.lastPlayed - a.lastPlayed);
+  
+  content.innerHTML = `
+    <h3>Load Game</h3>
+    <div style="max-height: 400px; overflow-y: auto;">
+      ${sortedSaves.map(save => renderSaveCard(save)).join('')}
+    </div>
+    <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <button onclick="exportAllSaves()" style="padding: 0.5rem 1rem; background: #10b981; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+        💾 Export All Saves
+      </button>
+      <button onclick="importSavesFile()" style="padding: 0.5rem 1rem; background: #6366f1; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+        📥 Import Saves
+      </button>
+      <button onclick="closeModal()" style="padding: 0.5rem 1rem; background: #6b7280; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+        Cancel
+      </button>
+    </div>
+  `;
+  
+  modal.style.display = 'flex';
+}
+
+function renderSaveCard(save) {
+  const char = characterLibrary.find(c => c.id === save.characterId);
+  const charName = char ? char.name : 'Unknown Character';
+  const charLevel = char ? char.level : '?';
+  
+  const lastPlayed = new Date(save.lastPlayed).toLocaleDateString();
+  const turnCount = save.turnCount || 0;
+  const location = save.currentLocation || 'Unknown';
+  
+  const isActive = save.id === activeSaveId;
+  const borderStyle = isActive ? 'border: 2px solid #10b981;' : 'border: 1px solid #ddd;';
+  
+  return `
+    <div style="${borderStyle} padding: 0.75rem; margin-bottom: 0.75rem; border-radius: 4px; background: ${isActive ? '#f0fdf4' : '#fff'};">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+        <div style="flex: 1;">
+          <strong>${save.name}</strong> ${isActive ? '<span style="color: #10b981;">✓ Current</span>' : ''}
+          <br><small style="color: #666;">${charName} (L${charLevel}) | ${turnCount} turns</small>
+          <br><small style="color: #999;">Last played: ${lastPlayed}</small>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+          <button onclick="loadSavedGame('${save.id}')" style="padding: 0.25rem 0.75rem; font-size: 0.875rem; background: #10b981; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Load</button>
+          <button onclick="renameSave('${save.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; background: #6366f1; color: #fff; border: none; border-radius: 4px; cursor: pointer;">✏️</button>
+          <button onclick="exportSave('${save.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; background: #8b5cf6; color: #fff; border: none; border-radius: 4px; cursor: pointer;">💾</button>
+          <button onclick="deleteSave('${save.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; background: #ef4444; color: #fff; border: none; border-radius: 4px; cursor: pointer;">🗑️</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+window.loadSavedGame = function(saveId) {
+  const save = savedGames.find(s => s.id === saveId);
+  if (!save) {
+    alert('Save not found');
+    return;
+  }
+  
+  // Load character
+  const char = characterLibrary.find(c => c.id === save.characterId);
+  if (!char) {
+    alert('Character for this save not found. Import the character first.');
+    return;
+  }
+  
+  // Update last played
+  save.lastPlayed = Date.now();
+  activeSaveId = saveId;
+  saveSavedGames();
+  
+  closeModal();
+  
+  // Open game in new window/tab
+  const gameUrl = window.location.href.split('?')[0] + '?play=' + saveId;
+  window.open(gameUrl, '_blank');
+};
 
 function backToSetup() {
   document.getElementById('setup-section').style.display = 'block';
@@ -1345,9 +2311,18 @@ ${messagesToSummarize.map(msg => {
 
 Write a journal entry summarizing these events:`;
     
-    // Call AI to generate summary
+    // Save current chat history temporarily
+    const tempHistory = [...gameState.chatHistory];
+    
+    // Temporarily replace chat history with just the summary prompt
+    gameState.chatHistory = [{ role: 'system', content: summaryPrompt }];
+    
+    // Call AI using the same function as regular gameplay
     const provider = getApiProvider();
     const summary = await callAI(provider, summaryPrompt, true);
+    
+    // Restore original chat history
+    gameState.chatHistory = tempHistory;
     
     // Add entry to journal
     if (!gameState.journal) {
@@ -1368,7 +2343,8 @@ Write a journal entry summarizing these events:`;
     appendMessage('system', '📖 <strong>Journal Updated</strong><br>Your adventure has been recorded.');
     
   } catch (error) {
-    alert('Failed to generate journal entry: ' + error.message);
+    console.error('Journal generation error:', error);
+    alert('Failed to generate journal entry: ' + error.message + '\n\nCheck browser console (F12) for details.');
     if (btn) {
       btn.disabled = false;
       btn.textContent = '📝 Update Journal';
@@ -1412,16 +2388,28 @@ window.exportJournal = function() {
 
 async function sendInitialPrompt() {
   const char = gameState.character;
+  const money = char.money || { copper: 0, silver: 0, gold: 0 };
+  const moneyDisplay = [];
+  if (money.gold > 0) moneyDisplay.push(`${money.gold}gp`);
+  if (money.silver > 0) moneyDisplay.push(`${money.silver}sp`);
+  if (money.copper > 0) moneyDisplay.push(`${money.copper}cp`);
+  const moneyText = moneyDisplay.length > 0 ? moneyDisplay.join(', ') : '0cp';
+  
+  const worldPrimer = gameState.world?.primer || null;
+  const worldContext = worldPrimer ? `\n\n**World Setting:** ${worldPrimer}\n` : '';
+  
+  const backstoryText = char.backstory ? `\n**Backstory:** ${char.backstory}` : '';
+  
   const initialMessage = `Begin a new adventure for this character:
 
 **${char.name}**
-Keywords: ${char.keywords.join(', ')}
+Keywords: ${char.keywords.join(', ')}${backstoryText}
 Level ${char.level} | HP: ${char.hp}/${char.maxHp} | AC: ${char.ac}
 STR ${char.stats.str}, DEX ${char.stats.dex}, INT ${char.stats.int}, WIS ${char.stats.wis}, CON ${char.stats.con}, CHA ${char.stats.cha}
 Aptitudes: ${char.aptitudes.join(', ') || 'None'}
 Equipment: ${char.equipment.join(', ') || 'None'}
-
-Create an evocative opening scene and give them something interesting to engage with.`;
+Money: ${moneyText}${worldContext}
+Create an evocative opening scene and give them something interesting to engage with. Remember to track the character's money during play.`;
 
   appendMessage('system', 'Starting new adventure...');
   await sendToAI(initialMessage, true);
@@ -1447,13 +2435,24 @@ async function sendToAI(message, isInitial = false) {
 
   // Show loading
   const loadingId = appendMessage('gm', '<span class="loading"></span> Thinking...');
+  let loadingRemoved = false;
+  
+  const removeLoading = () => {
+    if (!loadingRemoved) {
+      const loadingEl = document.getElementById(loadingId);
+      if (loadingEl) {
+        loadingEl.remove();
+        loadingRemoved = true;
+      }
+    }
+  };
 
   try {
     const provider = getApiProvider();
     const response = await callAI(provider, message, isInitial);
 
     // Remove loading message
-    document.getElementById(loadingId)?.remove();
+    removeLoading();
 
     // Process response
     const { narrative, memory } = parseAIResponse(response);
@@ -1478,7 +2477,7 @@ async function sendToAI(message, isInitial = false) {
     updateGameHeader();
 
   } catch (error) {
-    document.getElementById(loadingId)?.remove();
+    removeLoading();
     appendMessage('error', `Error: ${error.message}`);
   }
 
@@ -1627,13 +2626,20 @@ function buildContext() {
   // Character (ALWAYS include - this is the stat reference)
   if (gameState.character) {
     const c = gameState.character;
+    const money = c.money || { copper: 0, silver: 0, gold: 0 };
+    const moneyDisplay = [];
+    if (money.gold > 0) moneyDisplay.push(`${money.gold}gp`);
+    if (money.silver > 0) moneyDisplay.push(`${money.silver}sp`);
+    if (money.copper > 0) moneyDisplay.push(`${money.copper}cp`);
+    const moneyText = moneyDisplay.length > 0 ? moneyDisplay.join(', ') : '0cp';
+    
     parts.push(`**ACTIVE CHARACTER:**
-${c.name} | L${c.level} | HP ${c.hp}/${c.maxHp} | AC ${c.ac} | Fortune ${c.fortune}
+${c.name} | L${c.level} | HP ${c.hp}/${c.maxHp} | AC ${c.ac} | Fortune ${c.fortune} | Money: ${moneyText}
 STR +${c.stats.str}, DEX +${c.stats.dex}, INT +${c.stats.int}, WIS +${c.stats.wis}, CON +${c.stats.con}, CHA +${c.stats.cha}
 Aptitudes: ${c.aptitudes.join(', ') || 'None'}
 Equipment: ${c.equipment.join(', ') || 'None'}
 
-These are the ONLY modifiers that exist for this character. No proficiency, skill bonuses, or expertise exist.`);
+These are the ONLY modifiers that exist for this character. No proficiency, skill bonuses, or expertise exist. Track money changes (spending, looting) during play.`);
   }
 
   // Current location ONLY (not all locations)
@@ -1887,15 +2893,66 @@ function processMemoryUpdate(memory) {
           gameState.character.hp + update.hp_change));
     }
     if (update.item_gained) {
-      gameState.character.equipment.push(update.item_gained);
+      // Handle comma-separated items (in case AI lists multiple)
+      const items = update.item_gained.split(',').map(i => i.trim()).filter(i => i);
+      items.forEach(item => {
+        gameState.character.equipment.push(item);
+      });
     }
     if (update.item_lost) {
-      const idx = gameState.character.equipment.indexOf(update.item_lost);
-      if (idx > -1) gameState.character.equipment.splice(idx, 1);
+      // Handle comma-separated items for removal
+      const items = update.item_lost.split(',').map(i => i.trim()).filter(i => i);
+      items.forEach(item => {
+        const idx = gameState.character.equipment.indexOf(item);
+        if (idx > -1) gameState.character.equipment.splice(idx, 1);
+      });
     }
     if (update.fortune_change) {
       gameState.character.fortune = Math.max(0, 
         Math.min(3, gameState.character.fortune + update.fortune_change));
+    }
+    if (update.money_change) {
+      // Handle money changes (copper, silver, gold)
+      if (update.money_change.copper) {
+        gameState.character.money.copper += update.money_change.copper;
+      }
+      if (update.money_change.silver) {
+        gameState.character.money.silver += update.money_change.silver;
+      }
+      if (update.money_change.gold) {
+        gameState.character.money.gold += update.money_change.gold;
+      }
+      // Normalize money (convert copper to silver, silver to gold)
+      if (gameState.character.money.copper >= 10) {
+        const silverGained = Math.floor(gameState.character.money.copper / 10);
+        gameState.character.money.silver += silverGained;
+        gameState.character.money.copper %= 10;
+      }
+      if (gameState.character.money.silver >= 10) {
+        const goldGained = Math.floor(gameState.character.money.silver / 10);
+        gameState.character.money.gold += goldGained;
+        gameState.character.money.silver %= 10;
+      }
+    }
+    if (update.xp_award) {
+      gameState.character.xp = (gameState.character.xp || 0) + update.xp_award;
+      
+      // Show XP notification in chat
+      const xpNeeded = gameState.character.level;
+      const canLevelUp = gameState.character.xp >= xpNeeded;
+      
+      let xpMessage = `✨ <strong>XP Awarded!</strong> +${update.xp_award} XP (${gameState.character.xp}/${xpNeeded})`;
+      if (canLevelUp) {
+        xpMessage += '<br>⬆️ <strong style="color:#16a34a;">Ready to level up!</strong>';
+      }
+      appendMessage('system', xpMessage);
+      
+      // Update character in library
+      const libChar = characterLibrary.find(c => c.id === gameState.character.id);
+      if (libChar) {
+        libChar.xp = gameState.character.xp;
+      }
+      saveCharacterLibrary();
     }
   }
 }
@@ -1936,7 +2993,7 @@ function appendMessage(role, content) {
   const messagesDiv = document.getElementById('chat-messages');
   const chatContainer = document.getElementById('chat-container');
   const messageDiv = document.createElement('div');
-  const id = 'msg-' + Date.now();
+  const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
   messageDiv.id = id;
   messageDiv.className = `message ${role}`;
   messageDiv.innerHTML = `<div class="message-content">${formatMessage(content)}</div>`;

@@ -57,6 +57,8 @@
     
       <link rel="stylesheet" href="../stylesheets/solo-play.css">
     
+      <link rel="stylesheet" href="../stylesheets/point-crawl.css">
+    
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -279,6 +281,25 @@
     
   
   Solo Play
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../point-crawl/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Point Crawl Adventures
 
       </a>
     </li>
@@ -1279,6 +1300,33 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../point-crawl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point Crawl Adventures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -1295,10 +1343,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -1316,8 +1364,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2627,7 +2675,16 @@
 <hr />
 <h2 id="5-playing-the-game">5. Playing the Game<a class="headerlink" href="#5-playing-the-game" title="Permanent link">&para;</a></h2>
 <h3 id="combat">Combat<a class="headerlink" href="#combat" title="Permanent link">&para;</a></h3>
-<p><strong>Initiative:</strong> Each round, roll 1d6. On 1-3, enemies act first. On 4-6, players act first. Reroll each round.</p>
+<p><strong>Initiative:</strong> Each round, all PCs roll <strong>d20 + DEX vs DC 12</strong>.</p>
+<ul>
+<li><strong>Success (12+):</strong> You act before monsters</li>
+<li><strong>Failure:</strong> You act after monsters</li>
+</ul>
+<p>Reroll each round.</p>
+<p><strong>Turn order:</strong> Successful PCs → Monsters → Failed PCs</p>
+<blockquote>
+<p><strong>Ultra-simple variant:</strong> Roll 1d6 instead. On 1-3, enemies act first. On 4-6, players act first.</p>
+</blockquote>
 <p><strong>On Your Turn:</strong>
 - <strong>Move</strong> up to near distance + <strong>take an action</strong> (attack, cast, use item, etc.)
 - OR <strong>Run</strong> up to far distance (no action)</p>
@@ -3725,6 +3782,8 @@
         <script src="../js/rath-data.js"></script>
       
         <script src="../js/solo-play.js"></script>
+      
+        <script src="../js/point-crawl.js"></script>
       
     
   </body>
