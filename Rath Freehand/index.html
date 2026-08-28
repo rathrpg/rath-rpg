@@ -1,0 +1,2373 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A tabletop RPG system based on Knave">
+      
+      
+      
+        <link rel="canonical" href="https://rathrpg.github.io/rath-rpg/Rath%20Freehand/">
+      
+      
+        <link rel="prev" href="../Rath%20Overdrive/">
+      
+      
+        <link rel="next" href="../Homebrew%20Guide/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Rath Freehand - Rath RPG</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Crimson+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Crimson Pro";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rath-freehand" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Rath RPG" class="md-header__button md-logo" aria-label="Rath RPG" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Rath RPG
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Rath Freehand
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Players%20Handbook/" class="md-tabs__link">
+          
+  
+  
+  Core Rules
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Modern/" class="md-tabs__link">
+          
+  
+  
+  Settings
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Advanced%20Aptitudes/" class="md-tabs__link">
+          
+  
+  
+  Advanced Rules
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../Rath%20Overdrive/" class="md-tabs__link">
+          
+  
+  
+  Other Ways to Play
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Homebrew%20Guide/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Rath RPG" class="md-nav__button md-logo" aria-label="Rath RPG" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Rath RPG
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Rules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Rules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Players%20Handbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Players Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../GM%20Handbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GM Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Settings
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Modern/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modern
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Science%20Fiction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science Fiction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Rules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced Rules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Advanced%20Aptitudes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Aptitudes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Advanced%20Magic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Ways to Play
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Other Ways to Play
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Rath%20Overdrive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rath Overdrive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rath Freehand
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rath Freehand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-this-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What This Is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Basics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. The Basics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-six-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Six Stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-advantage-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Advantage Scale
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fortune" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fortune
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-making-a-character" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Making a Character
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Making a Character">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-say-who-they-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Say who they are
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-pick-3-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Pick 3 keywords
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-assign-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Assign stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-derive-and-equip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Derive and equip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Keywords
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Keywords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#they-grant-permission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        They grant permission
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#they-grant-advantage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        They grant advantage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#they-let-you-declare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        They let you declare
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-makes-a-good-keyword" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes a good keyword
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keywords-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keywords change
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-gear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Gear
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Gear">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#weapons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weapons
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#armour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Armour
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#everything-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Everything else
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#things-that-run-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Things that run out
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-playing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Playing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Playing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#combat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-hurt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting hurt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting better
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-dials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Dials
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-character-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Character Card
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Homebrew%20Guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Homebrew Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../downloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Downloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../License%20and%20Attribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-this-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What This Is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Basics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. The Basics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-six-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Six Stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-advantage-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Advantage Scale
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fortune" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fortune
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-making-a-character" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Making a Character
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Making a Character">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-say-who-they-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Say who they are
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-pick-3-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Pick 3 keywords
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-assign-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Assign stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-derive-and-equip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Derive and equip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Keywords
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Keywords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#they-grant-permission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        They grant permission
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#they-grant-advantage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        They grant advantage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#they-let-you-declare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        They let you declare
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-makes-a-good-keyword" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes a good keyword
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keywords-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keywords change
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-gear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Gear
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Gear">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#weapons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weapons
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#armour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Armour
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#everything-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Everything else
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#things-that-run-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Things that run out
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-playing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Playing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Playing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#combat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-hurt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting hurt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting better
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-dials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Dials
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-character-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Character Card
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rath-freehand">Rath Freehand<a class="headerlink" href="#rath-freehand" title="Permanent link">&para;</a></h1>
+<p><em>People in strange situations.</em></p>
+<hr />
+<h2 id="what-this-is">What This Is<a class="headerlink" href="#what-this-is" title="Permanent link">&para;</a></h2>
+<p>Rath Freehand is the whole of Rath in a dozen pages. Same dice, same stats, same maths — but no aptitude lists, no equipment catalogue, and nothing to read before you start.</p>
+<p>You get a character in five minutes. You describe who they are in two or three words, and those words are the rules. A cop has a badge, a radio, and a pistol because <em>of course she does</em> — you don't look any of that up, you just write it down and start playing.</p>
+<p><strong>This is a GM-facing game.</strong> There is no table to consult when a player asks whether their character can do something. There is you, the fiction, and a d20. If that sounds like more work, it isn't — it's less. The rulebook stops being a thing you arbitrate against and becomes a thing you arbitrate with.</p>
+<p><strong>Use it for:</strong> one-shots, conventions, a setting you invented an hour ago, teaching someone their first RPG, a game where you don't yet know what genre you're in.</p>
+<p><strong>Use full Rath instead if:</strong> you want a long campaign with mechanical character growth, or your players like builds. Freehand deliberately gives up the build.</p>
+<blockquote>
+<p><strong>Compatible with everything.</strong> Freehand uses the same stats, the same DCs, the same damage scale, and the same injury table as the full game. You can run a published Rath adventure with Freehand characters, or drop a Freehand character into a full-Rath party, without converting anything.</p>
+</blockquote>
+<hr />
+<h2 id="1-the-basics">1. The Basics<a class="headerlink" href="#1-the-basics" title="Permanent link">&para;</a></h2>
+<h3 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h3>
+<p>When the outcome is uncertain and failure costs something, roll:</p>
+<p><strong>d20 + stat ≥ 12</strong></p>
+<p>That's the whole resolution system. <strong>12</strong> is the target for almost everything.</p>
+<ul>
+<li><strong>Natural 20</strong> — critical success. Something extra goes right.</li>
+<li><strong>Natural 1</strong> — critical failure. Something goes wrong.</li>
+</ul>
+<p>In a fight, you roll against the target's <strong>AC</strong> instead of 12.</p>
+<p><strong>Don't roll when you don't need to.</strong> If there's no real chance of failure, or failure isn't interesting, the character just does it.</p>
+<h3 id="the-six-stats">The Six Stats<a class="headerlink" href="#the-six-stats" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Stat</th>
+<th>Used For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>STR</strong></td>
+<td>Melee attacks, lifting, breaking, physical power</td>
+</tr>
+<tr>
+<td><strong>DEX</strong></td>
+<td>Ranged attacks, dodging, climbing, sneaking</td>
+</tr>
+<tr>
+<td><strong>INT</strong></td>
+<td>Knowledge, technical work, magic, crafting</td>
+</tr>
+<tr>
+<td><strong>WIS</strong></td>
+<td>Perception, tracking, navigation, noticing</td>
+</tr>
+<tr>
+<td><strong>CON</strong></td>
+<td>Toughness, resisting harm, healing</td>
+</tr>
+<tr>
+<td><strong>CHA</strong></td>
+<td>Persuasion, deception, intimidation, charm</td>
+</tr>
+</tbody>
+</table>
+<p>Whichever stat best fits what the player described is the one they add. If two stats both fit, let them use the better one.</p>
+<h3 id="the-advantage-scale">The Advantage Scale<a class="headerlink" href="#the-advantage-scale" title="Permanent link">&para;</a></h3>
+<p>Every test sits somewhere on four steps:</p>
+<p><strong>Impossible → Disadvantage → Straight Roll → Advantage</strong></p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Roll</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Impossible</strong></td>
+<td>No roll</td>
+<td>No training, no tools, or it simply can't be done</td>
+</tr>
+<tr>
+<td><strong>Disadvantage</strong></td>
+<td>2d20, take lower</td>
+<td>Bad conditions, injured, working against your nature</td>
+</tr>
+<tr>
+<td><strong>Straight Roll</strong></td>
+<td>1d20</td>
+<td>The default</td>
+</tr>
+<tr>
+<td><strong>Advantage</strong></td>
+<td>2d20, take higher</td>
+<td>A keyword applies, good tools, clever approach</td>
+</tr>
+</tbody>
+</table>
+<p>Each factor moves you <strong>one step</strong>. Factors in the same direction don't stack — you can't get double advantage. Factors in opposite directions cancel one-for-one.</p>
+<p>This scale is where keywords live. See Section 3.</p>
+<h3 id="fortune">Fortune<a class="headerlink" href="#fortune" title="Permanent link">&para;</a></h3>
+<p>Every character has <strong>Fortune</strong>, maximum 3. Start each session with 1. Gain 1 on a natural 20. The GM hands them out for good play.</p>
+<p><strong>Spend 1 Fortune to:</strong>
+- Reroll any test and keep the better result
+- Help an ally's roll, if you can describe how you're in position to
+- <strong>Declare something true</strong> that one of your keywords makes plausible (see Section 3)</p>
+<hr />
+<h2 id="2-making-a-character">2. Making a Character<a class="headerlink" href="#2-making-a-character" title="Permanent link">&para;</a></h2>
+<p>Five minutes, four steps, no lists.</p>
+<h3 id="step-1-say-who-they-are">Step 1 — Say who they are<a class="headerlink" href="#step-1-say-who-they-are" title="Permanent link">&para;</a></h3>
+<p>One sentence. <em>"A tired homicide detective three weeks from retirement."</em> <em>"A void-station welder who's never seen a planet."</em> <em>"The youngest daughter of a burned-out noble house."</em></p>
+<h3 id="step-2-pick-3-keywords">Step 2 — Pick 3 keywords<a class="headerlink" href="#step-2-pick-3-keywords" title="Permanent link">&para;</a></h3>
+<p>Pull them out of the sentence. The detective is <strong>Police</strong>, <strong>Homicide Detective</strong>, <strong>Burned Out</strong>. See Section 3 for what makes a good one.</p>
+<h3 id="step-3-assign-stats">Step 3 — Assign stats<a class="headerlink" href="#step-3-assign-stats" title="Permanent link">&para;</a></h3>
+<p>Distribute <strong>3, 2, 2, 1, 1, 0</strong> across the six stats. Highest goes where the concept points.</p>
+<p><em>Rolling instead:</em> 3d6 per stat in order, take the <strong>lowest die</strong> of each. Then swap any two.</p>
+<h3 id="step-4-derive-and-equip">Step 4 — Derive and equip<a class="headerlink" href="#step-4-derive-and-equip" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HP</strong></td>
+<td>10 + CON</td>
+</tr>
+<tr>
+<td><strong>AC</strong></td>
+<td>10 + DEX + armour</td>
+</tr>
+<tr>
+<td><strong>Slots</strong></td>
+<td>10 + CON</td>
+</tr>
+</tbody>
+</table>
+<p>Then take <strong>whatever your keywords obviously imply</strong>, plus <strong>three things you name</strong>. The detective has a badge, a radio, cuffs, and a pistol without asking. Then she says: a photo of her daughter, a hip flask, and a lockpick set she isn't supposed to own.</p>
+<p>The GM says yes, or says "not that, but you could have —". That's the entire equipment system. Section 4 covers the few things that need numbers.</p>
+<p><strong>Write it on an index card.</strong> Name, three keywords, six stats, HP, AC, what you're carrying, Fortune. That's a character sheet.</p>
+<hr />
+<h2 id="3-keywords">3. Keywords<a class="headerlink" href="#3-keywords" title="Permanent link">&para;</a></h2>
+<p>Keywords are the only special-ability system in Freehand. Everything an aptitude, class, or feat would do in another game, a keyword does here.</p>
+<p>A keyword is <strong>two or three words describing something true about your character</strong>. Not a stat, not a power — a fact. <em>Police. Grew Up On The Docks. Wanted In Three Counties. Ex-Wyvern Rider. Very Large.</em></p>
+<p>They do three things.</p>
+<h3 id="they-grant-permission">They grant permission<a class="headerlink" href="#they-grant-permission" title="Permanent link">&para;</a></h3>
+<p><strong>This is the important one.</strong> A keyword can move a test from <strong>Impossible</strong> to a roll.</p>
+<p>Without the <strong>Locksmith</strong> keyword, you don't get to attempt the vault's deadbolt — you have no idea what you're looking at. With it, you roll. Without <strong>Police</strong>, you can't talk your way past a crime-scene cordon at all; with it, you're arguing with a colleague.</p>
+<p>This is what makes a character with four keywords different from one with two. Not a bigger bonus — a <strong>wider world of things they're allowed to try.</strong> Depth is capped. Breadth isn't.</p>
+<h3 id="they-grant-advantage">They grant advantage<a class="headerlink" href="#they-grant-advantage" title="Permanent link">&para;</a></h3>
+<p>When a keyword is clearly relevant to a roll you were already going to make, you get <strong>advantage</strong>. One step, once. A second applicable keyword adds nothing mechanically.</p>
+<p>The player argues for it: <em>"I'm a Homicide Detective — I've stood over a hundred bodies. I should have advantage reading this scene."</em> The GM says yes or no. Say yes often.</p>
+<h3 id="they-let-you-declare">They let you declare<a class="headerlink" href="#they-let-you-declare" title="Permanent link">&para;</a></h3>
+<p><strong>Spend 1 Fortune</strong> to declare a fact the world now contains, if one of your keywords makes it plausible.</p>
+<p><em>"I'm Police. There's a patrol car parked on this block — there always is."</em>
+<em>"I Grew Up On The Docks. I know a way through the fence."</em>
+<em>"I'm Wanted In Three Counties. One of these guards has my face on a poster, and he's nervous about it."</em></p>
+<p>The GM can narrow it, but shouldn't refuse it outright — if the keyword makes it plausible, the Fortune point has bought it. This is how a player writes the setting with you.</p>
+<h3 id="what-makes-a-good-keyword">What makes a good keyword<a class="headerlink" href="#what-makes-a-good-keyword" title="Permanent link">&para;</a></h3>
+<p>The test is <strong>how often it comes up</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Too broad</th>
+<th>Too narrow</th>
+<th>About right</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adventurer</td>
+<td>Left-Handed Lockpicking</td>
+<td>Thief</td>
+</tr>
+<tr>
+<td>Skilled</td>
+<td>Allergic To Cats</td>
+<td>Ship's Doctor</td>
+</tr>
+<tr>
+<td>Strong</td>
+<td>Speaks Old High Vessin</td>
+<td>Raised By Wolves</td>
+</tr>
+<tr>
+<td>Good At Things</td>
+<td>Once Met The Duke</td>
+<td>Owes The Duke Money</td>
+</tr>
+</tbody>
+</table>
+<p>Broad keywords apply to everything, so they stop meaning anything. Narrow ones never come up. Aim for something that'll matter two or three times a session.</p>
+<p><strong>Downsides count.</strong> <em>Burned Out</em>, <em>Blind</em>, <em>Hunted</em>, <em>Terrible Liar</em> are all excellent keywords. They grant permission and advantage in their own strange directions — being blind is an asset in the dark, being hunted means you know how the hunters think — and they earn Fortune when they cost you something. A keyword that only ever helps is a boring keyword.</p>
+<h3 id="keywords-change">Keywords change<a class="headerlink" href="#keywords-change" title="Permanent link">&para;</a></h3>
+<p>This is not a character sheet you fill in once.</p>
+<p><strong>Gain one</strong> when the story earns it. Survive a month in the marshes and you might take <em>Marsh-Wise</em>. Kill something famous and <em>Dragonslayer</em> is now true about you, for better and worse.</p>
+<p><strong>Lose one</strong> when the story takes it. Get struck off and <em>Police</em> is gone — though <em>Ex-Police</em> is a different and sometimes better keyword.</p>
+<p><strong>Swap one</strong> during any rest or scene break, if the fiction supports it.</p>
+<p><strong>Keep it to three active</strong> at a time. A character can <em>be</em> many things; three of them are load-bearing this session. Let players reshuffle which three between sessions.</p>
+<blockquote>
+<p><strong>GM:</strong> when a player invokes a keyword you don't think applies, don't say "no." Say <strong>"what does being Police have to do with this lock?"</strong> Half the time they have an answer you didn't think of, and it's better than the one you'd have given.</p>
+</blockquote>
+<hr />
+<h2 id="4-gear">4. Gear<a class="headerlink" href="#4-gear" title="Permanent link">&para;</a></h2>
+<p>There is no equipment list. There's a scale, and the GM prices things against it.</p>
+<h3 id="weapons">Weapons<a class="headerlink" href="#weapons" title="Permanent link">&para;</a></h3>
+<p>Pick a damage die. That's the weapon.</p>
+<table>
+<thead>
+<tr>
+<th>Damage</th>
+<th>Slots</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>d4</strong></td>
+<td>1</td>
+<td>Improvised. A chair leg, a rock, a letter opener</td>
+</tr>
+<tr>
+<td><strong>d6</strong></td>
+<td>1</td>
+<td>Small or one-handed. Knife, club, pistol, hatchet</td>
+</tr>
+<tr>
+<td><strong>d8</strong></td>
+<td>2</td>
+<td>The standard. Sword, axe, rifle, spear</td>
+</tr>
+<tr>
+<td><strong>d10</strong></td>
+<td>3</td>
+<td>Heavy, or needs both hands. Greatsword, shotgun, poleaxe</td>
+</tr>
+</tbody>
+</table>
+<p>Then take <strong>one trait free</strong>. Each extra trait costs <strong>+1 slot, or one step down the damage die.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Trait</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ranged (near)</strong></td>
+<td>Attack to near distance, using DEX</td>
+</tr>
+<tr>
+<td><strong>Ranged (far)</strong></td>
+<td>Attack to far distance, using DEX</td>
+</tr>
+<tr>
+<td><strong>Reload</strong></td>
+<td>Action to reload after a few shots</td>
+</tr>
+<tr>
+<td><strong>Piercing</strong></td>
+<td>Ignores 2 AC</td>
+</tr>
+<tr>
+<td><strong>Throwable</strong></td>
+<td>Can be thrown to near</td>
+</tr>
+<tr>
+<td><strong>Concealable</strong></td>
+<td>Hidden under clothing, no test</td>
+</tr>
+<tr>
+<td><strong>Quiet</strong></td>
+<td>Doesn't give away your position</td>
+</tr>
+<tr>
+<td><strong>Burst</strong></td>
+<td>Two targets in near range, both at disadvantage</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Worked example — a pistol.</strong> Start at d8 (a standard weapon, 2 slots). Ranged (near) is the free trait. Concealable costs one step down: <strong>d6, ranged, concealable, 2 slots</strong>. Want it to hit harder? Give up concealable and it's a d8. Want it in one slot? Drop to d4 or spend the slot elsewhere.</p>
+<p><strong>Worked example — a sniper rifle.</strong> d10, two-handed, 3 slots. Free trait: ranged (far). Add <em>piercing</em> and <em>quiet</em> — that's two extra traits, so either +2 slots (5 total, it's an enormous thing in a case) or step the damage down twice to d6 (a small, quiet, armour-piercing weapon that doesn't hit hard). Pick the one that matches the fiction.</p>
+<blockquote>
+<p><strong>d10 is the ceiling.</strong> Nothing a person picks up and uses does more than d10 without paying for it — a round spent aiming, an ammunition limit, a keyword requirement, or simple rarity. Break this and the weapon becomes the character.</p>
+</blockquote>
+<h3 id="armour">Armour<a class="headerlink" href="#armour" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Armour</th>
+<th>AC</th>
+<th>Slots</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Light</strong></td>
+<td>+1</td>
+<td>2</td>
+<td>Leather, a padded coat, a concealed vest</td>
+</tr>
+<tr>
+<td><strong>Medium</strong></td>
+<td>+2</td>
+<td>3</td>
+<td>Mail, a flak jacket. Disadvantage on stealth</td>
+</tr>
+<tr>
+<td><strong>Heavy</strong></td>
+<td>+3</td>
+<td>5</td>
+<td>Plate, a hardsuit. Disadvantage on stealth and swimming</td>
+</tr>
+<tr>
+<td><strong>Shield</strong></td>
+<td>+1</td>
+<td>1</td>
+<td>Can be destroyed to absorb up to 15 damage</td>
+</tr>
+<tr>
+<td><strong>Helmet</strong></td>
+<td>+1</td>
+<td>1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Whatever the setting calls it, it's one of these five.</p>
+<h3 id="everything-else">Everything else<a class="headerlink" href="#everything-else" title="Permanent link">&para;</a></h3>
+<p>Write it down. <strong>One slot each.</strong> You have 10 + CON slots.</p>
+<p>Don't price it. Don't track coins unless money is what the game is about — and if it is, invent a unit and charge what feels right. Nobody has ever had a better session because the rope cost 1 silver.</p>
+<h3 id="things-that-run-out">Things that run out<a class="headerlink" href="#things-that-run-out" title="Permanent link">&para;</a></h3>
+<p>Ammunition, torches, rations, medical supplies, fuel — anything you'd rather not count. Give it a <strong>usage die</strong> and roll it when it's used:</p>
+<p><strong>d20 → d12 → d10 → d8 → d6 → d4 → gone</strong></p>
+<p>On a <strong>1 or 2</strong>, the die shrinks one step. When a d4 comes up 1 or 2, you're out.</p>
+<p>Roll ammunition once after each fight. Roll light sources every hour. Roll everything else when it'd be tense.</p>
+<hr />
+<h2 id="5-playing">5. Playing<a class="headerlink" href="#5-playing" title="Permanent link">&para;</a></h2>
+<h3 id="combat">Combat<a class="headerlink" href="#combat" title="Permanent link">&para;</a></h3>
+<p><strong>Initiative:</strong> every round, each player rolls <strong>d20 + DEX vs 12</strong>. Success means they go before the enemies; failure means after. Reroll each round.</p>
+<p>Order: players who passed → enemies → players who failed.</p>
+<blockquote>
+<p><strong>Faster:</strong> roll 1d6. On 1-3 the enemies go first, on 4-6 the players do.</p>
+</blockquote>
+<p><strong>Your turn:</strong> move up to <strong>near</strong> and take an action, or <strong>run</strong> up to <strong>far</strong> and do nothing else.</p>
+<p><strong>Attack:</strong> d20 + STR (melee) or DEX (ranged) vs the target's AC.</p>
+<p><strong>Damage:</strong> roll the weapon's die, add STR if it's melee. <strong>Max roll explodes</strong> — roll again and add, and keep going while you keep rolling max.</p>
+<p><strong>Natural 20:</strong> the target loses 1 AC for the rest of the fight.
+<strong>Natural 1:</strong> something goes wrong. GM decides what.</p>
+<p><strong>Two weapons:</strong> after your first attack, take a second at disadvantage.
+<strong>Stunts</strong> — shove, disarm, trip, grapple: opposed test, usually STR vs STR or DEX vs DEX.
+<strong>Reactions:</strong> one per round. Attack an enemy who leaves your reach, or throw yourself in front of an ally.</p>
+<h3 id="distance">Distance<a class="headerlink" href="#distance" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Range</th>
+<th>Roughly</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Close</strong></td>
+<td>Arm's length. Melee</td>
+</tr>
+<tr>
+<td><strong>Near</strong></td>
+<td>Across a room. One move</td>
+</tr>
+<tr>
+<td><strong>Far</strong></td>
+<td>Across a street. A run</td>
+</tr>
+<tr>
+<td><strong>Distant</strong></td>
+<td>Further. Not part of this fight yet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="getting-hurt">Getting hurt<a class="headerlink" href="#getting-hurt" title="Permanent link">&para;</a></h3>
+<p><strong>At 0 HP:</strong> roll <strong>CON vs 12</strong>. Pass and you get 1d6 HP and stay up on adrenaline. Fail and you're down — you can crawl, nothing else, until the danger's over.</p>
+<p><strong>When the danger passes,</strong> roll 2d6:</p>
+<table>
+<thead>
+<tr>
+<th>2d6</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2-3</strong></td>
+<td><strong>Dead.</strong> Make the last words count</td>
+</tr>
+<tr>
+<td><strong>4-6</strong></td>
+<td><strong>Maimed.</strong> Something permanent. +1d6 HP</td>
+</tr>
+<tr>
+<td><strong>7-9</strong></td>
+<td><strong>Broken.</strong> A week off your feet. +1d6 HP</td>
+</tr>
+<tr>
+<td><strong>10-11</strong></td>
+<td><strong>Battered.</strong> A day. +1d6 HP</td>
+</tr>
+<tr>
+<td><strong>12</strong></td>
+<td><strong>Tough bastard.</strong> +2d6 HP, back on your feet</td>
+</tr>
+</tbody>
+</table>
+<p>A maiming is a new keyword. <em>One Eye. Bad Leg. Ruined Hand.</em> Write it down.</p>
+<h3 id="resting">Resting<a class="headerlink" href="#resting" title="Permanent link">&para;</a></h3>
+<p><strong>Short rest</strong> — an hour somewhere reasonably safe: recover <strong>1d6 + CON</strong> HP.
+<strong>Long rest</strong> — a night somewhere actually safe: back to full.</p>
+<h3 id="getting-better">Getting better<a class="headerlink" href="#getting-better" title="Permanent link">&para;</a></h3>
+<p>Freehand has no levels by default. Characters change by <strong>gaining and losing keywords</strong>, and that's usually enough — a one-shot doesn't need an XP economy.</p>
+<p>If you're running it longer and want progression, use this and nothing else:</p>
+<blockquote>
+<p><strong>After each session, one of:</strong> raise a stat by 1 (max 6), or take a fourth keyword slot (max 5 total). That's it. Roll 1d6 and add it to your max HP every third session if the players want to feel sturdier.</p>
+</blockquote>
+<hr />
+<h2 id="6-dials">6. Dials<a class="headerlink" href="#6-dials" title="Permanent link">&para;</a></h2>
+<p>Set these before session one. Say them out loud so the table agrees.</p>
+<p><strong>Lethality.</strong> The default is dangerous — a d8 to the chest is a third of a starting character. To go <em>deadlier</em>, drop starting HP to <strong>5 + CON</strong>. To go <em>pulpier</em>, let players spend Fortune to negate a hit entirely.</p>
+<p><strong>Guns.</strong> The scale above treats a pistol as a d6 and a rifle as a d8, which puts them level with a knife and a sword. That looks wrong at first — surely a rifle beats a longbow — but damage isn't where firearms win. They win on <strong>traits</strong>: a bow spends its one free trait just getting to far range, while a rifle gets there and can still afford <em>piercing</em> (armour was built for arrows, not bullets), <em>burst</em>, or <em>quiet</em> with a suppressor. Two weapons, the same die, and the gun is doing three things the bow can't. That's the distinction, and the scale already carries it.</p>
+<p>If you want firearms frightening on top of that, shift <strong>every</strong> gun up one die and give non-ballistic armour no AC against them. Apply it to the enemies too — that's the whole point.</p>
+<p><strong>Grit.</strong> For survival games, start every consumable one usage die lower than you otherwise would, and require a ration on any day of hard travel.</p>
+<p><strong>Magic and the strange.</strong> There are no spell lists here. If a character is a wizard, <em>Wizard</em> is their keyword: it grants permission to attempt magical things and advantage when doing them, and the roll is INT vs 12. Failure should cost something — describe what. If you want an actual magic system, that's what full Rath's <em>Advanced Magic</em> is for, and it drops straight in.</p>
+<p><strong>Session zero in one question.</strong> Ask each player: <em>"what's the worst thing that could plausibly happen to your character?"</em> Write the answers down. That's your adventure.</p>
+<hr />
+<h2 id="quick-reference">Quick Reference<a class="headerlink" href="#quick-reference" title="Permanent link">&para;</a></h2>
+<p><strong>Test:</strong> d20 + stat ≥ 12. Nat 20 crit, nat 1 fumble.
+<strong>Attack:</strong> d20 + STR/DEX ≥ AC. Damage explodes on max.
+<strong>Advantage:</strong> Impossible → Disadvantage → Straight → Advantage. One step per factor, no stacking, opposites cancel.
+<strong>Keywords:</strong> 3 active. Grant permission, grant advantage, and — for 1 Fortune — let you declare a fact.
+<strong>Fortune:</strong> max 3. Reroll, help an ally, or declare. Start each session with 1, gain on a nat 20.
+<strong>Weapons:</strong> d4/d6 = 1 slot, d8 = 2, d10 = 3. One trait free, extras cost a slot or a die step. d10 is the ceiling.
+<strong>Armour:</strong> Light +1 / Medium +2 / Heavy +3 / Shield +1 / Helmet +1.
+<strong>Carrying:</strong> 10 + CON slots. One slot per item unless it's obviously bigger.
+<strong>HP:</strong> 10 + CON. <strong>AC:</strong> 10 + DEX + armour.
+<strong>At 0 HP:</strong> CON vs 12 to stay up. Then 2d6 on the injury table.
+<strong>Rest:</strong> short = 1d6 + CON. Long = full.
+<strong>Usage die:</strong> d20 → d12 → d10 → d8 → d6 → d4 → gone. Shrinks on a 1-2.</p>
+<hr />
+<h2 id="the-character-card">The Character Card<a class="headerlink" href="#the-character-card" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>NAME ______________________  concept ____________________________
+
+KEYWORDS  1 ____________  2 ____________  3 ____________
+
+STR ___   DEX ___   INT ___   WIS ___   CON ___   CHA ___
+
+HP ____ / ____      AC ____      FORTUNE  o o o
+
+CARRYING (10 + CON slots)
+____________________  ____________________  ____________________
+____________________  ____________________  ____________________
+____________________  ____________________  ____________________
+____________________  ____________________  ____________________
+
+WEAPON _______________  dmg d___  traits ________________________
+ARMOUR _______________  +___ AC
+</code></pre></div>
+<hr />
+<p><em>Rath Freehand is part of the Rath RPG family. For aptitudes, spell lists, character advancement, and the full equipment catalogue, see the Rath RPG Players Handbook.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../js/rath-data.js"></script>
+      
+    
+  </body>
+</html>
