@@ -45,9 +45,9 @@ nav:
   - Other Ways to Play:
     - Rath Overdrive: Rath Overdrive.md
     - Rath Freehand: Rath Freehand.md
+  - Downloads: downloads.md
   - Reference:
     - Homebrew Guide: Homebrew Guide.md
-    - Downloads: downloads.md
     - License: License and Attribution.md
 
 markdown_extensions:
