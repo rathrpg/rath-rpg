@@ -1,3 +1,13 @@
+<style>
+:root { --setting-heading: 'Special Elite', 'Immortal', Georgia, serif; }
+/* Special Elite ships a single 400 weight. Left alone the browser synthesises
+   the bold the theme asks for, which thickens the distressed edges into mush at
+   heading sizes and closes up the counters in reversed-out table headers. Take
+   the real weight instead, and open the tracking slightly to compensate. */
+.md-typeset h1, .md-typeset h2, .md-typeset h3,
+.md-typeset h4, .md-typeset h5, .md-typeset h6,
+.md-typeset table:not([class]) th { font-weight: 400; letter-spacing: 0.01em; }
+</style>
 # Modern
 
 *This is Appendix A of the [Players Handbook](Players Handbook.md). The core rules — tests, combat, character creation — are the same for every setting; only the aptitudes, keywords, and equipment change.*

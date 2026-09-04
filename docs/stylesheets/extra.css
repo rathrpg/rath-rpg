@@ -17,10 +17,24 @@
   font-display: swap;
 }
 
-/* Import Crimson Pro for body text */
+/* NOTE: this @import does nothing. CSS requires @import to precede every other
+   rule, and the @font-face blocks above are rules — so browsers drop it. Body
+   text is Crimson Pro only because the Material theme loads it (theme.font in
+   mkdocs.yml). Web fonts belong in mkdocs.yml extra_css, not here. */
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 :root {
+  /* Page-content headings only. The site chrome (title, tabs, sidebar) stays
+     Immortal deliberately — the frame shouldn't change as you move between
+     settings, only the page you're reading.
+
+     The setting appendices override this on their own pages; see
+     split_appendices() in build_site.py. Swap a face by editing the one line
+     in the injected block there.
+       Modern  candidates: Oswald / Archivo Narrow / IBM Plex Sans
+       Sci-Fi  candidates: Chakra Petch / Rajdhani / Exo 2 (Orbitron = louder) */
+  --setting-heading: 'Immortal', Georgia, serif;
+
   --md-primary-fg-color: #8B0000;
   --md-primary-fg-color--light: #A52A2A;
   --md-primary-fg-color--dark: #600000;
@@ -43,9 +57,9 @@
   }
 }
 
-/* Headings with Immortal font */
+/* Headings follow --setting-heading (Immortal everywhere but the appendices) */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Immortal', Georgia, serif !important;
+  font-family: var(--setting-heading) !important;
 }
 
 .md-typeset h1,
@@ -54,7 +68,7 @@ h1, h2, h3, h4, h5, h6 {
 .md-typeset h4,
 .md-typeset h5,
 .md-typeset h6 {
-  font-family: 'Immortal', Georgia, serif !important;
+  font-family: var(--setting-heading) !important;
 }
 
 .md-typeset h1 {
@@ -71,7 +85,7 @@ h1, h2, h3, h4, h5, h6 {
 .md-typeset table:not([class]) th {
   background-color: #1a1a1a;
   color: white;
-  font-family: 'Immortal', Georgia, serif !important;
+  font-family: var(--setting-heading) !important;
 }
 
 .md-typeset table:not([class]) tr:nth-child(even) td {

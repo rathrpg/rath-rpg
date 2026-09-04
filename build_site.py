@@ -74,6 +74,29 @@ def process_markdown(content, filename):
     return content
 
 
+# A display face per setting. Body text stays Crimson Pro everywhere — the
+# appendices are part of the Players Handbook and are meant to be read side by
+# side, so only headings and table headers change. Injected per page rather than
+# put in extra.css because each rule must apply to one page and nothing else;
+# the site chrome keeps Immortal so the frame doesn't shift between settings.
+#
+# Each value is CSS injected into that page alone. Adding a face also means
+# adding it to extra_css in mkdocs.yml — an @import inside extra.css is ignored
+# (see the note in that file).
+SETTING_STYLES = {
+    "Modern.md": """:root { --setting-heading: 'Special Elite', 'Immortal', Georgia, serif; }
+/* Special Elite ships a single 400 weight. Left alone the browser synthesises
+   the bold the theme asks for, which thickens the distressed edges into mush at
+   heading sizes and closes up the counters in reversed-out table headers. Take
+   the real weight instead, and open the tracking slightly to compensate. */
+.md-typeset h1, .md-typeset h2, .md-typeset h3,
+.md-typeset h4, .md-typeset h5, .md-typeset h6,
+.md-typeset table:not([class]) th { font-weight: 400; letter-spacing: 0.01em; }""",
+
+    "Science Fiction.md": """:root { --setting-heading: 'Chakra Petch', 'Immortal', Georgia, sans-serif; }""",
+}
+
+
 def split_appendices():
     """Publish the PHB's setting appendices as standalone pages.
 
@@ -97,6 +120,8 @@ def split_appendices():
         section = content[begin:content.index(end, begin + len(start))]
 
         appendix_label = start.split(':')[0].replace('# ', '')
+        css = SETTING_STYLES.get(dest_name)
+        style = f"<style>\n{css}\n</style>\n" if css else ""
         header = "\n".join([
             f"# {title}",
             "",
@@ -115,7 +140,7 @@ def split_appendices():
 
         # drop the original top-level heading; the new one replaces it
         body = section.split("\n", 1)[1].lstrip("\n")
-        (DOCS_DIR / dest_name).write_text(header + body, encoding='utf-8')
+        (DOCS_DIR / dest_name).write_text(style + header + body, encoding='utf-8')
         print(f"  Split: Players Handbook -> {dest_name}")
 
 

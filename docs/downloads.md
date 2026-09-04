@@ -25,6 +25,7 @@ Standard letter-size PDFs for reading on screen or printing.
 | [Advanced Magic](downloads/Advanced Magic.pdf) | Complete magic system and spells |
 | [Rath Overdrive](downloads/Rath Overdrive.pdf) | Rider expansion — transformation, Charge, Inserts |
 | [Rath Freehand](downloads/Rath Freehand.pdf) | The stripped-down, any-setting edition |
+| [Homebrew Guide](downloads/Homebrew Guide.pdf) | Building your own aptitudes, spells, and gear |
 
 ---
 
@@ -40,6 +41,7 @@ Half-letter size (7.14" x 11") booklets formatted for printing. Print double-sid
 | [Advanced Magic](downloads/Advanced Magic_booklet.pdf) | Complete magic system and spells |
 | [Rath Overdrive](downloads/Rath Overdrive_booklet.pdf) | Rider expansion — transformation, Charge, Inserts |
 | [Rath Freehand](downloads/Rath Freehand_booklet.pdf) | The stripped-down, any-setting edition |
+| [Homebrew Guide](downloads/Homebrew Guide_booklet.pdf) | Building your own aptitudes, spells, and gear |
 
 ---
 

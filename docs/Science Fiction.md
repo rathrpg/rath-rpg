@@ -1,3 +1,6 @@
+<style>
+:root { --setting-heading: 'Chakra Petch', 'Immortal', Georgia, sans-serif; }
+</style>
 # Science Fiction
 
 *This is Appendix B of the [Players Handbook](Players Handbook.md). The core rules — tests, combat, character creation — are the same for every setting; only the aptitudes, keywords, and equipment change.*

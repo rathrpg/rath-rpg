@@ -14,7 +14,15 @@ Riders are not mages. They do not cast spells. Their power lives in their gear, 
 
 ## 1. Becoming a Rider
 
-Take **Henshin** as an Advanced Aptitude at level 3, 5, 7, or 9. The tree has four aptitudes; a specialist can take all four.
+There are two ways in.
+
+**Start as one.** Take **Henshin** at character creation, where it costs **both** of your starting aptitudes. You begin play already bonded to a Driver, already able to transform — and with nothing else. Everything you can do that an ordinary person can't comes out of the belt. That's the trade, and it's the right one for a campaign that opens with the Driver already on your hip.
+
+Because two slots buy what one otherwise would, a creation Rider tops out one aptitude short of everyone else. In exchange, you have been doing this long enough that it comes easily: **you transform with 1 additional Charge** — 4 instead of 3, or 6 instead of 5 with Reinforced Core.
+
+**Become one.** Take **Henshin** as an Advanced Aptitude at level 3, 5, 7, or 9, the normal way. Your character was someone before they were a Rider, and they keep being that person underneath. Finding the Driver is a story you get to play through rather than one you write in your backstory.
+
+Either way, the rest of the tree is Advanced Aptitudes taken at 3, 5, 7, or 9 as usual. A specialist can take all four.
 
 - **Henshin** *(required entry)* — You are bonded to a Driver. As an action, transform. You may Henshin **L times per long rest**. While transformed you have **+2 AC** and advantage on tests to resist fear, intimidation, and mental influence. You transform at **3 Charge**, your Charge cap is **6**, and your Driver has **1 Insert slot**.
 
@@ -24,7 +32,9 @@ Take **Henshin** as an Advanced Aptitude at level 3, 5, 7, or 9. The tree has fo
 
 - **Finisher Mastery** *(requires Henshin)* — Your Finisher deals **+1d6**, and immediately after using one you gain **1 Charge**. Spent everything? The Driver gives you just enough back to still be standing.
 
-> **Multiclassing:** Henshin uses Advanced Aptitude slots like any other path. A Rider can also be a Hedge Mage, Chartomancer, or Circle Mage, but four slots across two paths spreads thin. Pure Riders specialise.
+> **Multiclassing:** apart from the creation option above, Henshin uses Advanced Aptitude slots like any other path. A Rider can also be a Hedge Mage, Chartomancer, or Circle Mage, but four slots across two paths spreads thin. Pure Riders specialise.
+
+> **Starting at level 1.** A Rider who begins play as one is powerful in a way no other level 1 character is — but narrowly. **L** is 1, so you get **one transformation per day**; you have no other aptitudes at all; and while you start each Henshin at 4 Charge, your opening Finisher is only 5d6. Reaching the big numbers still takes rounds of fighting, and out of Henshin you are an ordinary person with a belt. If it feels too strong at your table, the dial is the same as always: drop the Finisher to **(Charge spent)d6**.
 
 ---
 
