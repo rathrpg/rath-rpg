@@ -588,6 +588,29 @@ For deadlier campaigns, limit Fortune Points.
 
 ---
 
+### Measured Distances
+
+Distance is abstract by default — Close, Near, Far, Distant — and a move takes a
+character up to Near. For a table playing with miniatures or a grid, replace the
+ladder with feet.
+
+**The Rule:** A move is **30 ft**. A run is **60 ft** and costs the action.
+Close is adjacent (5 ft), Near is 30 ft, Far is 60 ft, and Distant is anything
+past that.
+
+**Weapons need no conversion.** A range trait uses the same figures — a
+Near-range weapon reaches 30 ft, a Far-range one 60 ft — so every equipment list
+works unchanged, in any setting.
+
+**Pick one system and stay on it** for the whole fight. Switching mid-combat is
+where the arguments start.
+
+**When to Use:** If your table already plays with minis, or if exact positioning
+matters enough that "is he Near or Far?" keeps coming up. The abstract ladder is
+faster, and it's what the rest of the book assumes.
+
+---
+
 ## Quick Reference
 
 ### NPC Reaction (2d6)

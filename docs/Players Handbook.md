@@ -367,6 +367,18 @@ Some abilities let you act outside your turn as a **reaction**. You get one reac
 - **Protect** (aptitude): Intercept an attack on a nearby ally
 - **Opportunity Attack**: When an enemy leaves your reach, make one free attack
 
+### Time
+
+| Unit | Length | Used for |
+|------|--------|----------|
+| Round | A moment to a minute | Combat. Everyone acts once |
+| Turn | 1-10 minutes | Exploring. Ten rounds |
+| Hour | Six turns | Travel, searching, short rests |
+| Day | 24 hours | Journeys, long rests |
+
+In combat, **your turn** is your slice of a round. The **turn** above is the longer
+unit — it's the one durations and light sources are counted in.
+
 ### Distance
 
 | Abstract | Specific | Notes |
@@ -377,8 +389,6 @@ Some abilities let you act outside your turn as a **reaction**. You get one reac
 | Distant | 60+ ft | Beyond immediate combat |
 
 **Moving.** On your turn you may move up to **Near**, or give up your action to run up to **Far**. Anything that halves your speed covers half as much ground — two moves to go where one normally takes you.
-
-**Optional: measured distances.** For a table using miniatures or a grid, use feet throughout instead of the ladder above, and stay on one system for the whole fight. A move is **30 ft** and a run is **60 ft**. Close is adjacent (5 ft), Near is 30 ft, Far is 60 ft, and Distant is anything past that. A weapon's range trait uses the same figures — a Near-range weapon reaches 30 ft, a Far-range one 60 ft — so no equipment list changes with it.
 
 ### Injury and Death
 
