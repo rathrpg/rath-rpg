@@ -271,6 +271,8 @@ Order: players who passed → enemies → players who failed.
 | **Far** | Across a street. A run |
 | **Distant** | Further. Not part of this fight yet |
 
+**Moving:** on your turn you get one move — that's Near. Give up your action and you can run to Far instead. If something halves your speed, it takes two moves to get where one would.
+
 ### Getting hurt
 
 **At 0 HP:** roll **CON vs 12**. Pass and you get 1d6 HP and stay up on adrenaline. Fail and you're down — you can crawl, nothing else, until the danger's over.

@@ -376,6 +376,10 @@ Some abilities let you act outside your turn as a **reaction**. You get one reac
 | Far | 40-60 ft | Running distance |
 | Distant | 60+ ft | Beyond immediate combat |
 
+**Moving.** On your turn you may move up to **Near**, or give up your action to run up to **Far**. Anything that halves your speed covers half as much ground — two moves to go where one normally takes you.
+
+**Optional: measured distances.** For a table using miniatures or a grid, use feet throughout instead of the ladder above, and stay on one system for the whole fight. A move is **30 ft** and a run is **60 ft**. Close is adjacent (5 ft), Near is 30 ft, Far is 60 ft, and Distant is anything past that. A weapon's range trait uses the same figures — a Near-range weapon reaches 30 ft, a Far-range one 60 ft — so no equipment list changes with it.
+
 ### Injury and Death
 
 **Dropping to 0 HP:** Make a CON test DC 12.
